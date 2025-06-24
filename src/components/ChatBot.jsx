@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { useState } from "react";
+=======
+import React, { useState, useEffect, useRef} from "react";
+>>>>>>> 04b3cd1d88376f57d6e4f2d5c9d771909004cee5
 import "./ChatBot.css";
 import arrow from "../assets/ChatBot_pics/image.png";
 import chaticon from "../assets/ChatBot_pics/chat.png";
@@ -27,6 +31,22 @@ function ChatBot() {
     "Locate Nearby Store",
     "Query about my order",
   ];
+<<<<<<< HEAD
+=======
+
+  const chatPopupRef = useRef(null);
+  useEffect(() => {
+  function handleClickOutside(event) {
+    if (isOpen && chatPopupRef.current && !chatPopupRef.current.contains(event.target)) {
+      setIsOpen(false); // close chat
+      setStartNewConversation(false); // reset conversation state
+    }
+  }
+
+  document.addEventListener("mousedown", handleClickOutside);
+}, [isOpen]);
+
+>>>>>>> 04b3cd1d88376f57d6e4f2d5c9d771909004cee5
   // const [conversationsList, setConverstaionsList] = useState([      //to show history in front of chatwindow  when it is opened
   //   {
   //     id: "1234",
@@ -292,7 +312,11 @@ function ChatBot() {
   return (
     <>
       <div className="chatWrapper">
+<<<<<<< HEAD
         <div className={`chatPopup ${isOpen ? "open" : ""}`}>
+=======
+       <div className={`chatPopup ${isOpen ? "open" : ""}`} ref={chatPopupRef}>
+>>>>>>> 04b3cd1d88376f57d6e4f2d5c9d771909004cee5
           {isOpen && !startNewConversation && chatPopUpHeader()}
           {isOpen && !startNewConversation && floatingNewConversationCard()}
           {isOpen && startNewConversation && newChatHeader()}
