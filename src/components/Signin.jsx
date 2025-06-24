@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const SignIn = ({ onClose, onSwitch }) => {
+const SignIn = ({ onClose, onSwitch, onForgotPassword }) => {
   const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
@@ -8,7 +8,7 @@ const SignIn = ({ onClose, onSwitch }) => {
   }, []);
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 z-50">
+    <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/30 z-50">
       <div
         className={`bg-white rounded-xl shadow-lg p-8 w-96 max-w-full transform transition-all duration-300 ${
           animate ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-4 scale-95'
@@ -20,12 +20,23 @@ const SignIn = ({ onClose, onSwitch }) => {
             type="email"
             placeholder="Email"
             className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
           />
-          <input
-            type="password"
-            placeholder="Password"
-            className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <div className="relative">
+            <input
+              type="password"
+              placeholder="Password"
+              className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+              required
+            />
+            <button
+              type="button"
+              onClick={onForgotPassword}
+              className="absolute right-2 top-3 text-xs text-blue-600 hover:underline"
+            >
+              Forgot Password?
+            </button>
+          </div>
           <button
             type="submit"
             className="bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-all"
@@ -33,7 +44,7 @@ const SignIn = ({ onClose, onSwitch }) => {
             Sign In
           </button>
           <p className="text-center text-sm text-gray-600">
-            Don’t have an account?{' '}
+            Don't have an account?{' '}
             <span
               onClick={onSwitch}
               className="text-blue-600 cursor-pointer hover:underline"
