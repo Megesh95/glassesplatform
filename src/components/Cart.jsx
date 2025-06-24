@@ -4,10 +4,10 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import EastIcon from '@mui/icons-material/East';
 import WestIcon from '@mui/icons-material/West';
 
-const CartItem = ({ image, property1, property2, price1, price2, notice, finalPrice }) => (
+const CartItem = ({ image, property1, property2, price1, price2, notice, finalPrice, onRemove }) => (
   <div className="cart-item">
     <img src={image} alt="Eyeglasses" className="cart-item-img" />
-   
+
     <div className="cart-item-details">
       <div className="line">
         <div className="text">{property1}</div>
@@ -23,11 +23,12 @@ const CartItem = ({ image, property1, property2, price1, price2, notice, finalPr
         <span className="final-price">₹{finalPrice}</span>
       </div>
       <div className="cart-actions">
-        <a href="#">Remove</a> <span>|</span> <a href="#">Repeat</a>
+        <button onClick={onRemove}>Remove</button> <span>|</span> <a href="#">Repeat</a>
       </div>
     </div>
   </div>
 );
+
 
 const CartSummary = () => (
   <div className="cart-summary">
@@ -120,50 +121,37 @@ const WishlistSection = () => (
   </div>
 );
 
-const CartPage = ({ cart }) => {
+const CartPage = ({ cart, removeFromCart }) => {
   return (
     <div className="cart-container">
       <div className="cart-section">
-        <h2 className="cart-item-number">Cart (2 items)</h2>
+        <h2 className="cart-item-number">Cart ({cart.length} items)</h2>
+
         {cart.length === 0 ? (
-  <p>Your cart is empty.</p>
-) : (
-  cart.map((item, index) => (
-    <CartItem
-      key={index}
-      image={item.image}
-      property1={item.name}
-      price1={item.price}
-      property2="Custom Lens Option"
-      price2={0}
-      notice="You can upload prescription after payment"
-      finalPrice={item.price}
-    />
-  ))
-)}
-        <CartItem
-          image="https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//l/i/peyush-bansal-shark-tank-electric-green-full-rim-wayfarer_csvfile-1706676595673-217431_(1).jpg"
-          property1="Electric Green Full Rim Square Lenskart HUSTLR LAE5147-WC4 Eyeglasses"
-          price1={2000}
-          property2="Circular Bi-Focal KT With Photo-Chromatic Coating"
-          price2={3000}
-          notice="You can upload prescription after payment"
-          finalPrice={5000}
-        />
-        <CartItem
-          image="https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//l/i/crystal-full-rim-wayfarer-lenskart-hustlr-lh-e16985-w-c5-eyeglasses_img_2262_14march24.jpg"
-          property1="Crystal-Ace Full Rim Square Lenskart HUSTLR LHE6985-WC5"
-          price1={2000}
-          property2="Anti-Glare Premium"
-          price2={0}
-          notice="You can upload prescription after payment"
-          finalPrice={2000}
-        />
+          <p>Your cart is empty.</p>
+        ) : (
+          cart.map((item, index) => (
+            <CartItem
+              key={index}
+              image={item.image}
+              property1={item.name}
+              price1={item.price}
+              property2={item.size}
+              price2={0}
+              notice="You can upload prescription after payment"
+              finalPrice={item.price}
+              onRemove={() => removeFromCart(index)}
+            />
+          ))
+        )}
+
         <WishlistSection />
       </div>
+
       <CartSummary />
     </div>
   );
 };
 
 export default CartPage;
+

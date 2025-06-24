@@ -33,6 +33,11 @@ const App = () => {
     setCart((prevCart) => [...prevCart, product]);
   };
 
+  const removeFromCart = (index) => {
+  setCart((prevCart) => prevCart.filter((_, i) => i !== index));
+};
+
+
   return (
     <Router>
       <div className="font-sans min-h-screen bg-gray-100 flex flex-col">
@@ -41,7 +46,7 @@ const App = () => {
         <main className="flex-grow">
           <Routes>
             <Route path="/wishlist" element={<Wishlist />} />
-            <Route path="/cart" element={<Cart cart={cart} />} />
+            <Route path="/cart" element={<Cart cart={cart} removeFromCart={removeFromCart} />} />
             <Route path="/trackorder" element={<TrackOrder />} />
           </Routes>
         </main>
