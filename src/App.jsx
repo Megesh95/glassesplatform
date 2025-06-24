@@ -16,8 +16,6 @@ import Products from './components/Products/Products';
 const App = () => {
   const [showSignIn, setShowSignIn] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
-  const [cartItems, setCartItems] = useState([]);
-
 
   const [cart, setCart] = useState([]);
 
