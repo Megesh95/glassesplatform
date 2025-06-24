@@ -46,7 +46,7 @@ const App = () => {
           
         </main>
         <SliderAnimation />
-        <div className="flex items-center justify-center py-5 my-10">
+        <div className="flex items-center justify-center py-5 ">
         <div className="flex-grow h-px bg-gray-300"></div>
         <h1 className="px-4 text-3xl font-bold text-gray-800 tracking-wide">
           New Models
@@ -59,7 +59,7 @@ const App = () => {
           
             <Products />
           </div>
-         <div className="flex items-center justify-center py-5 my-10">
+         <div className="flex items-center justify-center py-5 ">
         <div className="flex-grow h-px bg-gray-300"></div>
         <h1 className="px-4 text-3xl font-bold text-gray-800 tracking-wide">
           Free Lens Replacement at Stores
