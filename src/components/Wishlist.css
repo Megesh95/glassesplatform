@@ -1,0 +1,159 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+/* wishlist body */
+.wishlist-body {
+  position: fixed;
+  bottom: 0;
+  left: 55%;
+  transform: translateX(-50%) translateY(100%);
+  transition: transform 0.4s ease-in-out;
+  z-index: 1000;
+  width: 100%; 
+  max-width: 400px;
+}
+
+.wishlist-body.show{
+        transform: translate(-50%) translateY(0%);
+}
+
+/* Header */
+.wishlist-wrapper{
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.15), /* top shadow */
+            -4px 0 6px rgba(0, 0, 0, 0.15),  /* left shadow */
+            4px 0 6px rgba(0, 0, 0, 0.15);   /* right shadow */
+
+    display: flex;
+    flex-direction:column;
+    width: 260px;
+    
+    
+    
+}
+
+.wishlist-header {
+        
+  position: relative;
+  display: flex;
+  justify-content: flex-end; 
+  align-items: center;
+  height: 40px;
+  background-color: #333333 ;
+  color: white !important;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.wishlist-title-wrapper {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.wishlist-title {
+  font-weight: 700;
+  white-space: nowrap;
+  font-size: 15px;
+  font-family: Plus Jakarta Sans;
+  color: white;
+  
+}
+
+.wishlist-close-button {
+  cursor: pointer;
+  padding-right: 16px;
+  font-weight: bold;
+}
+
+
+/* Product List */
+.wishlist-products{
+        
+        font-weight: 600;
+        background-color: white;
+}
+
+.wishlist-product-item{
+        
+        display: flex;
+        position: relative;
+        border-bottom: 1px solid #ebeaea; /* thin gray line */
+        padding: 1px 0;
+        
+}
+
+.wishlist-product-item:hover{
+        background-color: #fff9d9;
+        cursor: pointer;
+        transition: all 0.3s ease;
+}
+
+.wishlist-product-img{
+        float: left;
+        margin: 10px;
+}
+
+.wishlist-product-details{
+        float:right;
+}
+
+.wishlist-product-name{
+        margin: 3px;
+        font-family: Plus Jakarta Sans;
+        font-weight: 400 !important;
+        font-size: 11px;
+        line-height: 15px;
+        color: black;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        
+}
+
+.wishlist-product-name:hover{
+        color: #87b38f;
+}
+
+
+.wishlist-product-price{
+        font-family: Plus Jakarta Sans;
+        font-weight: 400;
+        font-size: 13px;
+        color: black;
+}
+
+.wishlist-remove-button {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  
+}
+
+.wishlist-remove-button:hover{
+        font-weight: bold;
+}
+
+/* Clear List Button */
+.wishlist-clear-button{
+        
+        display: flex;
+        justify-content: center;
+        padding: 10px;
+        background-color: #eeeeee;
+        box-shadow: 0 -3px 2px rgba(0, 0, 0, 0.2); /* shadow on top */
+}
+
+.wishlist-clear-button a{
+        background-color: #329c92;
+        padding: 5px 15px;
+        color: white;
+         border-radius: 8px; /* ✅ apply here */
+        text-decoration: none;
+}
+
+.wishlist-clear-button a:hover{
+        background-color: #247c73;
+}

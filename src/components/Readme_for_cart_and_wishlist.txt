@@ -1,0 +1,1 @@
+To view the wishlist, visit /wishlist. To view your cart, go to /cart

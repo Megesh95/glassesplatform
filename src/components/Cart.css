@@ -1,0 +1,340 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+body {
+  background: #fbf9f7;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+ 
+.cart-container {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+  gap: 2rem;
+}
+
+.cart-section {
+  flex: 2;
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.cart-item-number{
+  font-family: Lora;
+  font-weight: 500;
+  font-size: 24px;
+}
+
+/* cart item section  */
+.cart-item {
+  display: flex;
+  gap: 1.5rem;
+  border-bottom: 1px solid #ddd;
+  padding: 1.5rem 1rem;
+  margin-top: 10px;
+  background-color: white;
+  border-radius: 8px;
+  
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.15), /* top shadow */
+            -1px 0 3px rgba(0, 0, 0, 0.15),  /* left shadow */
+            1px 0 3px rgba(0, 0, 0, 0.15);
+
+
+}
+
+.cart-item img {
+  width: 130px;
+  object-fit: contain;
+  border-radius: 6px;
+}
+
+.cart-item-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.text{
+  font-family: Merriweather Sans;
+  font-weight: 300;
+}
+
+.price{
+  font-family: Merriweather Sans;
+  font-weight: 300;
+}
+
+
+
+.line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #111;
+  margin-bottom: 4px;
+}
+
+.notice {
+  font-size: 13px;
+  color: #555;
+  margin: 0.5rem 0 1rem;
+}
+
+.final-line {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px dotted #ccc;
+  border-bottom: 1px dotted #ccc;
+  padding-top: 0.5rem;
+  font-weight: bold;
+  color: #000;
+}
+
+.final-label{
+  font-family: Merriweather Sans;
+  font-weight: 500;
+}
+
+.final-price{
+  font-family: Merriweather Sans;
+  font-weight: 500;
+}
+
+.cart-actions {
+  font-size: 14px;
+  margin-top: 0.5rem;
+}
+
+.cart-actions a {
+  color: #000000;
+  text-decoration: underline;
+  font-weight: 500;
+  margin: 0 4px;
+  font-family: Merriweather Sans;
+  font-weight: 300;
+}
+
+/* Billing Details */
+.bill-details-heading{
+  font-family: Lora;
+  font-weight: 500;
+  font-size: 24px;
+}
+
+.cart-summary {
+  flex: 1;
+  
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.bill-details {
+  background-color: white;
+  font-size: 14px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 7px;box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.15), /* top shadow */
+            -1px 0 3px rgba(0, 0, 0, 0.15),  /* left shadow */
+            1px 0 3px rgba(0, 0, 0, 0.15);   /* right shadow */
+
+}
+
+.bill-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  font-family: Merriweather Sans;
+  font-weight: 300;
+}
+
+.bill-row.total {
+  font-weight: bold;
+  margin-top: 1rem;
+  font-family: Merriweather Sans;
+  font-weight: 500;
+}
+
+.discount {
+  color: green;
+}
+
+.MerriweatherSans500{
+  font-family: Merriweather Sans;
+  font-weight: 500;
+}
+
+.MerriweatherSans300{
+  font-family: Merriweather Sans;
+  font-weight: 300;
+}
+
+
+.checkout-btn {
+  margin-top: 1rem;
+  background-color: #11daac;
+  color: #052a53;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 26px;
+  border-radius: 50px;
+}
+
+/* Wishlist Section */
+.wishlist-section {
+  margin-top: 2rem;
+}
+
+.wishlist-top {
+    
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.wishlist-nav button {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  padding: 0.25rem 0.6rem;
+  margin-left: 0.5rem;
+  cursor: pointer;
+}
+
+.wishlist-items {
+  display: flex;
+  gap: 1rem;
+}
+
+.wishlist-item {
+  background-color: white;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 0.75rem;
+  width: 150px;
+  text-align: left;
+}
+
+.wishlist-item img {
+  width: 100%;
+  height: auto;
+  margin-bottom: 0.5rem;
+}
+
+.wishlist-Title {
+  font-size: 14px;
+  margin-bottom: 0.25rem;
+  color: #1a1a1a;
+}
+
+.wishlist-price {
+  font-size: 14px;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: #999;
+  margin-left: 4px;
+}
+
+.tag {
+  display: inline-block;
+  background: #e0f3f0;
+  color: #007965;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
+.gold-membership {
+  background: #ffefce;
+  border: 1px solid #fac666;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.15), /* top shadow */
+            -1px 0 3px rgba(0, 0, 0, 0.15),  /* left shadow */
+            1px 0 3px rgba(0, 0, 0, 0.15);
+}
+
+.gold-membership p {
+  margin: 0.25rem 0 0.75rem;
+  font-size: 13px;
+  color: #4a4a4a;
+}
+
+.gold-btn {
+  background: none;
+  border: none;
+  font-weight: bold;
+  color: #000;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.arrow {
+  margin-left: 8px;
+  font-size: 16px;
+}
+
+.welcome-box {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.15), /* top shadow */
+            -1px 0 3px rgba(0, 0, 0, 0.15),  /* left shadow */
+            1px 0 3px rgba(0, 0, 0, 0.15);
+}
+
+.welcome-box p {
+  font-size: 13px;
+  margin: 4px 0 0;
+}
+
+.remove-btn {
+  border: none;
+  background: none;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.insurance-box {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.15), /* top shadow */
+            -1px 0 3px rgba(0, 0, 0, 0.15),  /* left shadow */
+            1px 0 3px rgba(0, 0, 0, 0.15);
+}
+
+.insurance-box p {
+  font-size: 13px;
+  margin: 4px 0 0;
+}
+
+.arrow-btn {
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  padding: 0.1rem 0.6rem;
+  font-weight: bold;
+  cursor: pointer;
+}
