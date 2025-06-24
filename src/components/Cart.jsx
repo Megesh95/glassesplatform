@@ -120,11 +120,27 @@ const WishlistSection = () => (
   </div>
 );
 
-const CartPage = () => {
+const CartPage = ({ cart }) => {
   return (
     <div className="cart-container">
       <div className="cart-section">
         <h2 className="cart-item-number">Cart (2 items)</h2>
+        {cart.length === 0 ? (
+  <p>Your cart is empty.</p>
+) : (
+  cart.map((item, index) => (
+    <CartItem
+      key={index}
+      image={item.image}
+      property1={item.name}
+      price1={item.price}
+      property2="Custom Lens Option"
+      price2={0}
+      notice="You can upload prescription after payment"
+      finalPrice={item.price}
+    />
+  ))
+)}
         <CartItem
           image="https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//l/i/peyush-bansal-shark-tank-electric-green-full-rim-wayfarer_csvfile-1706676595673-217431_(1).jpg"
           property1="Electric Green Full Rim Square Lenskart HUSTLR LAE5147-WC4 Eyeglasses"

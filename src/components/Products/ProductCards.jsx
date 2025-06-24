@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Heart } from "lucide-react"; // Make sure you're importing the icon
+import { Heart } from "lucide-react";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, addToCart }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
 
   const toggleWishlist = (e) => {
-    e.stopPropagation(); // Prevent modal from opening
+    e.stopPropagation();
     setIsWishlisted(!isWishlisted);
   };
 
@@ -61,12 +61,10 @@ const ProductCard = ({ product }) => {
         </div>
       </div>
 
-      
+      {/* Modal */}
       {isOpen && (
         <div className="fixed inset-0 bg-white/5 backdrop-blur-md flex justify-center items-center z-50">
-
           <div className="bg-white p-6 rounded-lg w-[90%] max-w-md relative shadow-xl">
-            {/* Close Button */}
             <button
               onClick={() => setIsOpen(false)}
               className="absolute top-2 right-2 text-gray-500 hover:text-red-600 text-xl"
@@ -98,21 +96,24 @@ const ProductCard = ({ product }) => {
             <p className="text-sm mt-2 text-yellow-500">
               ⭐ {product.rating} ({product.reviews.toLocaleString()} reviews)
             </p>
-            <button className="w-full mt-4 bg-amber-400 hover:bg-amber-500 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 shadow hover:shadow-md">
-  Add to Cart
-</button>
 
-            {/* Color Swatches */}
+            <button
+              className="w-full mt-4 bg-amber-400 hover:bg-amber-500 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 shadow hover:shadow-md"
+              onClick={() => {
+                addToCart(product);
+                setIsOpen(false); // Optional: close modal after adding to cart
+              }}
+            >
+              Add to Cart
+            </button>
+
             <div className="flex gap-2 mt-4">
               {product.colors.map((color, idx) => (
                 <span
                   key={idx}
                   className="w-6 h-6 rounded-full border"
                   style={{ backgroundColor: color }}
-                >
-                  
-                </span>
-              
+                ></span>
               ))}
             </div>
           </div>

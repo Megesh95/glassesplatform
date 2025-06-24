@@ -148,11 +148,11 @@ const sampleProducts = [
 ];
 
 
-function Products() {
+function Products({ addToCart }) {
   return (
     <div className="flex flex-wrap gap-6 justify-center p-4 bg-gray-50 min-h-screen">
       {sampleProducts.map((product, index) => (
-        <ProductCard key={index} product={product} />
+        <ProductCard key={index} product={product} addToCart={addToCart} />
       ))}
     </div>
   );
