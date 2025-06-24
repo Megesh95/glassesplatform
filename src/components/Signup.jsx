@@ -8,7 +8,7 @@ const SignUp = ({ onClose, onSwitch }) => {
   }, []);
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 z-50">
+    <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/30 z-50">
       <div
         className={`bg-white rounded-xl shadow-lg p-8 w-96 max-w-full transform transition-all duration-300 ${
           animate ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-4 scale-95'
@@ -33,7 +33,7 @@ const SignUp = ({ onClose, onSwitch }) => {
           />
           <button
             type="submit"
-            className="bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition-all"
+            className="bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-all"
           >
             Sign Up
           </button>
