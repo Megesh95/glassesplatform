@@ -1,85 +1,65 @@
+// src/App.jsx
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
-
 import Header from './components/Header';
 import Wishlist from './components/Wishlist';
 import Cart from './components/Cart';
-import SliderAnimation from './components/SliderAnimation';
-import SignIn from './components/Signin';
-import SignUp from './components/Signup';
 import TrackOrder from './components/TrackOrder';
 import FooterSection from './components/FooterSection';
 import ChatBot from './components/ChatBot';
-import Products from './components/Products/Products';
+import HomePage from './pages/HomePage';
+import AuthModalManager from './components/AuthModalManager';
 
 const App = () => {
-  const [showSignIn, setShowSignIn] = useState(false);
-  const [showSignUp, setShowSignUp] = useState(false);
+  const [authModal, setAuthModal] = useState({
+    show: false,
+    type: null,
+    email: ''
+  });
 
-  const [cart, setCart] = useState([]);
-
-  const handleSwitchToSignUp = () => {
-    setShowSignIn(false);
-    setShowSignUp(true);
+  const openAuthModal = (type) => {
+    if (!type) return;
+    setAuthModal({ show: true, type, email: '' });
   };
 
-  const handleSwitchToSignIn = () => {
-    setShowSignUp(false);
-    setShowSignIn(true);
+  const closeAuthModal = () => {
+    setAuthModal({ show: false, type: null, email: '' });
   };
 
-  const addToCart = (product) => {
-    setCart((prevCart) => [...prevCart, product]);
+  const switchAuthModal = (type) => {
+    if (!type) return;
+    setAuthModal((prev) => ({ ...prev, show: true, type }));
   };
 
-  const removeFromCart = (index) => {
-  setCart((prevCart) => prevCart.filter((_, i) => i !== index));
-};
-
+  const handleOTPSent = (email) => {
+    setAuthModal((prev) => ({ ...prev, type: 'verifyotp', email }));
+  };
 
   return (
     <Router>
       <div className="font-sans min-h-screen bg-gray-100 flex flex-col">
-        <Header setShowSignUp={setShowSignUp} />
+        <Header onLoginClick={() => openAuthModal('signin')} />
 
         <main className="flex-grow">
           <Routes>
+            <Route path="/" element={<HomePage />} />
             <Route path="/wishlist" element={<Wishlist />} />
-            <Route path="/cart" element={<Cart cart={cart} removeFromCart={removeFromCart} />} />
+            <Route path="/cart" element={<Cart />} />
             <Route path="/trackorder" element={<TrackOrder />} />
           </Routes>
         </main>
 
-        <SliderAnimation />
-
-        <div className="flex items-center justify-center py-5">
-          <div className="flex-grow h-px bg-gray-300"></div>
-          <h1 className="px-4 text-3xl font-bold text-gray-800 tracking-wide">New Models</h1>
-          <div className="flex-grow h-px bg-gray-300"></div>
-        </div>
-
-        <div className="py-16 px-4 flex items align-middle">
-          <Products addToCart={addToCart} />
-        </div>
-
-        <div className="flex items-center justify-center py-5 my-10">
-          <div className="flex-grow h-px bg-gray-300"></div>
-          <h1 className="px-4 text-3xl font-bold text-gray-800 tracking-wide">Premium Eyewear</h1>
-          <div className="flex-grow h-px bg-gray-300"></div>
-        </div>
-
-        <div className="w-full flex justify-center py-6">
-          <img src="https://static1.lenskart.com/media/desktop/img/16-sep-24/r1.jpeg" alt="Premium Eyewear" className="max-w-[1200px] w-full h-auto shadow" />
-        </div>
-
         <FooterSection className="py-4" />
 
-        {showSignIn && <SignIn onClose={() => setShowSignIn(false)} onSwitch={handleSwitchToSignUp} />}
-        {showSignUp && <SignUp onClose={() => setShowSignUp(false)} onSwitch={handleSwitchToSignIn} />}
-      </div>
+        <AuthModalManager
+          authModal={authModal}
+          closeAuthModal={closeAuthModal}
+          switchAuthModal={switchAuthModal}
+          handleOTPSent={handleOTPSent}
+        />
 
-      <ChatBot />
+        <ChatBot />
+      </div>
     </Router>
   );
 };
