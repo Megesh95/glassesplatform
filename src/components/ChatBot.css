@@ -351,6 +351,7 @@ input:checked + .slider:before {
   text-align: center;
   width: 90%;
   z-index: 1001;
+  overflow-y:auto ;
 }
 
 .floatingCard h3 {
@@ -432,11 +433,16 @@ input:checked + .slider:before {
 }
 
 .conversationList {
-  padding: 16px;
+  padding: 10px 0 0;
+  margin-top: 20px;
   background: white;
-  border-radius: 10px;
+  border-top: 1px solid #eee;
 }
-
+.conversationList h2 {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #333;
+}
 .conversationItem {
   display: flex;
   align-items: center;
@@ -453,8 +459,7 @@ input:checked + .slider:before {
 }
 
 .conversationText {
-  flex-grow: 1;
-  margin-left: 10px;
+  font-size: 15px;
 }
 
 .conversationId {

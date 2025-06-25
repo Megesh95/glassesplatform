@@ -25,6 +25,31 @@ const chatMessagesEndRef = useRef(null);
     minute: "numeric",
     hour12: true,
   });
+  const [conversationHistory, setConversationHistory] = useState([
+  {
+    id: "#106482622",
+    title: "Card",
+    avatar: avatar1,
+    timeAgo: "3h ago",
+    sortIndex: 3,
+  },
+  {
+    id: "#106478427",
+    title: "Phone number",
+    avatar: avatar2,
+    timeAgo: "4h ago",
+    sortIndex: 2,
+  },
+  {
+    id: "#106471129",
+    title: "Store Locator",
+    avatar: avatar3,
+    timeAgo: "Yesterday",
+    sortIndex: 1,
+  },
+]);
+
+
 
   const options = ["Buy Eyewear", "Locate Nearby Store", "Query about my order"];
 useEffect(() => {
@@ -33,16 +58,17 @@ useEffect(() => {
   }
 }, [isOpen, startNewConversation]);
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (
-        isOpen &&
-        chatPopupRef.current &&
-        !chatPopupRef.current.contains(event.target)
-      ) {
-        setIsOpen(false);
-        setStartNewConversation(false);
-      }
-    }
+    
+   function handleClickOutside(event) {
+  if (
+    chatPopupRef.current &&
+    !chatPopupRef.current.contains(event.target) &&
+    !event.target.closest(".chatToggle") // prevent toggle click from closing
+  ) {
+    setIsOpen(false);
+    setStartNewConversation(false);
+  }
+}
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -78,7 +104,13 @@ useEffect(() => {
 
   function chatIcon() {
     return (
-      <div className="chatToggle" onClick={() => setIsOpen(!isOpen)}>
+      <div
+  className="chatToggle"
+  onClick={(e) => {
+    e.stopPropagation(); // prevent bubbling to outside click
+    setIsOpen((prev) => !prev);
+  }}
+>
         <img
           className={`chatIcon ${isOpen ? "opened" : "closed"}`}
           src={isOpen ? arrow : chaticon}
@@ -91,6 +123,7 @@ useEffect(() => {
   function floatingNewConversationCard() {
     return (
       <div className="floatingCard">
+        <div>
         <h3>Start a conversation with our team of experts now!</h3>
         <div className="avatars">
           <img src={avatar1} alt="avatar1" />
@@ -99,10 +132,29 @@ useEffect(() => {
         </div>
         <button
           className="startBtn"
-          onClick={() => setStartNewConversation(true)}
+          onClick={() => {setStartNewConversation(true);setMessages([]); setInputText("");}}
         >
           New Conversation
         </button>
+        </div>
+        <div className="conversationList">
+          <h2>History</h2>
+  {conversationHistory && conversationHistory
+  .sort((a, b) => b.sortIndex - a.sortIndex)
+  .map((convo, index) => (
+    <div key={index} className="conversationItem">
+      <img src={convo.avatar} alt="avatar" className="conversationAvatar" />
+      <div className="conversationText">
+        <div>
+          <strong>{convo.title}</strong>
+          <span className="conversationId">{convo.id}</span>
+        </div>
+        <div className="timeAgo">{convo.timeAgo}</div>
+      </div>
+      <div className="arrow">→</div>
+    </div>
+))}
+</div>
       </div>
     );
   }
