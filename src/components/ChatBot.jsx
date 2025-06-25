@@ -16,35 +16,71 @@ function ChatBot() {
   const [messages, setMessages] = useState([]);
   const [startNewConversation, setStartNewConversation] = useState(false);
   const [inputText, setInputText] = useState("");
-
+const inputRef = useRef(null);
   const chatPopupRef = useRef(null);
-
+const chatMessagesEndRef = useRef(null);
   const now = new Date();
   const formattedTime = now.toLocaleDateString("en-US", {
     hour: "numeric",
     minute: "numeric",
     hour12: true,
   });
+  const [conversationHistory, setConversationHistory] = useState([
+  {
+    id: "#106482622",
+    title: "Card",
+    avatar: avatar1,
+    timeAgo: "3h ago",
+    sortIndex: 3,
+  },
+  {
+    id: "#106478427",
+    title: "Phone number",
+    avatar: avatar2,
+    timeAgo: "4h ago",
+    sortIndex: 2,
+  },
+  {
+    id: "#106471129",
+    title: "Store Locator",
+    avatar: avatar3,
+    timeAgo: "Yesterday",
+    sortIndex: 1,
+  },
+]);
+
+
 
   const options = ["Buy Eyewear", "Locate Nearby Store", "Query about my order"];
-
+useEffect(() => {
+  if (isOpen && startNewConversation && inputRef.current) {
+    inputRef.current.focus();
+  }
+}, [isOpen, startNewConversation]);
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (
-        isOpen &&
-        chatPopupRef.current &&
-        !chatPopupRef.current.contains(event.target)
-      ) {
-        setIsOpen(false);
-        setStartNewConversation(false);
-      }
-    }
+    
+   function handleClickOutside(event) {
+  if (
+    chatPopupRef.current &&
+    !chatPopupRef.current.contains(event.target) &&
+    !event.target.closest(".chatToggle") // prevent toggle click from closing
+  ) {
+    setIsOpen(false);
+    setStartNewConversation(false);
+  }
+}
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
+
+useEffect(() => {
+  if (chatMessagesEndRef.current) {
+    chatMessagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+  }
+}, [messages]);
 
   function chatPopUpHeader() {
     return (
@@ -68,7 +104,13 @@ function ChatBot() {
 
   function chatIcon() {
     return (
-      <div className="chatToggle" onClick={() => setIsOpen(!isOpen)}>
+      <div
+  className="chatToggle"
+  onClick={(e) => {
+    e.stopPropagation(); // prevent bubbling to outside click
+    setIsOpen((prev) => !prev);
+  }}
+>
         <img
           className={`chatIcon ${isOpen ? "opened" : "closed"}`}
           src={isOpen ? arrow : chaticon}
@@ -81,6 +123,7 @@ function ChatBot() {
   function floatingNewConversationCard() {
     return (
       <div className="floatingCard">
+        <div>
         <h3>Start a conversation with our team of experts now!</h3>
         <div className="avatars">
           <img src={avatar1} alt="avatar1" />
@@ -89,10 +132,29 @@ function ChatBot() {
         </div>
         <button
           className="startBtn"
-          onClick={() => setStartNewConversation(true)}
+          onClick={() => {setStartNewConversation(true);setMessages([]); setInputText("");}}
         >
           New Conversation
         </button>
+        </div>
+        <div className="conversationList">
+          <h2>History</h2>
+  {conversationHistory && conversationHistory
+  .sort((a, b) => b.sortIndex - a.sortIndex)
+  .map((convo, index) => (
+    <div key={index} className="conversationItem">
+      <img src={convo.avatar} alt="avatar" className="conversationAvatar" />
+      <div className="conversationText">
+        <div>
+          <strong>{convo.title}</strong>
+          <span className="conversationId">{convo.id}</span>
+        </div>
+        <div className="timeAgo">{convo.timeAgo}</div>
+      </div>
+      <div className="arrow">→</div>
+    </div>
+))}
+</div>
       </div>
     );
   }
@@ -133,7 +195,33 @@ function ChatBot() {
       setMessages((prev) => [...prev, botMsg]);
     }, 1000);
   }
+function handleSendMessage() {
+  if (inputText.trim() === "") return;
 
+  const currentTime = new Date().toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  const userMsg = {
+    type: "user",
+    text: inputText,
+    time: currentTime,
+  };
+
+  const botMsg = {
+    type: "bot",
+    text: "Thanks for your message! How else can I assist you?",
+    time: currentTime,
+  };
+
+  setMessages((prev) => [...prev, userMsg]);
+  setInputText("");
+
+  setTimeout(() => {
+    setMessages((prev) => [...prev, botMsg]);
+  }, 1000);
+}
   function chatBody() {
     return (
       <div
@@ -173,6 +261,7 @@ function ChatBot() {
               <span className="timestamp">{msg.time}</span>
             </div>
           ))}
+            <div ref={chatMessagesEndRef} />
         </div>
 
         <div className="chatInputBar">
@@ -190,9 +279,13 @@ function ChatBot() {
             />
           </label>
           <input
+            ref={inputRef}
             type="text"
             placeholder="Type a message..."
             value={inputText}
+            onKeyDown={(e) => {
+    if (e.key === "Enter") handleSendMessage();
+  }}
             onChange={(e) => setInputText(e.target.value)}
           />
           <button
@@ -235,7 +328,7 @@ function ChatBot() {
     <>
       {chatIcon()}
       {isOpen && (
-        <div className="chatPopup" ref={chatPopupRef}>
+        <div className={`chatPopup ${isOpen ? "open" : ""}`} ref={chatPopupRef}>
           {!startNewConversation ? (
             <>
               {chatPopUpHeader()}

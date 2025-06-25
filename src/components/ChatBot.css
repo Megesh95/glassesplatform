@@ -31,6 +31,7 @@ html {
   margin-bottom: 14px;
   flex-direction: column;
   animation: fadeIn 0.3s ease-in-out;
+
 }
 
 .chatPopup.open {
@@ -77,19 +78,17 @@ html {
 }
 
 .chatBody {
-  padding: 20px;
-  background: #f9f9f9;
   flex: 1;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 .chatMessages {
   overflow-y: auto;
-  max-height: 400px;
+  flex-grow: 1;
   padding: 10px;
 }
-
 .botMessage {
   background: white;
   padding: 15px;
@@ -132,10 +131,14 @@ html {
   display: flex;
   flex-direction: column;
   gap: 10px;
+    justify-content: center;
+  align-items: center;
   margin-top: 10px;
 }
 
 .optionButton {
+
+  width: 200px;
   padding: 12px;
   background: white;
   border-radius: 12px;
@@ -160,17 +163,19 @@ html {
 }
 
 .chatInputBar {
+  padding: 12px 20px;
   display: flex;
   align-items: center;
-  padding: 12px 20px;
-  font-size: 14px;
-  color: white#888;
   background: #fff;
-  border-top: 1px solid white;
-  position: relative;
+  border-top: 1px solid #ddd;
+  gap: 10px;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
-  gap: 10px;
+
+  /* Fixed at bottom inside chatPopup */
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
 }
 .chatInputBar input[type="text"] {
   flex: 1;
@@ -346,6 +351,7 @@ input:checked + .slider:before {
   text-align: center;
   width: 90%;
   z-index: 1001;
+  overflow-y:auto ;
 }
 
 .floatingCard h3 {
@@ -427,11 +433,16 @@ input:checked + .slider:before {
 }
 
 .conversationList {
-  padding: 16px;
+  padding: 10px 0 0;
+  margin-top: 20px;
   background: white;
-  border-radius: 10px;
+  border-top: 1px solid #eee;
 }
-
+.conversationList h2 {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #333;
+}
 .conversationItem {
   display: flex;
   align-items: center;
@@ -448,8 +459,7 @@ input:checked + .slider:before {
 }
 
 .conversationText {
-  flex-grow: 1;
-  margin-left: 10px;
+  font-size: 15px;
 }
 
 .conversationId {
