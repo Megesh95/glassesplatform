@@ -1,4 +1,3 @@
-// src/App.jsx
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
@@ -16,6 +15,8 @@ const App = () => {
     type: null,
     email: ''
   });
+
+  const [cartItems, setCartItems] = useState([]);
 
   const openAuthModal = (type) => {
     if (!type) return;
@@ -35,6 +36,16 @@ const App = () => {
     setAuthModal((prev) => ({ ...prev, type: 'verifyotp', email }));
   };
 
+  // Add to cart function
+  const addToCart = (product) => {
+    setCartItems((prev) => [...prev, product]);
+  };
+
+  // Remove from cart function
+  const removeFromCart = (index) => {
+    setCartItems((prev) => prev.filter((_, i) => i !== index));
+  };
+
   return (
     <Router>
       <div className="font-sans min-h-screen bg-gray-100 flex flex-col">
@@ -42,10 +53,11 @@ const App = () => {
 
         <main className="flex-grow">
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<HomePage addToCart={addToCart} />} />
             <Route path="/wishlist" element={<Wishlist />} />
-            <Route path="/cart" element={<Cart />} />
+            <Route path="/cart" element={<Cart cart={cartItems} removeFromCart={removeFromCart} />} />
             <Route path="/trackorder" element={<TrackOrder />} />
+
           </Routes>
         </main>
 

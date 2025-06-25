@@ -1,15 +1,14 @@
-// src/pages/HomePage.jsx
 import React from 'react';
 import SliderAnimation from '../components/SliderAnimation';
 import Products from '../components/Products/Products';
 
-const HomePage = () => {
+const HomePage = ({ addToCart }) => {  // <-- Receive addToCart here
   return (
     <>
       <SliderAnimation />
       <SectionDivider title="New Models" />
       <div className="py-16 px-4 flex items align-middle">
-        <Products />
+        <Products addToCart={addToCart} />  {/* <-- Pass it down to Products */}
       </div>
       <SectionDivider title="Free Lens Replacement at Stores" />
       <BannerImage 
