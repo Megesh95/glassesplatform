@@ -135,7 +135,7 @@ const CartPage = ({ cart , removeFromCart }) => {
               price2={0}
               notice="You can upload prescription after payment"
               finalPrice={item.price}
-              onRemove={() => console.log(`Remove item at index ${index}`)}
+              onRemove={() => removeFromCart(index)}
             />
           ))
         )}
