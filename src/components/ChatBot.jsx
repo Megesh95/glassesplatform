@@ -16,9 +16,9 @@ function ChatBot() {
   const [messages, setMessages] = useState([]);
   const [startNewConversation, setStartNewConversation] = useState(false);
   const [inputText, setInputText] = useState("");
-
+const inputRef = useRef(null);
   const chatPopupRef = useRef(null);
-
+const chatMessagesEndRef = useRef(null);
   const now = new Date();
   const formattedTime = now.toLocaleDateString("en-US", {
     hour: "numeric",
@@ -27,7 +27,11 @@ function ChatBot() {
   });
 
   const options = ["Buy Eyewear", "Locate Nearby Store", "Query about my order"];
-
+useEffect(() => {
+  if (isOpen && startNewConversation && inputRef.current) {
+    inputRef.current.focus();
+  }
+}, [isOpen, startNewConversation]);
   useEffect(() => {
     function handleClickOutside(event) {
       if (
@@ -45,6 +49,12 @@ function ChatBot() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
+
+useEffect(() => {
+  if (chatMessagesEndRef.current) {
+    chatMessagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+  }
+}, [messages]);
 
   function chatPopUpHeader() {
     return (
@@ -133,7 +143,33 @@ function ChatBot() {
       setMessages((prev) => [...prev, botMsg]);
     }, 1000);
   }
+function handleSendMessage() {
+  if (inputText.trim() === "") return;
 
+  const currentTime = new Date().toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  const userMsg = {
+    type: "user",
+    text: inputText,
+    time: currentTime,
+  };
+
+  const botMsg = {
+    type: "bot",
+    text: "Thanks for your message! How else can I assist you?",
+    time: currentTime,
+  };
+
+  setMessages((prev) => [...prev, userMsg]);
+  setInputText("");
+
+  setTimeout(() => {
+    setMessages((prev) => [...prev, botMsg]);
+  }, 1000);
+}
   function chatBody() {
     return (
       <div
@@ -173,6 +209,7 @@ function ChatBot() {
               <span className="timestamp">{msg.time}</span>
             </div>
           ))}
+            <div ref={chatMessagesEndRef} />
         </div>
 
         <div className="chatInputBar">
@@ -190,9 +227,13 @@ function ChatBot() {
             />
           </label>
           <input
+            ref={inputRef}
             type="text"
             placeholder="Type a message..."
             value={inputText}
+            onKeyDown={(e) => {
+    if (e.key === "Enter") handleSendMessage();
+  }}
             onChange={(e) => setInputText(e.target.value)}
           />
           <button
@@ -235,7 +276,7 @@ function ChatBot() {
     <>
       {chatIcon()}
       {isOpen && (
-        <div className="chatPopup" ref={chatPopupRef}>
+        <div className={`chatPopup ${isOpen ? "open" : ""}`} ref={chatPopupRef}>
           {!startNewConversation ? (
             <>
               {chatPopUpHeader()}
