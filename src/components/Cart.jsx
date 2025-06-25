@@ -3,6 +3,8 @@ import './Cart.css';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import EastIcon from '@mui/icons-material/East';
 import WestIcon from '@mui/icons-material/West';
+import { useState } from 'react';
+
 
 
 const CartItem = ({ image, property1, property2, price1, price2, notice, finalPrice, onRemove }) => (
@@ -117,6 +119,9 @@ const WishlistSection = () => (
 );
 
 const CartPage = ({ cart , removeFromCart }) => {
+  const [showModal, setShowModal] = useState(false);
+  const [removeIndex, setRemoveIndex] = useState(null);
+
   return (
     <div className="cart-container">
       <div className="cart-section">
@@ -135,7 +140,11 @@ const CartPage = ({ cart , removeFromCart }) => {
               price2={0}
               notice="You can upload prescription after payment"
               finalPrice={item.price}
-              onRemove={() => removeFromCart(index)}
+              onRemove={() => {
+                setRemoveIndex(index);
+                setShowModal(true);
+              }}
+
             />
           ))
         )}
@@ -144,6 +153,43 @@ const CartPage = ({ cart , removeFromCart }) => {
       </div>
 
       <CartSummary />
+      {showModal && (
+  <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center z-50">
+    <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-sm relative text-center">
+      <button
+        className="absolute top-2 right-2 text-gray-600 hover:text-black"
+        onClick={() => setShowModal(false)}
+      >
+        &times;
+      </button>
+      <h2 className="text-lg font-semibold mb-2">Remove Item From Cart?</h2>
+      <p className="text-sm text-gray-600 mb-4">
+        Instead, you could wishlist this item and access it later.
+      </p>
+      <div className="flex justify-around">
+        <button
+          className="border border-blue-900 text-blue-900 px-4 py-2 rounded hover:bg-blue-50"
+          onClick={() => {
+            removeFromCart(removeIndex);
+            setShowModal(false);
+          }}
+        >
+          Yes, remove
+        </button>
+        <button
+          className="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-800"
+          onClick={() => {
+            // Optional: You can move to wishlist logic here
+            setShowModal(false);
+          }}
+        >
+          Move to wishlist
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };
