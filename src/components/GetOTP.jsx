@@ -49,7 +49,7 @@ const GetOTP = ({ onBack, onOTPSent }) => {
           <button
             type="submit"
             disabled={isLoading}
-            className="bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-all disabled:opacity-70"
+            className="bg-gray-600 text-white py-2 rounded-md hover:bg-gray-800 transition-all disabled:opacity-70"
           >
             {isLoading ? 'Sending...' : 'Send OTP'}
           </button>

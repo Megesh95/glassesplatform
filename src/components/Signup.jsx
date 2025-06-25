@@ -33,7 +33,7 @@ const SignUp = ({ onClose, onSwitch }) => {
           />
           <button
             type="submit"
-            className="bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-all"
+            className="bg-gray-600 text-white py-2 rounded-md hover:bg-gray-700 transition-all"
           >
             Sign Up
           </button>
