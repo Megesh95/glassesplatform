@@ -49,7 +49,8 @@ const App = () => {
   return (
     <Router>
       <div className="font-sans min-h-screen bg-gray-100 flex flex-col">
-        <Header onLoginClick={() => openAuthModal('signin')} />
+        <Header onLoginClick={() => openAuthModal('signin')}
+        cartCount={cartItems.length} />
 
         <main className="flex-grow">
           <Routes>

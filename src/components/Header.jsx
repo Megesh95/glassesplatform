@@ -13,9 +13,10 @@ const toplinks = [
   { name: "Partner with us", url: "/partner" },
 ];
 
-function Header({ onLoginClick }) {  // Changed from setShowSignUp to more generic onLoginClick
+function Header({ onLoginClick, cartCount }) {
   return (
     <div id="header">
+      
       {/* Top Header */}
       <div id="topheader">
         <div id="topheader2">
@@ -24,7 +25,7 @@ function Header({ onLoginClick }) {  // Changed from setShowSignUp to more gener
               <Link to={link.url} className="toplinktext">
                 {link.name}
               </Link>
-              {index < toplinks.length - 1 && " | "}  {/* Better conditional rendering */}
+              {index < toplinks.length - 1 && " | "}
             </div>
           ))}
         </div>
@@ -44,27 +45,38 @@ function Header({ onLoginClick }) {  // Changed from setShowSignUp to more gener
           <input 
             type="text" 
             placeholder="What are you looking for?" 
-            aria-label="Search products"  // Accessibility improvement
+            aria-label="Search products"
           />
         </div>
         
         <div id="middlerightheader">
           <Link to="/track-order" className="nav-link">Track Order</Link>
+          
           <button 
-            className="mrhbutton auth-button"  // Added separate class for auth button
-            onClick={onLoginClick}  // Using the passed handler
+            className="mrhbutton auth-button"
+            onClick={onLoginClick}
             aria-label="Sign in or sign up"
           >
             Sign In & Sign Up
           </button>
+          
           <Link to="/wishlist" className="nav-link">Wishlist</Link>
-          <Link to="/cart" className="nav-link">Cart</Link>
+          
+          <div className="nav-link relative">
+            <Link to="/cart">Cart</Link>
+            {cartCount > 0 && (
+              <span className="absolute -top-2 -right-3 bg-blue-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                {cartCount}
+              </span>
+            )}
+          </div>
+          
         </div>
       </div>
 
       {/* Navigation */}
       <nav id="navigator">
-        {/* You can add your main navigation items here */}
+        {/* Add main navigation items here */}
       </nav>
     </div>
   );
