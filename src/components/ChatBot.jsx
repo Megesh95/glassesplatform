@@ -206,11 +206,33 @@ function newChatHeader() {
       minute: "2-digit",
     });
     const userMsg = { type: "user", text: optionText, time };
-    const botMsg = {
+    let botMsg;
+
+    if (optionText === "Buy Eyewear") {
+    botMsg = {
       type: "bot",
-      text: `You selected "${optionText}". How else can I assist you? Provide your phone number`,
+      text: "Share Your Phone Number",
       time,
     };
+  } else if (optionText === "Locate Nearby Store") {
+    botMsg = {
+      type: "bot",
+      text: "Please find the nearest stores by clicking here - https://stores.lenskart.com/",
+      time,
+    };
+  } else if (optionText === "Query about my order") {
+    botMsg = {
+      type: "bot",
+      text: "Start exploring your new eyewear fashion by logging into V-lens 🤓 .",
+      time,
+    };
+  } else {
+    botMsg = {
+      type: "bot",
+      text: "Sorry, I didn't get that. Can you please select an option?",
+      time,
+    };
+  }
 
     setMessages((prev) => [...prev, userMsg]);
     setTimeout(() => {
@@ -233,7 +255,7 @@ function handleSendMessage() {
 
   const botMsg = {
     type: "bot",
-    text: "Thanks for your message! How else can I assist you?",
+    text: "Sorry, I didn't get that. Can you please select an option?",
     time: currentTime,
   };
 
@@ -305,6 +327,7 @@ function handleSendMessage() {
             type="text"
             placeholder="Type a message..."
             value={inputText}
+            disabled={messages.length === 0}
             onKeyDown={(e) => {
     if (e.key === "Enter") handleSendMessage();
   }}
