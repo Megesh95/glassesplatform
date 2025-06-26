@@ -16,7 +16,11 @@ function ChatBot() {
   const [messages, setMessages] = useState([]);
   const [startNewConversation, setStartNewConversation] = useState(false);
   const [inputText, setInputText] = useState("");
+  const [showNewConvo,setShowNewConvo] = useState(startNewConversation);
 const inputRef = useRef(null);
+const [showDropdown, setShowDropdown] = useState(false);
+const hoverTimeoutRef = useRef(null);
+
   const chatPopupRef = useRef(null);
 const chatMessagesEndRef = useRef(null);
   const now = new Date();
@@ -63,7 +67,7 @@ useEffect(() => {
   if (
     chatPopupRef.current &&
     !chatPopupRef.current.contains(event.target) &&
-    !event.target.closest(".chatToggle") // prevent toggle click from closing
+    !event.target.closest(".chatToggle")
   ) {
     setIsOpen(false);
     setStartNewConversation(false);
@@ -86,7 +90,7 @@ useEffect(() => {
     return (
       <div className="chatHeader">
         <img className="logo" src={logo} alt="logo" />
-        <h1>Welcome to V-Tech</h1>
+        <h1>Welcome to V-Lens</h1>
         <p>How can we help you?</p>
         <div className="menuIcon" onClick={() => setShowMute(!showMute)}>⋮</div>
         {showMute && (
@@ -107,7 +111,7 @@ useEffect(() => {
       <div
   className="chatToggle"
   onClick={(e) => {
-    e.stopPropagation(); // prevent bubbling to outside click
+    e.stopPropagation();
     setIsOpen((prev) => !prev);
   }}
 >
@@ -159,23 +163,41 @@ useEffect(() => {
     );
   }
 
-  function newChatHeader() {
-    return (
-      <div className="newHeader fade-slide-in">
-        <div
-          className="backiconclass"
-          onClick={() => setStartNewConversation(false)}
-        >
-          <img className="back" src={back} alt="back arrow" />
+function newChatHeader() {
+  return (
+    <div className="newHeader fade-slide-in">
+      <div
+        className="menuHoverContainer"
+      >
+        <div className="menuIcon">
+          <span  onClick={() => setShowDropdown((prev)=>!prev)} style={{ fontSize: "24px", cursor: "pointer" }}>⋮</span>
         </div>
-        <img className="logo1" src={logo} alt="logo" />
-        <div className="headerText">
-          <span className="name">V-Tech Assistant</span>
-          <span className="subtitle">I am here to help you!</span>
-        </div>
+        {showDropdown && (
+          <div
+            className="newconvoDropdown"
+            onClick={() => {setMessages([]);
+              setShowDropdown(false);
+            }}
+          >
+            New conversation
+          </div>
+        )}
       </div>
-    );
-  }
+
+      <div className="backiconclass" onClick={() => setStartNewConversation(false)}>
+        <img className="back" src={back} alt="back arrow" />
+      </div>
+
+      <img className="logo1" src={logo} alt="logo" />
+      <div className="headerText">
+        <span className="name">V-Lens Assistant</span>
+        <span className="subtitle">I am here to help you!</span>
+      </div>
+    </div>
+  );
+}
+
+
 
   function handleOptionClick(index) {
     const optionText = options[index];
@@ -235,7 +257,7 @@ function handleSendMessage() {
       >
         <div className="chatMessages">
           <div className="botMessage">
-            Hello! Welcome to V-Tech, India’s largest online tech support team.
+            Hello! Welcome to V-Lens, India’s largest online tech support team.
             How can I help you today?
           </div>
           <div className="options">
