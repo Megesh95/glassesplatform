@@ -71,7 +71,7 @@ const App = () => {
           handleOTPSent={handleOTPSent}
         />
 
-        <ChatBot />
+        <ChatBot cart={cartItems} />
       </div>
     </Router>
   );

@@ -10,8 +10,10 @@ import back from "../assets/ChatBot_pics/back.png";
 import bgimage from "../assets/ChatBot_pics/Backgroundimage.jpg";
 import paperpin from "../assets/ChatBot_pics/paperpin.png";
 
-function ChatBot() {
+function ChatBot({cart}) {
+  const [showOptions, setShowOptions] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [disable, setDisable] = useState(true);
   const [showMute, setShowMute] = useState(false);
   const [messages, setMessages] = useState([]);
   const [startNewConversation, setStartNewConversation] = useState(false);
@@ -20,7 +22,7 @@ function ChatBot() {
 const inputRef = useRef(null);
 const [showDropdown, setShowDropdown] = useState(false);
 const hoverTimeoutRef = useRef(null);
-
+const [expectingPhone, setExpectingPhone] = useState(false);
   const chatPopupRef = useRef(null);
 const chatMessagesEndRef = useRef(null);
   const now = new Date();
@@ -53,7 +55,19 @@ const chatMessagesEndRef = useRef(null);
   },
 ]);
 
-
+function getOptionsMessage() {
+  return (<div className="options">
+            {options.map((option, idx) => (
+              <button
+                key={idx}
+                className="optionButton"
+                onClick={() => handleOptionClick(idx)}
+              >
+                {option}
+              </button>
+            ))}
+          </div>);
+}
 
   const options = ["Buy Eyewear", "Locate Nearby Store", "Query about my order"];
 useEffect(() => {
@@ -70,7 +84,6 @@ useEffect(() => {
     !event.target.closest(".chatToggle")
   ) {
     setIsOpen(false);
-    setStartNewConversation(false);
   }
 }
 
@@ -209,9 +222,11 @@ function newChatHeader() {
     let botMsg;
 
     if (optionText === "Buy Eyewear") {
+      setExpectingPhone(true);
+      setDisable(false);
     botMsg = {
       type: "bot",
-      text: "Share Your Phone Number",
+      text: "Please provide your Phone Number",
       time,
     };
   } else if (optionText === "Locate Nearby Store") {
@@ -221,9 +236,12 @@ function newChatHeader() {
       time,
     };
   } else if (optionText === "Query about my order") {
+    const productList = cart?.length
+    ? cart.map((item, i) => `${i + 1}. ${item.name}`).join("\n")
+    : "🛒 Your cart is currently empty.";
     botMsg = {
       type: "bot",
-      text: "Start exploring your new eyewear fashion by logging into V-lens 🤓 .",
+      text: `Here’s your current order:\n${productList}`,
       time,
     };
   } else {
@@ -234,9 +252,10 @@ function newChatHeader() {
     };
   }
 
-    setMessages((prev) => [...prev, userMsg]);
+    setMessages((prev) => {if(optionText==="Buy Eyewear"){setDisable(false)};return [...prev, userMsg]});
     setTimeout(() => {
-      setMessages((prev) => [...prev, botMsg]);
+      setMessages((prev) => {if(optionText!=="Buy Eyewear")setDisable(true)
+        ;return [...prev, botMsg]});
     }, 1000);
   }
 function handleSendMessage() {
@@ -253,11 +272,33 @@ function handleSendMessage() {
     time: currentTime,
   };
 
-  const botMsg = {
-    type: "bot",
-    text: "Sorry, I didn't get that. Can you please select an option?",
-    time: currentTime,
-  };
+  let botMsg;
+
+
+  if (expectingPhone) {
+    const phoneRegex = /^[6-9]\d{9}$/; 
+    if (phoneRegex.test(inputText.trim())) {
+      botMsg = {
+        type: "bot",
+        text: "✅ Valid phone number! Enter the OTP sent to your mobile.",
+        time: currentTime,
+      };
+    } else {
+      setShowOptions(true);
+      botMsg = {
+        type: "bot",
+        text: "❌ Invalid phone number. Please enter a 10-digit valid number starting with 6-9.",
+        time: currentTime,
+      };
+    }
+    setExpectingPhone(false); 
+  } else {
+    botMsg = {
+      type: "bot",
+      text: "Thanks for your message! How can I assist you further?",
+      time: currentTime,
+    };
+  }
 
   setMessages((prev) => [...prev, userMsg]);
   setInputText("");
@@ -266,6 +307,7 @@ function handleSendMessage() {
     setMessages((prev) => [...prev, botMsg]);
   }, 1000);
 }
+
   function chatBody() {
     return (
       <div
@@ -282,29 +324,25 @@ function handleSendMessage() {
             Hello! Welcome to V-Lens, India’s largest online tech support team.
             How can I help you today?
           </div>
-          <div className="options">
-            {options.map((option, idx) => (
-              <button
-                key={idx}
-                className="optionButton"
-                onClick={() => handleOptionClick(idx)}
-              >
-                {option}
-              </button>
-            ))}
-          </div>
+          {
+            getOptionsMessage()
+          }
           <div className="time">
             <p style={{ fontSize: "11px" }}>{formattedTime}</p>
           </div>
           {messages.map((msg, idx) => (
-            <div
-              key={idx}
-              className={msg.type === "user" ? "userMessage" : "botresponse"}
-            >
-              {msg.text}
-              <span className="timestamp">{msg.time}</span>
-            </div>
-          ))}
+  <div
+    key={idx}
+    className={`${msg.type === "user" ? "userMessage" : "botresponse"} messageAnim`}
+  >
+    {msg.text.split('\n').map((line, i) => (
+  <div key={i}>{line}
+  {showOptions && getOptionsMessage()}</div>
+))}
+    <span className="timestamp">{msg.time}</span>
+  </div>
+))}
+
             <div ref={chatMessagesEndRef} />
         </div>
 
@@ -327,7 +365,7 @@ function handleSendMessage() {
             type="text"
             placeholder="Type a message..."
             value={inputText}
-            disabled={messages.length === 0}
+            disabled={disable}
             onKeyDown={(e) => {
     if (e.key === "Enter") handleSendMessage();
   }}
