@@ -336,8 +336,7 @@ function handleSendMessage() {
     className={`${msg.type === "user" ? "userMessage" : "botresponse"} messageAnim`}
   >
     {msg.text.split('\n').map((line, i) => (
-  <div key={i}>{line}
-  {showOptions && getOptionsMessage()}</div>
+  <div key={i}>{line}</div>
 ))}
     <span className="timestamp">{msg.time}</span>
   </div>
