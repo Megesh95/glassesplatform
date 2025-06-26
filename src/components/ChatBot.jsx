@@ -10,13 +10,19 @@ import back from "../assets/ChatBot_pics/back.png";
 import bgimage from "../assets/ChatBot_pics/Backgroundimage.jpg";
 import paperpin from "../assets/ChatBot_pics/paperpin.png";
 
-function ChatBot() {
+function ChatBot({cart}) {
+  const [showOptions, setShowOptions] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [disable, setDisable] = useState(true);
   const [showMute, setShowMute] = useState(false);
   const [messages, setMessages] = useState([]);
   const [startNewConversation, setStartNewConversation] = useState(false);
   const [inputText, setInputText] = useState("");
+  const [showNewConvo,setShowNewConvo] = useState(startNewConversation);
 const inputRef = useRef(null);
+const [showDropdown, setShowDropdown] = useState(false);
+const hoverTimeoutRef = useRef(null);
+const [expectingPhone, setExpectingPhone] = useState(false);
   const chatPopupRef = useRef(null);
 const chatMessagesEndRef = useRef(null);
   const now = new Date();
@@ -49,7 +55,19 @@ const chatMessagesEndRef = useRef(null);
   },
 ]);
 
-
+function getOptionsMessage() {
+  return (<div className="options">
+            {options.map((option, idx) => (
+              <button
+                key={idx}
+                className="optionButton"
+                onClick={() => handleOptionClick(idx)}
+              >
+                {option}
+              </button>
+            ))}
+          </div>);
+}
 
   const options = ["Buy Eyewear", "Locate Nearby Store", "Query about my order"];
 useEffect(() => {
@@ -63,10 +81,9 @@ useEffect(() => {
   if (
     chatPopupRef.current &&
     !chatPopupRef.current.contains(event.target) &&
-    !event.target.closest(".chatToggle") // prevent toggle click from closing
+    !event.target.closest(".chatToggle")
   ) {
     setIsOpen(false);
-    setStartNewConversation(false);
   }
 }
 
@@ -86,7 +103,7 @@ useEffect(() => {
     return (
       <div className="chatHeader">
         <img className="logo" src={logo} alt="logo" />
-        <h1>Welcome to V-Tech</h1>
+        <h1>Welcome to V-Lens</h1>
         <p>How can we help you?</p>
         <div className="menuIcon" onClick={() => setShowMute(!showMute)}>⋮</div>
         {showMute && (
@@ -107,7 +124,7 @@ useEffect(() => {
       <div
   className="chatToggle"
   onClick={(e) => {
-    e.stopPropagation(); // prevent bubbling to outside click
+    e.stopPropagation();
     setIsOpen((prev) => !prev);
   }}
 >
@@ -159,23 +176,41 @@ useEffect(() => {
     );
   }
 
-  function newChatHeader() {
-    return (
-      <div className="newHeader fade-slide-in">
-        <div
-          className="backiconclass"
-          onClick={() => setStartNewConversation(false)}
-        >
-          <img className="back" src={back} alt="back arrow" />
+function newChatHeader() {
+  return (
+    <div className="newHeader fade-slide-in">
+      <div
+        className="menuHoverContainer"
+      >
+        <div className="menuIcon">
+          <span  onClick={() => setShowDropdown((prev)=>!prev)} style={{ fontSize: "24px", cursor: "pointer" }}>⋮</span>
         </div>
-        <img className="logo1" src={logo} alt="logo" />
-        <div className="headerText">
-          <span className="name">V-Tech Assistant</span>
-          <span className="subtitle">I am here to help you!</span>
-        </div>
+        {showDropdown && (
+          <div
+            className="newconvoDropdown"
+            onClick={() => {setMessages([]);
+              setShowDropdown(false);
+            }}
+          >
+            New conversation
+          </div>
+        )}
       </div>
-    );
-  }
+
+      <div className="backiconclass" onClick={() => setStartNewConversation(false)}>
+        <img className="back" src={back} alt="back arrow" />
+      </div>
+
+      <img className="logo1" src={logo} alt="logo" />
+      <div className="headerText">
+        <span className="name">V-Lens Assistant</span>
+        <span className="subtitle">I am here to help you!</span>
+      </div>
+    </div>
+  );
+}
+
+
 
   function handleOptionClick(index) {
     const optionText = options[index];
@@ -184,15 +219,43 @@ useEffect(() => {
       minute: "2-digit",
     });
     const userMsg = { type: "user", text: optionText, time };
-    const botMsg = {
+    let botMsg;
+
+    if (optionText === "Buy Eyewear") {
+      setExpectingPhone(true);
+      setDisable(false);
+    botMsg = {
       type: "bot",
-      text: `You selected "${optionText}". How else can I assist you? Provide your phone number`,
+      text: "Please provide your Phone Number",
       time,
     };
+  } else if (optionText === "Locate Nearby Store") {
+    botMsg = {
+      type: "bot",
+      text: "Please find the nearest stores by clicking here - https://stores.lenskart.com/",
+      time,
+    };
+  } else if (optionText === "Query about my order") {
+    const productList = cart?.length
+    ? cart.map((item, i) => `${i + 1}. ${item.name}`).join("\n")
+    : "🛒 Your cart is currently empty.";
+    botMsg = {
+      type: "bot",
+      text: `Here’s your current order:\n${productList}`,
+      time,
+    };
+  } else {
+    botMsg = {
+      type: "bot",
+      text: "Sorry, I didn't get that. Can you please select an option?",
+      time,
+    };
+  }
 
-    setMessages((prev) => [...prev, userMsg]);
+    setMessages((prev) => {if(optionText==="Buy Eyewear"){setDisable(false)};return [...prev, userMsg]});
     setTimeout(() => {
-      setMessages((prev) => [...prev, botMsg]);
+      setMessages((prev) => {if(optionText!=="Buy Eyewear")setDisable(true)
+        ;return [...prev, botMsg]});
     }, 1000);
   }
 function handleSendMessage() {
@@ -209,11 +272,33 @@ function handleSendMessage() {
     time: currentTime,
   };
 
-  const botMsg = {
-    type: "bot",
-    text: "Thanks for your message! How else can I assist you?",
-    time: currentTime,
-  };
+  let botMsg;
+
+
+  if (expectingPhone) {
+    const phoneRegex = /^[6-9]\d{9}$/; 
+    if (phoneRegex.test(inputText.trim())) {
+      botMsg = {
+        type: "bot",
+        text: "✅ Valid phone number! Enter the OTP sent to your mobile.",
+        time: currentTime,
+      };
+    } else {
+      setShowOptions(true);
+      botMsg = {
+        type: "bot",
+        text: "❌ Invalid phone number. Please enter a 10-digit valid number starting with 6-9.",
+        time: currentTime,
+      };
+    }
+    setExpectingPhone(false); 
+  } else {
+    botMsg = {
+      type: "bot",
+      text: "Thanks for your message! How can I assist you further?",
+      time: currentTime,
+    };
+  }
 
   setMessages((prev) => [...prev, userMsg]);
   setInputText("");
@@ -222,6 +307,7 @@ function handleSendMessage() {
     setMessages((prev) => [...prev, botMsg]);
   }, 1000);
 }
+
   function chatBody() {
     return (
       <div
@@ -235,32 +321,27 @@ function handleSendMessage() {
       >
         <div className="chatMessages">
           <div className="botMessage">
-            Hello! Welcome to V-Tech, India’s largest online tech support team.
+            Hello! Welcome to V-Lens, India’s largest online tech support team.
             How can I help you today?
           </div>
-          <div className="options">
-            {options.map((option, idx) => (
-              <button
-                key={idx}
-                className="optionButton"
-                onClick={() => handleOptionClick(idx)}
-              >
-                {option}
-              </button>
-            ))}
-          </div>
+          {
+            getOptionsMessage()
+          }
           <div className="time">
             <p style={{ fontSize: "11px" }}>{formattedTime}</p>
           </div>
           {messages.map((msg, idx) => (
-            <div
-              key={idx}
-              className={msg.type === "user" ? "userMessage" : "botresponse"}
-            >
-              {msg.text}
-              <span className="timestamp">{msg.time}</span>
-            </div>
-          ))}
+  <div
+    key={idx}
+    className={`${msg.type === "user" ? "userMessage" : "botresponse"} messageAnim`}
+  >
+    {msg.text.split('\n').map((line, i) => (
+  <div key={i}>{line}</div>
+))}
+    <span className="timestamp">{msg.time}</span>
+  </div>
+))}
+
             <div ref={chatMessagesEndRef} />
         </div>
 
@@ -283,6 +364,7 @@ function handleSendMessage() {
             type="text"
             placeholder="Type a message..."
             value={inputText}
+            disabled={disable}
             onKeyDown={(e) => {
     if (e.key === "Enter") handleSendMessage();
   }}
