@@ -98,6 +98,7 @@ const App = () => {
         show={showWishlist}
       />
     </Router>
+    
   );
 };
 
