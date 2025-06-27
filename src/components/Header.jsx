@@ -60,7 +60,7 @@ function Header({ onLoginClick, cartCount, wishlistCount, toggleWishlist }) {
           </button>
           
           <button onClick={toggleWishlist} className="relative ml-4 bg-transparent border-none outline-none cursor-pointer" style={{background: 'none'}} aria-label="Open wishlist">
-            <span className="material-icons">favorite_border</span>
+            <span className="wishlist-text">Wishlist</span>
             {wishlistCount > 0 && (
               <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs px-1">
                 {wishlistCount}
