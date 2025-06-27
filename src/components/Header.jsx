@@ -1,5 +1,7 @@
 import './Header.css';
 import { Link } from 'react-router-dom';
+import { useState} from 'react';
+import Wishlist from './Wishlist';
 
 const toplinks = [
   { name: "Do More, Be More", url: "/" },
@@ -14,6 +16,13 @@ const toplinks = [
 ];
 
 function Header({ onLoginClick, cartCount }) {
+
+    const [showWishlist, setShowWishlist] = useState(false);
+
+    function toggleWishlist(){
+      setShowWishlist(!showWishlist);
+    };
+
   return (
     <div id="header">
       
@@ -60,7 +69,10 @@ function Header({ onLoginClick, cartCount }) {
             Sign In & Sign Up
           </button>
           
-          <Link to="/wishlist" className="nav-link">Wishlist</Link>
+          <Link onClick={toggleWishlist} className="nav-link">Wishlist</Link>
+          <div className={`wishlist-body ${showWishlist ? "show" : ""}`}>
+            <Wishlist toggleWishlist={toggleWishlist}/>
+          </div>
           
           <div className="nav-link relative">
             <Link to="/cart">Cart</Link>
