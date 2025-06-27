@@ -13,10 +13,9 @@ const toplinks = [
   { name: "Partner with us", url: "/partner" },
 ];
 
-function Header({ onLoginClick }) {  // Changed from setShowSignUp to more generic onLoginClick
+function Header({ onLoginClick }) {
   return (
     <div id="header">
-      {/* Top Header */}
       <div id="topheader">
         <div id="topheader2">
           {toplinks.map((link, index) => (
@@ -24,7 +23,7 @@ function Header({ onLoginClick }) {  // Changed from setShowSignUp to more gener
               <Link to={link.url} className="toplinktext">
                 {link.name}
               </Link>
-              {index < toplinks.length - 1 && " | "}  {/* Better conditional rendering */}
+              {index < toplinks.length - 1 && " | "}
             </div>
           ))}
         </div>
@@ -33,7 +32,6 @@ function Header({ onLoginClick }) {  // Changed from setShowSignUp to more gener
         </Link>
       </div>
 
-      {/* Middle Header */}
       <div id="middleheader">
         <Link to="/" id="middleleftheader">
           <h1 id="headerlogo">V-Lens</h1>
@@ -42,17 +40,17 @@ function Header({ onLoginClick }) {  // Changed from setShowSignUp to more gener
         
         <div id="searchbar">
           <input 
-            type="text" 
-            placeholder="What are you looking for?" 
-            aria-label="Search products"  // Accessibility improvement
+            type="text"
+            placeholder="What are you looking for?"
+            aria-label="Search products"
           />
         </div>
         
         <div id="middlerightheader">
-          <Link to="/track-order" className="nav-link">Track Order</Link>
+          <Link to="/trackorder" className="nav-link">Track Order</Link>
           <button 
-            className="mrhbutton auth-button"  // Added separate class for auth button
-            onClick={onLoginClick}  // Using the passed handler
+            className="mrhbutton auth-button"
+            onClick={onLoginClick}
             aria-label="Sign in or sign up"
           >
             Sign In & Sign Up
@@ -62,9 +60,7 @@ function Header({ onLoginClick }) {  // Changed from setShowSignUp to more gener
         </div>
       </div>
 
-      {/* Navigation */}
       <nav id="navigator">
-        {/* You can add your main navigation items here */}
       </nav>
     </div>
   );
