@@ -8,7 +8,6 @@
     color: rgba(0,0,80,1);
     position: sticky;
     top: 0;
-    z-index: 100;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -106,3 +105,7 @@
   border-radius: 4px;
 }
 
+#navigator>button:hover {
+    border-bottom: 2px solid rgba(0,0,80,1);
+    cursor: pointer;
+}
