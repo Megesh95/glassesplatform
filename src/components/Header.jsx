@@ -18,78 +18,95 @@ const toplinks = [
 function Header({ onLoginClick, cartCount }) {
 
     const [showWishlist, setShowWishlist] = useState(false);
+    const [showNavCard, setShowNavCard] = useState(false);
 
     function toggleWishlist(){
       setShowWishlist(!showWishlist);
     };
 
   return (
-    <div id="header">
-      
-      {/* Top Header */}
-      <div id="topheader">
-        <div id="topheader2">
-          {toplinks.map((link, index) => (
-            <div key={index} className="toplink">
-              <Link to={link.url} className="toplinktext">
-                {link.name}
-              </Link>
-              {index < toplinks.length - 1 && " | "}
+    <div>
+      <div id="header">
+        
+        {/* Top Header */}
+        <div id="topheader">
+          <div id="topheader2">
+            {toplinks.map((link, index) => (
+              <div key={index} className="toplink">
+                <Link to={link.url} className="toplinktext">
+                  {link.name}
+                </Link>
+                {index < toplinks.length - 1 && " | "}
+              </div>
+            ))}
+          </div>
+          <Link id="contactlink" to="/contact">
+            Contact Us
+          </Link>
+        </div>
+
+        {/* Middle Header */}
+        <div id="middleheader">
+          <Link to="/" id="middleleftheader">
+            <h1 id="headerlogo">V-Lens</h1>
+            <h1 id="phonenumber">9XXXX-XXXXX</h1>
+          </Link>
+          
+          <div id="searchbar">
+            <input 
+              type="text" 
+              placeholder="What are you looking for?" 
+              aria-label="Search products"
+            />
+          </div>
+          
+          <div id="middlerightheader">
+            <Link to="/track-order" className="nav-link">Track Order</Link>
+            
+            <button 
+              className="mrhbutton auth-button"
+              onClick={onLoginClick}
+              aria-label="Sign in or sign up"
+            >
+              Sign In & Sign Up
+            </button>
+            
+            <Link onClick={toggleWishlist} className="nav-link">Wishlist</Link>
+            <div className={`wishlist-body ${showWishlist ? "show" : ""}`}>
+              <Wishlist toggleWishlist={toggleWishlist}/>
             </div>
-          ))}
-        </div>
-        <Link id="contactlink" to="/contact">
-          Contact Us
-        </Link>
-      </div>
-
-      {/* Middle Header */}
-      <div id="middleheader">
-        <Link to="/" id="middleleftheader">
-          <h1 id="headerlogo">V-Lens</h1>
-          <h1 id="phonenumber">9XXXX-XXXXX</h1>
-        </Link>
-        
-        <div id="searchbar">
-          <input 
-            type="text" 
-            placeholder="What are you looking for?" 
-            aria-label="Search products"
-          />
-        </div>
-        
-        <div id="middlerightheader">
-          <Link to="/track-order" className="nav-link">Track Order</Link>
-          
-          <button 
-            className="mrhbutton auth-button"
-            onClick={onLoginClick}
-            aria-label="Sign in or sign up"
-          >
-            Sign In & Sign Up
-          </button>
-          
-          <Link onClick={toggleWishlist} className="nav-link">Wishlist</Link>
-          <div className={`wishlist-body ${showWishlist ? "show" : ""}`}>
-            <Wishlist toggleWishlist={toggleWishlist}/>
+            
+            <div className="nav-link relative">
+              <Link to="/cart">Cart</Link>
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-3 bg-blue-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
+            </div>
+            
           </div>
-          
-          <div className="nav-link relative">
-            <Link to="/cart">Cart</Link>
-            {cartCount > 0 && (
-              <span className="absolute -top-2 -right-3 bg-blue-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                {cartCount}
-              </span>
-            )}
-          </div>
-          
         </div>
-      </div>
 
-      {/* Navigation */}
-      <nav id="navigator">
-        {/* Add main navigation items here */}
-      </nav>
+        {/* Navigation */}
+        <nav id="navigator" className = "flex gap-3 px-2 text-[95%] font-semibold h-16 bg-neutral-100">
+          <button
+          onClick={() => {setShowNavCard(!showNavCard)}}
+          >EYEGLASSES</button>
+          <button>SCREEN GLASSES</button>
+          <button>KIDS GLASSES</button>
+          <button>CONTACT LENSES</button>
+          <button>SUNGLASSES</button>
+          <button>HOME EYE-TEST</button>
+          <button>STORE LOCATOR</button>
+        </nav>
+        
+      </div>
+      {showNavCard && 
+          <div className = "absolute left-8 bg-white h-[70vh] w-[90vw] z-50">
+
+          </div>
+        }
     </div>
   );
 }
