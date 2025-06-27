@@ -1,4 +1,6 @@
 import ProductCard from "./ProductCards";
+import { useState } from "react";
+
 
 const sampleProducts = [
   {
@@ -35,7 +37,7 @@ const sampleProducts = [
     reviews: 1222,
     colors: ["#1e3a8a", "#1f2937", "#374151"],
     image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//l/i/Lenskart-Air-LA-E14360-C2-Eyeglasses_J_1844.jpg",
-    description: "Stay cool and confident with the Lenskart Blue eyeglasses, designed in striking navy tones. Crafted with a strong yet light build, they’re perfect for professionals and students alike."
+    description: "Stay cool and confident with the Lenskart Blue eyeglasses, designed in striking navy tones. Crafted with a strong yet light build, they're perfect for professionals and students alike."
   },
   {
     name: "Rose Gold Classic",
@@ -148,12 +150,54 @@ const sampleProducts = [
 ];
 
 
-function Products({ addToCart }) {
+function Products({ addToCart, wishlistItems, addToWishlist, removeFromWishlist }) {
+  const [sortOption, setSortOption] = useState("");
+
+  let sortedProducts = [...sampleProducts];
+
+  if (sortOption === "priceLowHigh") {
+    sortedProducts.sort((a, b) => a.price - b.price);
+  } else if (sortOption === "priceHighLow") {
+    sortedProducts.sort((a, b) => b.price - a.price);
+  }
+
   return (
-    <div className="flex flex-wrap gap-6 justify-center p-4 bg-gray-50 min-h-screen">
-      {sampleProducts.map((product, index) => (
-        <ProductCard key={index} product={product} addToCart={addToCart} />
-      ))}
+    <div className="px-4 py-4 bg-gray-50 min-h-screen">
+      
+      {/* Header and Sort Bar */}
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold">Eyeglasses for You</h2>
+
+        <div className="flex items-center">
+          <span className="text-teal-600 font-semibold mr-2 flex items-center">
+            ⇅ SORT BY
+          </span>
+          <select 
+            value={sortOption} 
+            onChange={(e) => setSortOption(e.target.value)}
+            className="border border-gray-300 rounded px-3 py-2"
+          >
+            <option value="">Best Sellers</option>
+            <option value="priceLowHigh">Price: Low to High</option>
+            <option value="priceHighLow">Price: High to Low</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Product Grid */}
+      <div className="flex flex-wrap gap-6 justify-center">
+        {sortedProducts.map((product, index) => (
+          <ProductCard 
+            key={index} 
+            product={product} 
+            addToCart={addToCart} 
+            wishlistItems={wishlistItems}
+            addToWishlist={addToWishlist}
+            removeFromWishlist={removeFromWishlist}
+          />
+        ))}
+      </div>
+
     </div>
   );
 }

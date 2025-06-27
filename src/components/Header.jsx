@@ -13,7 +13,8 @@ const toplinks = [
   { name: "Partner with us", url: "/partner" },
 ];
 
-function Header({ onLoginClick }) {
+
+function Header({ onLoginClick, cartCount, wishlistCount, toggleWishlist }) {
   return (
     <div id="header">
       <div id="topheader">
@@ -40,14 +41,16 @@ function Header({ onLoginClick }) {
         
         <div id="searchbar">
           <input 
-            type="text"
-            placeholder="What are you looking for?"
+
+            type="text" 
+            placeholder="What are you looking for?" 
             aria-label="Search products"
           />
         </div>
         
         <div id="middlerightheader">
           <Link to="/trackorder" className="nav-link">Track Order</Link>
+
           <button 
             className="mrhbutton auth-button"
             onClick={onLoginClick}
@@ -55,12 +58,28 @@ function Header({ onLoginClick }) {
           >
             Sign In & Sign Up
           </button>
-          <Link to="/wishlist" className="nav-link">Wishlist</Link>
-          <Link to="/cart" className="nav-link">Cart</Link>
+          
+          <button onClick={toggleWishlist} className="relative ml-4 bg-transparent border-none outline-none cursor-pointer" style={{background: 'none'}} aria-label="Open wishlist">
+            <span className="wishlist-text">Wishlist</span>
+            {wishlistCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs px-1">
+                {wishlistCount}
+              </span>
+            )}
+          </button>
+          <div className="nav-link relative">
+            <Link to="/cart">Cart</Link>
+            {cartCount > 0 && (
+              <span className="absolute -top-2 -right-3 bg-blue-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                {cartCount}
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
       <nav id="navigator">
+        {/* Add main navigation items here */}
       </nav>
     </div>
   );

@@ -1,21 +1,28 @@
-// src/pages/HomePage.jsx
 import React from 'react';
 import SliderAnimation from '../components/SliderAnimation';
 import Products from '../components/Products/Products';
 
-const HomePage = () => {
+const HomePage = ({ addToCart, addToWishlist, wishlistItems, removeFromWishlist }) => {
   return (
     <>
       <SliderAnimation />
+      
       <SectionDivider title="New Models" />
       <div className="py-16 px-4 flex items align-middle">
-        <Products />
+        <Products 
+          addToCart={addToCart}
+          addToWishlist={addToWishlist}
+          wishlistItems={wishlistItems}
+          removeFromWishlist={removeFromWishlist}
+        />
       </div>
+
       <SectionDivider title="Free Lens Replacement at Stores" />
       <BannerImage 
         src="https://static5.lenskart.com/media/uploads/Desktop-v2-topbanner-hustlrswitch-GJ-150525.png"
         alt="Replacement"
       />
+
       <SectionDivider title="Premium Eyewear" />
       <BannerImage 
         src="https://static1.lenskart.com/media/desktop/img/16-sep-24/r1.jpeg"

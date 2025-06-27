@@ -1,13 +1,17 @@
 import React, { useState } from "react";
 import { Heart } from "lucide-react";
 
-const ProductCard = ({ product, addToCart }) => {
+const ProductCard = ({ product, addToCart, wishlistItems, addToWishlist, removeFromWishlist }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isWishlisted, setIsWishlisted] = useState(false);
+  const isWishlisted = wishlistItems.some((item) => item.name === product.name);
 
-  const toggleWishlist = (e) => {
+  const handleWishlistClick = (e) => {
     e.stopPropagation();
-    setIsWishlisted(!isWishlisted);
+    if (isWishlisted) {
+      removeFromWishlist(product.name);
+    } else {
+      addToWishlist(product);
+    }
   };
 
   return (
@@ -30,7 +34,7 @@ const ProductCard = ({ product, addToCart }) => {
                 ? "text-red-500"
                 : "text-gray-500 hover:text-red-400"
             }`}
-            onClick={toggleWishlist}
+            onClick={handleWishlistClick}
             aria-label="Toggle wishlist"
           >
             <Heart size={20} fill={isWishlisted ? "currentColor" : "none"} />
