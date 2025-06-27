@@ -68,11 +68,31 @@ html {
   color: white;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
+   animation: slideFadeInTop 0.5s ease-out;
+}
+@keyframes slideFadeInTop {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 .fade-slide-in {
   opacity: 0;
-
   animation: fadeSlideIn 0.4s ease-out forwards;
+}
+@keyframes fadeSlideIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 .fade-out {
   opacity: 1;
@@ -252,6 +272,20 @@ html {
 .logo {
   width: 50px;
   margin-bottom: 10px;
+}
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.messageAnim {
+  animation: fadeInUp 0.4s ease-out;
 }
 
 .back {
@@ -557,3 +591,84 @@ input:checked + .slider:before {
     width: 100%;
   }
 }
+.micIcon {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.micIcon.listening {
+  animation: pulse 1s infinite;
+  filter: drop-shadow(0 0 5px red);
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.feedbackButtons {
+  margin-top: 6px;
+  display: flex;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.thumbIcon {
+  color: #888;
+  transition: transform 0.2s;
+}
+
+.thumbIcon:hover {
+  color: #00005c;
+  transform: scale(1.2);
+}
+.msgMeta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-top: 4px;
+  font-size: 10px;
+  color: #999;
+}
+
+.feedbackWrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.thumbIcon {
+  cursor: pointer;
+  color: #888;
+  transition: transform 0.2s ease;
+}
+
+.thumbIcon:hover {
+  transform: scale(1.2);
+}
+
+.thumbIcon.selected {
+  color: #00005c;
+}
+
+.reportText {
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 10px;
+  color: #999;
+}
+
+.reportText:hover {
+  color: red;
+}
+
