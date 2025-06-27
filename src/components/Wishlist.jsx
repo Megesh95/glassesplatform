@@ -1,19 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import "./Wishlist.css";
+import "./Header";
 
-
-function Wishlist() {
-    const [showWishlist, setShowWishlist] = useState(false);
-
-    function toggleWishlist(){
-      setShowWishlist(!showWishlist);
-    };
-  
+function Wishlist({ toggleWishlist }) {
   return (
     <>
-    <button onClick={toggleWishlist}>wishlist</button>
-
-        <div className={`wishlist-body ${showWishlist ? "show" : ""}`}>
         <div className="wishlist-wrapper">
           {/* Header */}
           <div className="wishlist-header">
@@ -22,7 +13,9 @@ function Wishlist() {
                 PRODUCTS <span>(3)</span>
               </div>
             </div>
-            <div className="wishlist-close-button" onClick={toggleWishlist}>X</div>
+            <div className="wishlist-close-button" onClick={toggleWishlist}>
+              X
+            </div>
           </div>
 
           {/* Product List */}
@@ -38,14 +31,14 @@ function Wishlist() {
                 target="_blank"
                 title="Lenskart BLU Screen Glasses"
                 className="wishlist-product-link"
-                >
+              >
                 <div className="wishlist-product-img">
                   <img
                     src="https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//l/i/lenskart-blu-lb-e16383-c1-eyeglasses_img_3499_14_03_2024.jpg"
                     alt=""
                     height="48"
                     width="48"
-                    />
+                  />
                 </div>
                 <div className="wishlist-product-details">
                   <h5 className="wishlist-product-name">
@@ -67,7 +60,7 @@ function Wishlist() {
                 target="_blank"
                 title="Lenskart BLU Screen Glasses"
                 className="wishlist-product-link"
-                >
+              >
                 <div className="wishlist-product-img">
                   <img
                     src="https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//l/i/blue-block-phone-&amp;-computer-glasses:-light-blue-transparent-full-rim-round-lenskart-blu-lb-e14061-c1_lenskart-blu-lb-e14061-c1-eyeglasses_lenskart-blu-lb-e14061-c1-eyeglasses_eyeglasses_g_9196_325_02_2022.jpg"
@@ -96,14 +89,14 @@ function Wishlist() {
                 target="_blank"
                 title="Lenskart Hustlr"
                 className="wishlist-product-link"
-                >
+              >
                 <div className="wishlist-product-img">
                   <img
                     src="https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//l/i/crystal-full-rim-wayfarer-lenskart-hustlr-lh-e16985-w-c5-eyeglasses_img_2263_14march24.jpg"
                     alt=""
                     height="48"
                     width="48"
-                    />
+                  />
                 </div>
                 <div className="wishlist-product-details">
                   <h5 className="wishlist-product-name">Lenskart Hustlr</h5>
@@ -111,8 +104,6 @@ function Wishlist() {
                 </div>
               </a>
             </div>
-
-            
           </div>
 
           {/* Clear List Button */}
@@ -120,7 +111,7 @@ function Wishlist() {
             <a href="/">CLEAR LIST</a>
           </div>
         </div>
-      </div>
+     
     </>
   );
 }
