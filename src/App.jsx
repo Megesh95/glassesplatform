@@ -1,42 +1,51 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Header from './components/Header';
-import Wishlist from './components/Wishlist';
-import Cart from './components/Cart';
-import TrackOrder from './components/TrackOrder';
-import FooterSection from './components/FooterSection';
-import ChatBot from './components/ChatBot';
-import HomePage from './pages/HomePage';
-import AuthModalManager from './components/AuthModalManager';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import Header from "./components/Header"
+import Wishlist from "./components/Wishlist"
+import Cart from "./components/Cart"
+import TrackOrder from "./components/TrackOrder"
+import FooterSection from "./components/FooterSection"
+import ChatBot from "./components/ChatBot"
+import HomePage from "./pages/HomePage"
+import AuthModalManager from "./components/AuthModalManager"
 
 const App = () => {
   const [authModal, setAuthModal] = useState({
     show: false,
     type: null,
-    email: ''
-  });
+    email: "",
+  })
+
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [user, setUser] = useState(null)
 
   const [cartItems, setCartItems] = useState([]);
   const [wishlistItems, setWishlistItems] = useState([]);
   const [showWishlist, setShowWishlist] = useState(false);
 
   const openAuthModal = (type) => {
-    if (!type) return;
-    setAuthModal({ show: true, type, email: '' });
-  };
+    if (!type) return
+    setAuthModal({ show: true, type, email: "" })
+  }
 
   const closeAuthModal = () => {
-    setAuthModal({ show: false, type: null, email: '' });
-  };
+    setAuthModal({ show: false, type: null, email: "" })
+  }
 
   const switchAuthModal = (type) => {
-    if (!type) return;
-    setAuthModal((prev) => ({ ...prev, show: true, type }));
-  };
+    if (!type) return
+    setAuthModal((prev) => ({ ...prev, show: true, type }))
+  }
 
   const handleOTPSent = (email) => {
-    setAuthModal((prev) => ({ ...prev, type: 'verifyotp', email }));
-  };
+    setAuthModal((prev) => ({ ...prev, type: "verifyotp", email }))
+  }
+
+  const handleAuthSuccess = (userData) => {
+    setIsAuthenticated(true)
+    setUser(userData)
+    closeAuthModal()
+  }
 
   // Add to cart function
   const addToCart = (product) => {
@@ -87,6 +96,7 @@ const App = () => {
           closeAuthModal={closeAuthModal}
           switchAuthModal={switchAuthModal}
           handleOTPSent={handleOTPSent}
+          onAuthSuccess={handleAuthSuccess}
         />
         <ChatBot cart={cartItems} wishlist={wishlistItems} />
       </div>

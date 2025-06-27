@@ -13,10 +13,10 @@ const toplinks = [
   { name: "Partner with us", url: "/partner" },
 ];
 
+
 function Header({ onLoginClick, cartCount, wishlistCount, toggleWishlist }) {
   return (
     <div id="header">
-      {/* Top Header */}
       <div id="topheader">
         <div id="topheader2">
           {toplinks.map((link, index) => (
@@ -33,7 +33,6 @@ function Header({ onLoginClick, cartCount, wishlistCount, toggleWishlist }) {
         </Link>
       </div>
 
-      {/* Middle Header */}
       <div id="middleheader">
         <Link to="/" id="middleleftheader">
           <h1 id="headerlogo">V-Lens</h1>
@@ -42,6 +41,7 @@ function Header({ onLoginClick, cartCount, wishlistCount, toggleWishlist }) {
         
         <div id="searchbar">
           <input 
+
             type="text" 
             placeholder="What are you looking for?" 
             aria-label="Search products"
@@ -49,8 +49,8 @@ function Header({ onLoginClick, cartCount, wishlistCount, toggleWishlist }) {
         </div>
         
         <div id="middlerightheader">
-          <Link to="/track-order" className="nav-link">Track Order</Link>
-          
+          <Link to="/trackorder" className="nav-link">Track Order</Link>
+
           <button 
             className="mrhbutton auth-button"
             onClick={onLoginClick}
@@ -78,7 +78,6 @@ function Header({ onLoginClick, cartCount, wishlistCount, toggleWishlist }) {
         </div>
       </div>
 
-      {/* Navigation */}
       <nav id="navigator">
         {/* Add main navigation items here */}
       </nav>
