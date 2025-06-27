@@ -1,118 +1,68 @@
 import React from "react";
 import "./Wishlist.css";
-import "./Header";
 
-function Wishlist({ toggleWishlist }) {
+function Wishlist({ wishlist, removeFromWishlist, clearWishlist, toggleWishlist, show }) {
+  if (!show) return null;
   return (
-    <>
+    <div className="wishlist-bottom-sheet">
+      <div className="wishlist-modal">
         <div className="wishlist-wrapper">
           {/* Header */}
           <div className="wishlist-header">
             <div className="wishlist-title-wrapper">
               <div className="wishlist-title">
-                PRODUCTS <span>(3)</span>
+                PRODUCTS <span>({wishlist.length})</span>
               </div>
             </div>
             <div className="wishlist-close-button" onClick={toggleWishlist}>
               X
             </div>
           </div>
-
           {/* Product List */}
           <div className="wishlist-products">
-            {/* Product 1 */}
-            <div className="wishlist-product-item">
-              <a className="wishlist-remove-button">
-                <span>x</span>
-              </a>
-              <a
-                href="/lenskart-blu-lb-e16383-c1-eyeglasses.html"
-                rel="noreferrer"
-                target="_blank"
-                title="Lenskart BLU Screen Glasses"
-                className="wishlist-product-link"
-              >
-                <div className="wishlist-product-img">
-                  <img
-                    src="https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//l/i/lenskart-blu-lb-e16383-c1-eyeglasses_img_3499_14_03_2024.jpg"
-                    alt=""
-                    height="48"
-                    width="48"
-                  />
+            {wishlist.length === 0 ? (
+              <div className="wishlist-empty" style={{textAlign: 'center', padding: '32px 0', color: '#222', fontWeight: 400}}>
+                You have not selected any products to compare.<br/>
+                Please add products of your choice and view here.
+              </div>
+            ) : (
+              wishlist.map((product, idx) => (
+                <div className="wishlist-product-item" key={product.name}>
+                  <button className="wishlist-remove-button" onClick={() => removeFromWishlist(product.name)}>
+                    <span>x</span>
+                  </button>
+                  <a
+                    href={product.link || '#'}
+                    rel="noreferrer"
+                    target="_blank"
+                    title={product.name}
+                    className="wishlist-product-link"
+                  >
+                    <div className="wishlist-product-img">
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        height="48"
+                        width="48"
+                      />
+                    </div>
+                    <div className="wishlist-product-details">
+                      <h5 className="wishlist-product-name">{product.name}</h5>
+                      <span className="wishlist-product-price">₹ {product.price}</span>
+                    </div>
+                  </a>
                 </div>
-                <div className="wishlist-product-details">
-                  <h5 className="wishlist-product-name">
-                    Lenskart BLU Screen Glasses
-                  </h5>
-                  <span className="wishlist-product-price">₹ 600</span>
-                </div>
-              </a>
-            </div>
-
-            {/* Product 2 */}
-            <div className="wishlist-product-item">
-              <a className="wishlist-remove-button">
-                <span>x</span>
-              </a>
-              <a
-                href="/blue-block-phone-computer-glasses-blue-transparent-full-rim-round-lenskart-blu-lb-e14061-c1.html"
-                rel="noreferrer"
-                target="_blank"
-                title="Lenskart BLU Screen Glasses"
-                className="wishlist-product-link"
-              >
-                <div className="wishlist-product-img">
-                  <img
-                    src="https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//l/i/blue-block-phone-&amp;-computer-glasses:-light-blue-transparent-full-rim-round-lenskart-blu-lb-e14061-c1_lenskart-blu-lb-e14061-c1-eyeglasses_lenskart-blu-lb-e14061-c1-eyeglasses_eyeglasses_g_9196_325_02_2022.jpg"
-                    alt=""
-                    height="48"
-                    width="48"
-                  />
-                </div>
-                <div className="wishlist-product-details">
-                  <h5 className="wishlist-product-name">
-                    Lenskart BLU Screen Glasses
-                  </h5>
-                  <span className="wishlist-product-price">₹ 600</span>
-                </div>
-              </a>
-            </div>
-
-            {/* Product 3 */}
-            <div className="wishlist-product-item">
-              <a className="wishlist-remove-button">
-                <span>x</span>
-              </a>
-              <a
-                href="/lenskart-hustlr-lh-e16985-w-c5-eyeglasses.html"
-                rel="noreferrer"
-                target="_blank"
-                title="Lenskart Hustlr"
-                className="wishlist-product-link"
-              >
-                <div className="wishlist-product-img">
-                  <img
-                    src="https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//l/i/crystal-full-rim-wayfarer-lenskart-hustlr-lh-e16985-w-c5-eyeglasses_img_2263_14march24.jpg"
-                    alt=""
-                    height="48"
-                    width="48"
-                  />
-                </div>
-                <div className="wishlist-product-details">
-                  <h5 className="wishlist-product-name">Lenskart Hustlr</h5>
-                  <span className="wishlist-product-price">₹ 2000</span>
-                </div>
-              </a>
-            </div>
+              ))
+            )}
           </div>
-
-          {/* Clear List Button */}
-          <div className="wishlist-clear-button">
-            <a href="/">CLEAR LIST</a>
-          </div>
+          {wishlist.length > 0 && (
+            <div className="wishlist-clear-button">
+              <button onClick={clearWishlist}>CLEAR LIST</button>
+            </div>
+          )}
         </div>
-     
-    </>
+      </div>
+    </div>
   );
 }
 

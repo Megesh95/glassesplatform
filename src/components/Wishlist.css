@@ -28,10 +28,8 @@ html, body {
 
     display: flex;
     flex-direction:column;
-    width: 260px;
-    
-    
-    
+    width: 100%;
+    background: transparent !important;
 }
 
 .wishlist-header {
@@ -71,9 +69,8 @@ html, body {
 
 /* Product List */
 .wishlist-products{
-        
-        font-weight: 600;
-        background-color: white;
+    font-weight: 600;
+    background: transparent !important;
 }
 
 .wishlist-product-item{
@@ -156,4 +153,38 @@ html, body {
 
 .wishlist-clear-button a:hover{
         background-color: #247c73;
+}
+
+.wishlist-bottom-sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  z-index: 2147483647 !important;
+  background: none;
+  pointer-events: none;
+}
+
+.wishlist-bottom-sheet > .wishlist-modal {
+  pointer-events: all;
+}
+
+/* Remove modal overlay background if present */
+.wishlist-modal-overlay {
+  background: none !important;
+}
+
+.wishlist-modal {
+  background: white;
+  border-radius: 8px;
+  border: none !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  min-width: 220px;
+  max-width: 260px;
+  width: 100%;
+  overflow: hidden;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
