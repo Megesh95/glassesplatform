@@ -9,8 +9,18 @@ import avatar3 from "../assets/ChatBot_pics/avatar3.png";
 import back from "../assets/ChatBot_pics/back.png";
 import bgimage from "../assets/ChatBot_pics/Backgroundimage.jpg";
 import paperpin from "../assets/ChatBot_pics/paperpin.png";
+import MicIcon from '@mui/icons-material/Mic';
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import { Box, IconButton, Tooltip } from '@mui/material';
+import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
+import ThumbDownAltOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
+import ReportProblemOutlinedIcon from '@mui/icons-material/ReportProblemOutlined';
+
 
 function ChatBot({cart}) {
+  const [feedbackMap, setFeedbackMap] = useState({});
   const [showOptions, setShowOptions] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [disable, setDisable] = useState(true);
@@ -18,13 +28,11 @@ function ChatBot({cart}) {
   const [messages, setMessages] = useState([]);
   const [startNewConversation, setStartNewConversation] = useState(false);
   const [inputText, setInputText] = useState("");
-  const [showNewConvo,setShowNewConvo] = useState(startNewConversation);
-const inputRef = useRef(null);
-const [showDropdown, setShowDropdown] = useState(false);
-const hoverTimeoutRef = useRef(null);
-const [expectingPhone, setExpectingPhone] = useState(false);
+  const inputRef = useRef(null);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [expectingPhone, setExpectingPhone] = useState(false);
   const chatPopupRef = useRef(null);
-const chatMessagesEndRef = useRef(null);
+  const chatMessagesEndRef = useRef(null);
   const now = new Date();
   const formattedTime = now.toLocaleDateString("en-US", {
     hour: "numeric",
@@ -54,6 +62,37 @@ const chatMessagesEndRef = useRef(null);
     sortIndex: 1,
   },
 ]);
+const [isListening, setIsListening] = useState(false);
+
+const recognitionRef = useRef(null);
+
+useEffect(() => {
+  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-IN';
+    recognition.interimResults = false;
+    recognition.continuous = false;
+
+    recognition.onstart = () => setIsListening(true);
+    recognition.onend = () => setIsListening(false);
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setInputText((prev) => prev + " " + transcript);
+    };
+
+    recognitionRef.current = recognition;
+  }
+}, []);
+
+const handleVoiceInput = () => {
+  if (recognitionRef.current) {
+    if (!isListening) recognitionRef.current.start();
+    else recognitionRef.current.stop();
+  }
+};
+
 
 function getOptionsMessage() {
   return (<div className="options">
@@ -70,6 +109,7 @@ function getOptionsMessage() {
 }
 
   const options = ["Buy Eyewear", "Locate Nearby Store", "Query about my order"];
+
 useEffect(() => {
   if (isOpen && startNewConversation && inputRef.current) {
     inputRef.current.focus();
@@ -188,6 +228,7 @@ function newChatHeader() {
         {showDropdown && (
           <div
             className="newconvoDropdown"
+            style={{hover:"pointer"}}
             onClick={() => {setMessages([]);
               setShowDropdown(false);
             }}
@@ -198,7 +239,9 @@ function newChatHeader() {
       </div>
 
       <div className="backiconclass" onClick={() => setStartNewConversation(false)}>
-        <img className="back" src={back} alt="back arrow" />
+        <div>
+          <KeyboardBackspaceIcon />
+        </div>
       </div>
 
       <img className="logo1" src={logo} alt="logo" />
@@ -307,7 +350,9 @@ function handleSendMessage() {
     setMessages((prev) => [...prev, botMsg]);
   }, 1000);
 }
-
+function handleFeedback(index, type) {
+  setFeedbackMap((prev) => ({ ...prev, [index]: type }));
+}
   function chatBody() {
     return (
       <div
@@ -331,16 +376,86 @@ function handleSendMessage() {
             <p style={{ fontSize: "11px" }}>{formattedTime}</p>
           </div>
           {messages.map((msg, idx) => (
-  <div
+  <Box
     key={idx}
-    className={`${msg.type === "user" ? "userMessage" : "botresponse"} messageAnim`}
+    sx={{
+      display: 'flex',
+      flexDirection: 'column',
+       justifyContent: msg.type === 'user' ? 'flex-end' : 'flex-start',
+      alignItems: msg.type === 'user' ? 'flex-end' : 'flex-start', // user right, bot left
+      mb: 2,
+      maxWidth: '70%',
+      marginLeft: msg.type === 'user' ? 'auto' : 0,
+marginRight: msg.type === 'user' ? 0 : 'auto',
+    }}
   >
-    {msg.text.split('\n').map((line, i) => (
-  <div key={i}>{line}</div>
+    {/* Message Bubble */}
+    <Box
+      sx={{
+        p: 1.5,
+        borderRadius: 2,
+        bgcolor: msg.type === 'user' ? '#4a6edb' : 'white', // brighter colors
+        color: msg.type === 'user' ? 'white' : 'black',
+        wordBreak: 'break-word',
+        whiteSpace: 'pre-line',
+        width: '100%',
+      }}
+    >
+      {msg.text}
+    </Box>
+
+    {/* Bottom bar with timestamp left and feedback right */}
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        mt: 0.3,
+        fontSize: 11,
+        color: 'text.secondary',
+        width: '100%',
+        userSelect: 'none',
+      }}
+    >
+      {/* Timestamp left */}
+      <Box>{msg.time}</Box>
+
+      {/* Feedback icons right */}
+      <Box>
+        <Tooltip title="Like">
+          <IconButton
+            size="small"
+            sx={{ color: feedbackMap[idx] === 'up' ? '#1e88e5' : 'rgba(0,0,0,0.54)' }}
+            onClick={() => handleFeedback(idx, 'up')}
+          >
+            <ThumbUpAltOutlinedIcon fontSize="small" />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Dislike">
+          <IconButton
+            size="small"
+            sx={{ color: feedbackMap[idx] === 'down' ? '#e53935' : 'rgba(0,0,0,0.54)' }}
+            onClick={() => handleFeedback(idx, 'down')}
+          >
+            <ThumbDownAltOutlinedIcon fontSize="small" />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Report this message">
+          <IconButton
+            size="small"
+            color="error"
+            onClick={() => alert(`Reported message #${idx + 1}`)}
+          >
+            <ReportProblemOutlinedIcon fontSize="small" />
+          </IconButton>
+        </Tooltip>
+      </Box>
+    </Box>
+  </Box>
 ))}
-    <span className="timestamp">{msg.time}</span>
-  </div>
-))}
+
+
+
 
             <div ref={chatMessagesEndRef} />
         </div>
@@ -370,6 +485,13 @@ function handleSendMessage() {
   }}
             onChange={(e) => setInputText(e.target.value)}
           />
+          <div
+          className={`micIcon ${isListening ? 'listening' : ''}`}
+    onClick={handleVoiceInput}
+    title="Voice Input"
+  >
+    <MicIcon />
+  </div>
           <button
             onClick={() => {
               if (inputText.trim() === "") return;
