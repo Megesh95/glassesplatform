@@ -1,5 +1,7 @@
 import './Header.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { sampleProducts } from './Products/productData';
 
 const toplinks = [
   { name: "Do More, Be More", url: "/" },
@@ -13,8 +15,31 @@ const toplinks = [
   { name: "Partner with us", url: "/partner" },
 ];
 
-
 function Header({ onLoginClick, cartCount, wishlistCount, toggleWishlist }) {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const navigate = useNavigate();
+
+  const handleSearchChange = (e) => {
+  const value = e.target.value;
+  setSearchTerm(value);
+
+  if (value.length > 0) {
+    const filtered = sampleProducts.filter((product) =>
+      product.name.toLowerCase().includes(value.toLowerCase())
+    );
+    setSuggestions(filtered);
+  } else {
+    setSuggestions([]);
+  }
+};
+
+  const handleSuggestionClick = (product) => {
+    setSearchTerm("");
+    setSuggestions([]);
+    navigate(`/product/${product.id}`);
+  };
+
   return (
     <div id="header">
       <div id="topheader">
@@ -39,13 +64,28 @@ function Header({ onLoginClick, cartCount, wishlistCount, toggleWishlist }) {
           <h1 id="phonenumber">9XXXX-XXXXX</h1>
         </Link>
         
-        <div id="searchbar">
+        <div id="searchbar" style={{ position: 'relative' }}>
           <input 
-
             type="text" 
             placeholder="What are you looking for?" 
             aria-label="Search products"
+            value={searchTerm}
+            onChange={handleSearchChange}
           />
+
+          {suggestions.length > 0 && (
+            <ul className="suggestion-box">
+              {suggestions.map((product) => (
+                <li
+                  key={product.id}
+                  className="suggestion-item"
+                  onClick={() => handleSuggestionClick(product)}
+                >
+                  {product.name}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
         
         <div id="middlerightheader">
