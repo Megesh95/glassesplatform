@@ -12,10 +12,11 @@ html {
   bottom: 20px;
   min-height: 100vh;
   right: 20px;
-  z-index: 1000;
+  z-index: 9999;
 }
 
 .chatPopup {
+  z-index: 9999;
   position: fixed;
   right: 30px;
   bottom: 100px;
@@ -32,6 +33,14 @@ html {
   flex-direction: column;
   animation: fadeIn 0.4s ease-in-out;
 
+}@media (max-width: 600px) {
+  .chatPopup {
+    z-index: 9999;
+  }
+
+  .chatWrapper {
+    z-index: 9999;
+  }
 }
 
 .chatPopup.open {
@@ -576,12 +585,6 @@ input:checked + .slider:before {
     height: 100vh;
     border-radius: 0;
     z-index: 9999;
-  }
-
-  .chatWrapper {
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
   }
 
   .chatBody {
