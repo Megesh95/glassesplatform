@@ -21,18 +21,18 @@ function Header({ onLoginClick, cartCount, wishlistCount, toggleWishlist }) {
   const navigate = useNavigate();
 
   const handleSearchChange = (e) => {
-  const value = e.target.value;
-  setSearchTerm(value);
+    const value = e.target.value;
+    setSearchTerm(value);
 
-  if (value.length > 0) {
-    const filtered = sampleProducts.filter((product) =>
-      product.name.toLowerCase().includes(value.toLowerCase())
-    );
-    setSuggestions(filtered);
-  } else {
-    setSuggestions([]);
-  }
-};
+    if (value.length > 0) {
+      const filtered = sampleProducts.filter((product) =>
+        product.name.toLowerCase().includes(value.toLowerCase())
+      );
+      setSuggestions(filtered);
+    } else {
+      setSuggestions([]);
+    }
+  };
 
   const handleSuggestionClick = (product) => {
     setSearchTerm("");
@@ -63,43 +63,55 @@ function Header({ onLoginClick, cartCount, wishlistCount, toggleWishlist }) {
           <h1 id="headerlogo">V-Lens</h1>
           <h1 id="phonenumber">9XXXX-XXXXX</h1>
         </Link>
-        
+
         <div id="searchbar" style={{ position: 'relative' }}>
-          <input 
-            type="text" 
-            placeholder="What are you looking for?" 
+          <input
+            type="text"
+            placeholder="What are you looking for?"
             aria-label="Search products"
             value={searchTerm}
             onChange={handleSearchChange}
           />
 
-          {suggestions.length > 0 && (
-            <ul className="suggestion-box">
-              {suggestions.map((product) => (
-                <li
-                  key={product.id}
-                  className="suggestion-item"
-                  onClick={() => handleSuggestionClick(product)}
-                >
-                  {product.name}
-                </li>
-              ))}
-            </ul>
+          {searchTerm && (
+            <div className="suggestion-box">
+              <div className="suggestion-section">
+                <h4 className="suggestion-heading">Matching Keywords</h4>
+                {suggestions.slice(0, 3).map((product, index) => (
+                  <div key={index} className="suggestion-item" onClick={() => handleSuggestionClick(product)}>
+                    {product.name}
+                  </div>
+                ))}
+              </div>
+
+              <div className="suggestion-section">
+                <h4 className="suggestion-heading">Product Recommendations</h4>
+                {suggestions.slice(0, 5).map((product, index) => (
+                  <div key={index} className="suggestion-product-item" onClick={() => handleSuggestionClick(product)}>
+                    <img src={product.image} alt={product.name} className="suggestion-product-image" />
+                    <div className="suggestion-product-details">
+                      <div className="product-name">{product.name}</div>
+                      <div className="product-price">₹ {product.price}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           )}
         </div>
-        
+
         <div id="middlerightheader">
           <Link to="/trackorder" className="nav-link">Track Order</Link>
 
-          <button 
+          <button
             className="mrhbutton auth-button"
             onClick={onLoginClick}
             aria-label="Sign in or sign up"
           >
             Sign In & Sign Up
           </button>
-          
-          <button onClick={toggleWishlist} className="relative ml-4 bg-transparent border-none outline-none cursor-pointer" style={{background: 'none'}} aria-label="Open wishlist">
+
+          <button onClick={toggleWishlist} className="relative ml-4 bg-transparent border-none outline-none cursor-pointer" style={{ background: 'none' }} aria-label="Open wishlist">
             <span className="wishlist-text">Wishlist</span>
             {wishlistCount > 0 && (
               <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs px-1">
