@@ -77,8 +77,12 @@ function Header({ onLoginClick, cartCount, wishlistCount, toggleWishlist }) {
             <div className="suggestion-box">
               <div className="suggestion-section">
                 <h4 className="suggestion-heading">Matching Keywords</h4>
-                {suggestions.slice(0, 3).map((product, index) => (
-                  <div key={index} className="suggestion-item" onClick={() => handleSuggestionClick(product)}>
+                {suggestions.slice(0, 4).map((product, index) => (
+                  <div
+                    key={index}
+                    className="suggestion-item"
+                    onClick={() => handleSuggestionClick(product)}
+                  >
                     {product.name}
                   </div>
                 ))}
@@ -86,9 +90,17 @@ function Header({ onLoginClick, cartCount, wishlistCount, toggleWishlist }) {
 
               <div className="suggestion-section">
                 <h4 className="suggestion-heading">Product Recommendations</h4>
-                {suggestions.slice(0, 5).map((product, index) => (
-                  <div key={index} className="suggestion-product-item" onClick={() => handleSuggestionClick(product)}>
-                    <img src={product.image} alt={product.name} className="suggestion-product-image" />
+                {suggestions.map((product, index) => (
+                  <div
+                    key={index}
+                    className="suggestion-product-item"
+                    onClick={() => handleSuggestionClick(product)}
+                  >
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="suggestion-product-image"
+                    />
                     <div className="suggestion-product-details">
                       <div className="product-name">{product.name}</div>
                       <div className="product-price">₹ {product.price}</div>
@@ -111,7 +123,12 @@ function Header({ onLoginClick, cartCount, wishlistCount, toggleWishlist }) {
             Sign In & Sign Up
           </button>
 
-          <button onClick={toggleWishlist} className="relative ml-4 bg-transparent border-none outline-none cursor-pointer" style={{ background: 'none' }} aria-label="Open wishlist">
+          <button
+            onClick={toggleWishlist}
+            className="relative ml-4 bg-transparent border-none outline-none cursor-pointer"
+            style={{ background: 'none' }}
+            aria-label="Open wishlist"
+          >
             <span className="wishlist-text">Wishlist</span>
             {wishlistCount > 0 && (
               <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs px-1">
@@ -119,6 +136,7 @@ function Header({ onLoginClick, cartCount, wishlistCount, toggleWishlist }) {
               </span>
             )}
           </button>
+
           <div className="nav-link relative">
             <Link to="/cart">Cart</Link>
             {cartCount > 0 && (
