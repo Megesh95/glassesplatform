@@ -1,6 +1,7 @@
 import React from 'react';
 import SliderAnimation from '../components/SliderAnimation';
 import Products from '../components/Products/Products';
+import TrendingCarousel from "../components/TrendingCarousel";
 
 const HomePage = ({ addToCart, addToWishlist, wishlistItems, removeFromWishlist }) => {
   return (
@@ -16,6 +17,8 @@ const HomePage = ({ addToCart, addToWishlist, wishlistItems, removeFromWishlist 
           removeFromWishlist={removeFromWishlist}
         />
       </div>
+
+<TrendingCarousel />
 
       <SectionDivider title="Free Lens Replacement at Stores" />
       <BannerImage 
