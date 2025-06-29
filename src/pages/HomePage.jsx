@@ -29,11 +29,17 @@ const HomePage = ({ addToCart, addToWishlist, wishlistItems, removeFromWishlist 
         alt="Premium Eyewear"
       />
 
-      <SectionDivider title="Hot Deals" />
+      <SectionDivider title="BUY ONE GET ONE FREE" />
       <BannerImage 
       src="https://static5.lenskart.com/media/uploads/1920x520-desktop-banner.png"
-      alt="Hot Deals Banner"
-/>
+      alt="BUY ONE GET ONE FREE"
+      />
+
+      <SectionDivider title="AS SEEN ON SHARK TANK" />
+      <BannerImage 
+      src="https://static1.lenskart.com/media/desktop/img/Dec22/1-Dec/Homepage-Banner-web.gif"
+      alt="AS SEEN ON SHARK TANK"
+      />
     </>
   );
 };
