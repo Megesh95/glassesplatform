@@ -28,6 +28,12 @@ const HomePage = ({ addToCart, addToWishlist, wishlistItems, removeFromWishlist 
         src="https://static1.lenskart.com/media/desktop/img/16-sep-24/r1.jpeg"
         alt="Premium Eyewear"
       />
+
+      <SectionDivider title="Hot Deals" />
+      <BannerImage 
+      src="https://static5.lenskart.com/media/uploads/1920x520-desktop-banner.png"
+      alt="Hot Deals Banner"
+/>
     </>
   );
 };
@@ -43,11 +49,11 @@ const SectionDivider = ({ title }) => (
 );
 
 const BannerImage = ({ src, alt }) => (
-  <div className="w-full flex justify-center py-6">
+  <div className="w-full">
     <img
       src={src}
       alt={alt}
-      className="max-w-[1200px] w-full h-auto shadow"
+      className="w-full h-auto block"
     />
   </div>
 );
