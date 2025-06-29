@@ -40,6 +40,12 @@ const HomePage = ({ addToCart, addToWishlist, wishlistItems, removeFromWishlist 
       src="https://static1.lenskart.com/media/desktop/img/Dec22/1-Dec/Homepage-Banner-web.gif"
       alt="AS SEEN ON SHARK TANK"
       />
+
+      <SectionDivider title="Trending Sunglasses" />
+      <BannerImage 
+      src="https://static1.lenskart.com/media/desktop/img/Jan23/sunglasses/Sun-Banner-web.gif"
+      alt="Trending Sunglasses"
+      />
     </>
   );
 };
