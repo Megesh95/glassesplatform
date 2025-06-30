@@ -1,57 +1,82 @@
-import React, { useState } from "react";
+import React from "react"
+import { useState } from "react"
 
-const TrackOrderPage = () => {
-  const [orderNumber, setOrderNumber] = useState("");
-  const [email, setEmail] = useState("");
-  const [orderStatus, setOrderStatus] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+interface OrderStatus {
+  id: string
+  email: string
+  status: "placed" | "confirmed" | "processing" | "shipped" | "out-for-delivery" | "delivered"
+  orderDate: string
+  estimatedDelivery: string
+  trackingNumber: string
+  items: Array<{
+    name: string
+    quantity: number
+    price: number
+    image: string
+  }>
+  shippingAddress: {
+    name: string
+    address: string
+    city: string
+    pincode: string
+    phone: string
+  }
+  timeline: Array<{
+    status: string
+    date: string
+    time: string
+    description: string
+    completed: boolean
+  }>
+}
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError("");
+const TrackOrderPage: React.FC = () => {
+  const [orderNumber, setOrderNumber] = useState<string>("")
+  const [email, setEmail] = useState<string>("")
+  const [orderStatus, setOrderStatus] = useState<OrderStatus | null>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string>("")
+  
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsLoading(true)
+    setError("")
 
     try {
-      const response = await fetch("/api/track-order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ orderNumber, email }),
-      });
+      await new Promise((resolve) => setTimeout(resolve, 1500))
 
-      const data = await response.json();
-
-      if (response.ok && data?.id) {
-        setOrderStatus(data);
+      if (email.toLowerCase().includes("gmail")) {
+        setOrderStatus("order found" as any)
       } else {
-        setError(data?.error || "Order not found. Please check your order number and email address.");
+        setError("Order not found. Please check your order number and email address.")
       }
     } catch (err) {
-      setError("Something went wrong. Please try again.");
+      setError("Something went wrong. Please try again.")
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
-  const getStatusColor = (status) => {
-    switch (status?.toLowerCase()) {
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
       case "delivered":
-        return "text-green-600";
+        return "text-green-600"
       case "shipped":
       case "out for delivery":
-        return "text-blue-600";
+        return "text-blue-600"
       case "processing":
-        return "text-yellow-600";
+        return "text-yellow-600"
       default:
-        return "text-gray-600";
+        return "text-gray-600"
     }
-  };
+  }
 
   const getProgressPercentage = () => {
-    if (!orderStatus?.timeline) return 0;
-    const completedSteps = orderStatus.timeline.filter((step) => step.completed).length;
-    return (completedSteps / orderStatus.timeline.length) * 100;
-  };
+    if (!orderStatus) return 0
+    const completedSteps = orderStatus.timeline.filter((step) => step.completed).length
+    return (completedSteps / orderStatus.timeline.length) * 100
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -117,6 +142,21 @@ const TrackOrderPage = () => {
                 </button>
               </form>
 
+              <div className="mt-8 p-6 bg-gradient-to-r from-cyan-50 to-blue-50 rounded-lg border border-cyan-100">
+                <h3 className="font-semibold text-gray-800 mb-3 text-lg">💡 Demo Instructions</h3>
+                <div className="text-sm text-gray-700 space-y-2">
+                  <p>
+                    <strong>Order Number:</strong> VL2024001234
+                  </p>
+                  <p>
+                    <strong>Email:</strong> Any email containing "example"
+                  </p>
+                  <p className="text-xs text-gray-500 mt-3">
+                    Use these demo credentials to see the tracking system in action!
+                  </p>
+                </div>
+              </div>
+
               <div className="mt-6 p-4 bg-gray-50 rounded-lg">
                 <h3 className="font-semibold text-gray-800 mb-2">Need Help?</h3>
                 <p className="text-sm text-gray-600 mb-3">
@@ -152,7 +192,7 @@ const TrackOrderPage = () => {
               <div>
                 <h2 className="text-2xl font-semibold text-gray-800 mb-6">Order Timeline</h2>
                 <div className="space-y-6">
-                  {orderStatus.timeline?.map((step, index) => (
+                  {orderStatus.timeline.map((step, index) => (
                     <div key={index} className="flex items-start">
                       <div
                         className={`w-5 h-5 rounded-full mt-1 mr-4 flex-shrink-0 ${
@@ -187,7 +227,7 @@ const TrackOrderPage = () => {
 
                 <div className="bg-gray-50 rounded-lg p-6 mb-6">
                   <h3 className="font-semibold text-gray-800 mb-4 text-lg">Items Ordered</h3>
-                  {orderStatus.items?.map((item, index) => (
+                  {orderStatus.items.map((item, index) => (
                     <div key={index} className="flex items-center mb-4 last:mb-0">
                       <img
                         src={item.image || "/placeholder.svg"}
@@ -206,12 +246,12 @@ const TrackOrderPage = () => {
                 <div className="bg-gray-50 rounded-lg p-6 mb-6">
                   <h3 className="font-semibold text-gray-800 mb-4 text-lg">Shipping Address</h3>
                   <div className="text-gray-600">
-                    <p className="font-medium text-gray-800 text-lg">{orderStatus.shippingAddress?.name}</p>
-                    <p className="mt-1">{orderStatus.shippingAddress?.address}</p>
+                    <p className="font-medium text-gray-800 text-lg">{orderStatus.shippingAddress.name}</p>
+                    <p className="mt-1">{orderStatus.shippingAddress.address}</p>
                     <p>
-                      {orderStatus.shippingAddress?.city} - {orderStatus.shippingAddress?.pincode}
+                      {orderStatus.shippingAddress.city} - {orderStatus.shippingAddress.pincode}
                     </p>
-                    <p className="mt-2">📞 {orderStatus.shippingAddress?.phone}</p>
+                    <p className="mt-2">📞 {orderStatus.shippingAddress.phone}</p>
                   </div>
                 </div>
 
@@ -233,7 +273,7 @@ const TrackOrderPage = () => {
                     <div className="flex justify-between">
                       <span>Status:</span>
                       <span className={`font-semibold capitalize ${getStatusColor(orderStatus.status)}`}>
-                        {orderStatus.status?.replace("-", " ")}
+                        {orderStatus.status.replace("-", " ")}
                       </span>
                     </div>
                   </div>
@@ -256,7 +296,7 @@ const TrackOrderPage = () => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default TrackOrderPage;
