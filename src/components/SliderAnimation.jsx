@@ -40,7 +40,7 @@ const SliderAnimation = () => {
   }, []);
 
   return (
-    <div className='max-w-[1680px] h-[780px] w-full m-auto py-6 px-4 relative group'>
+    <div className='max-w-[1680px] h-[780px] w-full m-auto pb-6 px-4 relative group'>
       <div
         style={{ backgroundImage: `url(${images[curIndex]})` }}
         className="w-full h-full bg-center bg-cover duration-700 "
