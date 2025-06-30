@@ -7,6 +7,15 @@ html {
   overflow-y: auto;
   height: auto;
 }
+.agentHeader button {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #1976d2;
+  font-weight: bold;
+  cursor: pointer;
+}
+
 .chatWrapper {
   position: fixed;
   bottom: 20px;
