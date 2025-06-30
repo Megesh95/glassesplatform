@@ -43,11 +43,20 @@ function ChatBot({cart}) {
   const [expectingOrderEmail, setExpectingOrderEmail] = useState(false);
   const [conversationHistory, setConversationHistory] = useState([ ]);
 const [isListening, setIsListening] = useState(false);
-const options = ["Buy Eyewear", "Locate Nearby Store", "Track my order", "My Cart", "FAQ's"];
+const options = ["Buy Eyewear", "Locate Nearby Store", "Track my order", "My Cart", "FAQ's", "Chat with Agent"];
 const recognitionRef = useRef(null);
 const [showRiseUpMenu, setShowRiseUpMenu] = useState(false);
 const [orderEmail, setOrderEmail] = useState("");
 const [orderId, setOrderId] = useState("");
+const [showAgentList, setShowAgentList] = useState(false);
+const [selectedAgent, setSelectedAgent] = useState(null);
+const [mode, setMode] = useState("bot"); // or "agent"
+const [agentMessages, setAgentMessages] = useState([]);
+const [agents, setAgents] = useState([
+  { id: 1, name: "Agent A", status: "free" },
+  { id: 2, name: "Agent B", status: "free" },
+  { id: 3, name: "Agent C", status: "free" },
+]);
 const faqs = [
   { question: "What is V-Lens?", answer: "V-Lens is an eyewear platform offering affordable and stylish glasses." },
   { question: "How can I track my order?", answer: "Use the 'Track my order' option in the chatbot and provide your email and order ID." },
@@ -320,6 +329,11 @@ function renderMessageWithLinks(text) {
     });
     const userMsg = { type: "user", text: optionText, time };
     let botMsg;
+if (optionText === "Chat with Agent") {
+  handleOptionClickByText("Yes, connect me");
+  setMessages((prev) => [...prev, userMsg]);
+  return;
+}
 
     if (optionText === "Buy Eyewear") {
       setExpectingPhone(true);
@@ -365,7 +379,7 @@ function renderMessageWithLinks(text) {
     time,
   };
 
-  // Push bot message and show FAQ buttons after a delay
+  
   setMessages((prev) => [...prev, userMsg]);
   setTimeout(() => {
     setMessages((prev) => [...prev, botMsg]);
@@ -398,6 +412,162 @@ else {
       setMessages((prev) => [...prev, botMsg]);
     }, 1000);
   }
+
+  
+
+  function AgentChat({ agent, onBack, delayStart }) {
+  const [agentMsgs, setAgentMsgs] = useState([]);
+  const [text, setText] = useState("");
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef(null);
+  const [ready, setReady] = useState(!delayStart);
+
+  useEffect(() => {
+    if (delayStart) {
+      const timeout = setTimeout(() => setReady(true), 2000);
+      return () => clearTimeout(timeout);
+    }
+  }, [delayStart]);
+
+  useEffect(() => {
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'en-IN';
+      recognition.interimResults = false;
+      recognition.continuous = false;
+
+      recognition.onstart = () => setIsListening(true);
+      recognition.onend = () => setIsListening(false);
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        setText((prev) => prev + " " + transcript);
+      };
+
+      recognitionRef.current = recognition;
+    }
+  }, []);
+
+  const handleVoiceInput = () => {
+    if (recognitionRef.current) {
+      if (!isListening) recognitionRef.current.start();
+      else recognitionRef.current.stop();
+    }
+  };
+
+  const sendMessage = () => {
+    if (!text.trim()) return;
+    const newMsg = { from: "user", text };
+    setAgentMsgs((prev) => [...prev, newMsg]);
+    setText("");
+
+    setTimeout(() => {
+      setAgentMsgs((prev) => [
+        ...prev,
+        { from: "agent", text: "👩‍💼 Got it! Let me check that for you." },
+      ]);
+    }, 1500);
+  };
+
+  if (!ready) {
+    return (
+      <div className="chatBody fade-slide-in" style={{ backgroundColor: "#f9f9f9", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <span style={{ color: "#555", fontSize: "16px" }}>Connecting you to {agent.name}...</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="chatBody fade-slide-in" style={{ backgroundImage: `url(${bgimage})`, backgroundRepeat: "repeat", backgroundSize: "contain", backgroundColor: "#f9f9f9", height: "100%", display: "flex", flexDirection: "column" }}>
+
+      <div className="agentHeader" style={{ display: "flex", alignItems: "center", padding: "12px", background: "#0b3d91", color: "white", fontWeight: "bold" }}>
+        <span>🧑‍💼 {agent.name}</span>
+        <span
+          onClick={onBack}
+          style={{ color: "white", marginLeft: "auto", cursor: "pointer", fontWeight: "bold" }}
+        >
+          ← Back to Bot
+        </span>
+      </div>
+
+      <div className="agentMessages" style={{ flexGrow: 1, padding: "10px", overflowY: "auto" }}>
+        {agentMsgs.map((m, i) => (
+          <div
+            key={i}
+            style={{
+              marginBottom: "8px",
+              alignSelf: m.from === "user" ? "flex-end" : "flex-start",
+              background: m.from === "user" ? "#4a6edb" : "#e3f2fd",
+              color: m.from === "user" ? "white" : "#000",
+              padding: "10px 14px",
+              borderRadius: "20px",
+              maxWidth: "75%",
+              wordBreak: "break-word",
+            }}
+          >
+            {m.text}
+          </div>
+        ))}
+      </div>
+
+      <div className="chatInputBar" style={{ display: "flex", alignItems: "center", padding: "10px", borderTop: "1px solid #ddd" }}>
+        <label className="attachmentIcon" style={{ marginRight: "8px" }}>
+          <input type="file" style={{ display: "none" }} />
+          <img src="paperpin.png" alt="Attach" style={{ width: "20px", cursor: "pointer" }} />
+        </label>
+
+        <input
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="Type your message..."
+          style={{
+            flex: 1,
+            padding: "8px 12px",
+            borderRadius: "20px",
+            border: "1px solid #ccc",
+            outline: "none",
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") sendMessage();
+          }}
+        />
+
+        <button
+          onClick={handleVoiceInput}
+          style={{ background: "none", border: "none", marginLeft: "8px", cursor: "pointer" }}
+        >🎤</button>
+
+        <button
+          onClick={sendMessage}
+          style={{ marginLeft: "8px", background: "#4a6edb", color: "white", border: "none", borderRadius: "20px", padding: "8px 16px", cursor: "pointer" }}
+        >
+          Send
+        </button>
+      </div>
+    </div>
+  );
+}const freeAgents = agents.filter((a) => a.status === "free");
+if (freeAgents.length === 0) {
+  const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  const noAgentsMsg = {
+    type: "bot",
+    text: "😔 Sorry, all our agents are currently busy. Please try again later or continue with the bot.",
+    time,
+  };
+  setMessages((prev) => [...prev, noAgentsMsg]);
+  return;
+}
+
+const handleAgentSelect = (agent) => {
+  const updatedAgents = agents.map((a) =>
+    a.id === agent.id ? { ...a, status: "busy" } : a
+  );
+  setAgents(updatedAgents);
+  setSelectedAgent(agent);
+  setMode("agent");
+};
+
 function handleSendMessage() {
   if (inputText.trim() === "") return;
 
@@ -545,6 +715,84 @@ function chatBody() {
         </div>
 
         {messages.map((msg, idx) => {
+          if (msg.agentOptions?.length > 0) {
+  return (
+    <Box
+      key={idx}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start",
+        mb: 2,
+        maxWidth: "70%",
+        marginRight: "auto",
+      }}
+    >
+      <Box
+        sx={{
+          p: 1.5,
+          borderRadius: 2,
+          bgcolor: "white",
+          color: "black",
+          wordBreak: "break-word",
+          whiteSpace: "pre-line",
+          mb: 1,
+        }}
+      >
+        Please select an available agent:
+      </Box>
+
+      <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+        {msg.agentOptions.map((agent) => (
+          <button
+            key={agent.id}
+            className="faqButton"
+            onClick={() => {handleAgentSelect(agent);
+  const time = new Date().toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  const selected = { ...agent, status: "busy" };
+  setSelectedAgent(selected);
+  setMode("agent");
+
+  setMessages((prev) => [
+    ...prev,
+    { type: "user", text: agent.name, time },
+  ]);
+
+  setTimeout(() => {
+    setMessages((prev) => [
+      ...prev,
+      {
+        type: "bot",
+        text: `✅ You are now connected with ${agent.name}. They will assist you shortly.`,
+        time,
+      },
+    ]);
+  }, 800);
+}}
+            style={{
+              padding: "8px 14px",
+              borderRadius: "20px",
+              border: "1px solid #ccc",
+              background: agent.status === "free" ? "#d4edda" : "#f8d7da",
+              color: agent.status === "free" ? "#155724" : "#721c24",
+              cursor: agent.status === "free" ? "pointer" : "not-allowed",
+              opacity: agent.status === "free" ? 1 : 0.6,
+            }}
+            disabled={agent.status !== "free"}
+          >
+            {agent.name}
+          </button>
+        ))}
+      </Box>
+    </Box>
+  );
+}
+
+
           if(msg.type === 'bot' && msg.contactInfo) {
             return(  <Box
             key={idx}
@@ -868,47 +1116,50 @@ function chatBody() {
     </div>
   );
 }
-
 function handleOptionClickByText(optionText) {
   const time = new Date().toLocaleTimeString([], {
     hour: "2-digit",
     minute: "2-digit",
   });
 
-  setMessages((prev) => [...prev, { type: "user", text: optionText, time }]);
-
   if (optionText === "Yes, connect me") {
+
+    const freeAgents = agents.filter(agent => agent.status === "free");
+
     setTimeout(() => {
-      setMessages((prev) => [
+      setMessages(prev => [
         ...prev,
         {
           type: "bot",
-          text: "Connecting you to customer care... Please visit our contact page or call us at 1800-123-4567.",
-          time: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-          contactInfo: true,
-          
+          text: "Please select an available agent:",
+          time,
+          agentOptions: freeAgents,
         },
       ]);
     }, 800);
-  } else if (optionText === "No, it's fine") {
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        {
-          type: "bot",
-          text: "Alright! Let me know if you need any further assistance.",
-          time: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-        },
-      ]);
-    }, 800);
+    return;
+  }
+
+  if (optionText === "No, it's fine") {
+    setMessages(prev => [
+      ...prev,
+      {
+        type: "bot",
+        text: "Alright! Let me know if you need any further assistance.",
+        time,
+      },
+    ]);
+    return;
+  }
+
+  const agent = agents.find(a => a.name === optionText);
+  if (agent) {
+    setSelectedAgent(agent); 
+    setMode("agent");
   }
 }
+
+
 
   return (
     <>
@@ -923,7 +1174,22 @@ function handleOptionClickByText(optionText) {
           ) : (
             <>
               {newChatHeader()}
-              {chatBody()}
+              {!selectedAgent && chatBody()}
+              {mode === "agent" && selectedAgent && (
+  <AgentChat
+    agent={selectedAgent}
+    onBack={() => {
+      setMode("bot");
+      setSelectedAgent(null);
+    }}
+    delayStart={true} 
+  />
+)}
+
+
+
+
+
             </>
           )}
         </div>
