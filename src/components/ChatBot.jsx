@@ -413,7 +413,25 @@ function handleSendMessage() {
   };
 
   let botMsg;
+  if (
+  inputText.toLowerCase().includes("not resolved") ||
+  inputText.toLowerCase().includes("unresolved") ||
+  inputText.toLowerCase().includes("not working")
+) {
+  const unresolvedBotMsg = {
+    type: "bot",
+    text: "Sorry that didn’t help. Would you like to talk to our support agent?",
+    options: ["Yes, connect me", "No, it's fine"],
+    time: currentTime,
+  };
 
+  setMessages((prev) => [...prev, userMsg]);
+  setInputText("");
+  setTimeout(() => {
+    setMessages((prev) => [...prev, unresolvedBotMsg]);
+  }, 1000);
+  return;
+}
 if (expectingOrderEmail) {
   setOrderEmail(inputText.trim());
   setExpectingOrderEmail(false);
@@ -485,237 +503,412 @@ if (expectingOrderEmail) {
 
 function handleFeedback(index, type) {
   setFeedbackMap((prev) => ({ ...prev, [index]: type }));
+
+  if (type === "dislike") {
+    const time = new Date().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    const unresolvedBotMsg = {
+      type: "bot",
+      text: "Sorry that didn’t help. Would you like to talk to our support agent?",
+      options: ["Yes, connect me", "No, it's fine"],
+      time,
+    };
+    setTimeout(() => {
+       setMessages((prev) => [...prev, unresolvedBotMsg]);
+    }, 1000);
+   
+  }
 }
-  function chatBody() {
-    return (
-      <div
-        className="chatBody fade-slide-in"
-        style={{
-          backgroundImage: `url(${bgimage})`,
-          backgroundRepeat: "repeat",
-          backgroundSize: "contain",
-          backgroundColor: "#f9f9f9",
-        }}
-      >
-        <div className="chatMessages">
-          <div className="botMessage">
-            Hello! Welcome to V-Lens, India’s largest online tech support team.
-            How can I help you today?
-          </div>
-          {
-            getOptionsMessage()
-          }
-          <div className="time">
-            <p style={{ fontSize: "11px" }}>{formattedTime}</p>
-          </div>
-          {messages.map((msg, idx) => (
-  msg.type === "faq-button" ? (
-    <Box
-      key={idx}
-      sx={{ display: 'flex', justifyContent: 'center', mb: 1 }}
-    >
-      <button
-        className="faqButton"
-        onClick={() => {
-          const faqAnswer = faqs.find(f => f.question === msg.text)?.answer || "Sorry, I couldn't find an answer.";
-          const botResponse = {
-            type: "bot",
-            text: faqAnswer,
-            time: new Date().toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            }),
-          };
-          setMessages((prev) => [...prev, {
-            type: "user",
-            text: msg.text,
-            time: msg.time,
-          }]);
-          setTimeout(() => {
-            setMessages((prev) => [...prev, botResponse]);
-          }, 800);
-        }}
-        style={{
-          padding: "8px 14px",
-          borderRadius: "20px",
-          border: "1px solid #ccc",
-          background: "#f2f2f2",
-          cursor: "pointer",
-        }}
-      >
-        {msg.text}
-      </button>
-    </Box>
-  ) : (
-    <Box
-      key={idx}
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: msg.type === 'user' ? 'flex-end' : 'flex-start',
-        alignItems: msg.type === 'user' ? 'flex-end' : 'flex-start',
-        mb: 2,
-        maxWidth: '70%',
-        marginLeft: msg.type === 'user' ? 'auto' : 0,
-        marginRight: msg.type === 'user' ? 0 : 'auto',
+
+function chatBody() {
+  return (
+    <div
+      className="chatBody fade-slide-in"
+      style={{
+        backgroundImage: `url(${bgimage})`,
+        backgroundRepeat: "repeat",
+        backgroundSize: "contain",
+        backgroundColor: "#f9f9f9",
       }}
     >
-      <Box
-        sx={{
-          p: 1.5,
-          borderRadius: 2,
-          bgcolor: msg.type === 'user' ? '#4a6edb' : 'white',
-          color: msg.type === 'user' ? 'white' : 'black',
-          wordBreak: 'break-word',
-          whiteSpace: 'pre-line',
-          width: '100%',
-        }}
-      >
-        {msg.type === 'bot' ? renderMessageWithLinks(msg.text) : msg.text}
-      </Box>
-
-    {msg.type === 'bot' && (
-  <Box sx={{ display: "flex", gap: 1, mt: 0.5 }}>
-    <Tooltip title="Like">
-      <IconButton
-        size="small"
-        onClick={() => handleFeedback(idx, "like")}
-      >
-        {feedbackMap[idx] === "like" ? (
-          <ThumbUpAltIcon fontSize="small" color="primary" />
-        ) : (
-          <ThumbUpAltOutlinedIcon fontSize="small" />
-        )}
-      </IconButton>
-    </Tooltip>
-    <Tooltip title="Dislike">
-      <IconButton
-        size="small"
-        onClick={() => handleFeedback(idx, "dislike")}
-      >
-        {feedbackMap[idx] === "dislike" ? (
-          <ThumbDownAltIcon fontSize="small" color="error" />
-        ) : (
-          <ThumbDownAltOutlinedIcon fontSize="small" />
-        )}
-      </IconButton>
-    </Tooltip>
-    <Tooltip title="Report">
-      <IconButton size="small" onClick={() => alert("Reported!")}>
-        <ReportProblemOutlinedIcon fontSize="small" />
-      </IconButton>
-    </Tooltip>
-  </Box>
-)}
-
-    </Box>
-  )
-))}
-
-
-
-
-
-            <div ref={chatMessagesEndRef} />
+      <div className="chatMessages">
+        <div className="botMessage">
+          Hello! Welcome to V-Lens, India’s largest online tech support team.
+          How can I help you today?
         </div>
-<div className="riseUpMenuContainer">
-  <div
-    className="menuButton"
-    onClick={() => setShowRiseUpMenu(prev => !prev)}
-    title="Menu"
-  >
-    ☰
-  </div>
+        {getOptionsMessage()}
+        <div className="time">
+          <p style={{ fontSize: "11px" }}>{formattedTime}</p>
+        </div>
 
-  {showRiseUpMenu && (
-    <div className="riseUpMenu">
-      {options.map((option, idx) => (
-        <button
-          key={idx}
-          className="riseUpOption"
+        {messages.map((msg, idx) => {
+          if(msg.type === 'bot' && msg.contactInfo) {
+            return(  <Box
+            key={idx}
+    sx={{
+      mt: 1,
+      p: 1,
+      bgcolor: '#e3f2fd',
+      borderRadius: 2,
+      color: '#1976d2',
+      fontWeight: 'bold',
+    }}
+  >
+    📞 Customer Care: <a href="tel:18001234567" style={{color:'#1976d2', textDecoration:'underline'}}>1800-123-4567</a><br />
+    🌐 Or visit <a href="/contact" target="" rel="" style={{color:'#1976d2', textDecoration:'underline'}}>Contact Us</a> page
+  </Box>);
+          }
+
+          if (msg.type === "faq-button") {
+            return (
+              <Box
+                key={idx}
+                sx={{ display: "flex", justifyContent: "center", mb: 1 }}
+              >
+                <button
+                  className="faqButton"
+                  onClick={() => {
+                    const faqAnswer =
+                      faqs.find((f) => f.question === msg.text)?.answer ||
+                      "Sorry, I couldn't find an answer.";
+                    const botResponse = {
+                      type: "bot",
+                      text: faqAnswer,
+                      time: new Date().toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      }),
+                    };
+                    setMessages((prev) => [
+                      ...prev,
+                      {
+                        type: "user",
+                        text: msg.text,
+                        time: msg.time,
+                      },
+                    ]);
+                    setTimeout(() => {
+                      setMessages((prev) => [...prev, botResponse]);
+                    }, 800);
+                  }}
+                  style={{
+                    padding: "8px 14px",
+                    borderRadius: "20px",
+                    border: "1px solid #ccc",
+                    background: "#f2f2f2",
+                    cursor: "pointer",
+                  }}
+                >
+                  {msg.text}
+                </button>
+              </Box>
+            );
+          } else if (msg.type === "bot" && msg.options?.length > 0) {
+            return (
+              <Box
+                key={idx}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "flex-start",
+                  alignItems: "flex-start",
+                  mb: 2,
+                  maxWidth: "70%",
+                  marginRight: "auto",
+                }}
+              >
+                <Box
+                  sx={{
+                    p: 1.5,
+                    borderRadius: 2,
+                    bgcolor: "white",
+                    color: "black",
+                    wordBreak: "break-word",
+                    whiteSpace: "pre-line",
+                    width: "100%",
+                    mb: 1,
+                  }}
+                >
+                  {renderMessageWithLinks(msg.text)}
+                </Box>
+                <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+                  {msg.options.map((optionText, optionIdx) => (
+                    <button
+                      key={optionIdx}
+                      className="faqButton"
+                      onClick={() => {
+                        const time = new Date().toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        });
+                    setMessages((prev) => [
+                          ...prev,
+                          { type: "user", text: optionText, time },
+                        ]);
+
+                        setMessages((prev) =>
+                          prev.map((m, i) =>
+                            i === idx ? { ...m, options: [] } : m
+                          )
+                        );
+
+                        if (optionText === "Yes, connect me") {
+  handleOptionClickByText("Yes, connect me");
+} else if (optionText === "No, it's fine") {
+  handleOptionClickByText("No, it's fine");
+} else {
+                          setTimeout(() => {
+                            setMessages((prev) => [
+                              ...prev,
+                              {
+                                type: "bot",
+                                text: "Okay, let me know if you need anything else.",
+                                time,
+                              },
+                            ]);
+                          }, 1000);
+                        }
+                      }}
+                      style={{
+                        padding: "8px 14px",
+                        borderRadius: "20px",
+                        border: "1px solid #ccc",
+                        background: "#f2f2f2",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {optionText}
+                    </button>
+                  ))}
+                </Box>
+              </Box>
+            );
+          } else {
+            return (
+              <Box
+                key={idx}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent:
+                    msg.type === "user" ? "flex-end" : "flex-start",
+                  alignItems: msg.type === "user" ? "flex-end" : "flex-start",
+                  mb: 2,
+                  maxWidth: "70%",
+                  marginLeft: msg.type === "user" ? "auto" : 0,
+                  marginRight: msg.type === "user" ? 0 : "auto",
+                }}
+              >
+                <Box
+                  sx={{
+                    p: 1.5,
+                    borderRadius: 2,
+                    bgcolor: msg.type === "user" ? "#4a6edb" : "white",
+                    color: msg.type === "user" ? "white" : "black",
+                    wordBreak: "break-word",
+                    whiteSpace: "pre-line",
+                    width: "100%",
+                  }}
+                >
+                  {msg.type === "bot"
+                    ? renderMessageWithLinks(msg.text)
+                    : msg.text}
+                </Box>
+
+                {msg.type === "bot" && (
+                  <Box sx={{ display: "flex", gap: 1, mt: 0.5 }}>
+                    <Tooltip title="Like">
+                      <IconButton
+                        size="small"
+                        onClick={() => handleFeedback(idx, "like")}
+                      >
+                        {feedbackMap[idx] === "like" ? (
+                          <ThumbUpAltIcon fontSize="small" color="primary" />
+                        ) : (
+                          <ThumbUpAltOutlinedIcon fontSize="small" />
+                        )}
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Dislike">
+                      <IconButton
+                        size="small"
+                        onClick={() => handleFeedback(idx, "dislike")}
+                      >
+                        {feedbackMap[idx] === "dislike" ? (
+                          <ThumbDownAltIcon fontSize="small" color="error" />
+                        ) : (
+                          <ThumbDownAltOutlinedIcon fontSize="small" />
+                        )}
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Report">
+                      <IconButton
+                        size="small"
+                        onClick={() => alert("Reported!")}
+                      >
+                        <ReportProblemOutlinedIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </Box>
+                )}
+              </Box>
+            );
+          }
+        })}
+
+        <div ref={chatMessagesEndRef} />
+      </div>
+
+      {/* Rise Up Menu */}
+      <div className="riseUpMenuContainer">
+        <div
+          className="menuButton"
+          onClick={() => setShowRiseUpMenu((prev) => !prev)}
+          title="Menu"
+        >
+          ☰
+        </div>
+
+        {showRiseUpMenu && (
+          <div className="riseUpMenu">
+            {options.map((option, idx) => (
+              <button
+                key={idx}
+                className="riseUpOption"
+                onClick={() => {
+                  handleOptionClick(idx);
+                  setShowRiseUpMenu(false);
+                }}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Input Bar */}
+      <div className="chatInputBar">
+        <label className="attachmentIcon">
+          <input
+            type="file"
+            onChange={(e) =>
+              console.log("File selected successfully:", e.target.files[0])
+            }
+          />
+          <img
+            src={paperpin}
+            alt="Attach"
+            style={{
+              width: "18px",
+              height: "18px",
+              cursor: disable ? "not-allowed" : "pointer",
+            }}
+          />
+        </label>
+        <input
+          ref={inputRef}
+          type="text"
+          placeholder={disable ? "Select from menu" : "Type a message..."}
+          value={inputText}
+          disabled={disable}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") handleSendMessage();
+          }}
+          onChange={(e) => setInputText(e.target.value)}
+        />
+        <div
+          className={`micIcon ${isListening ? "listening" : ""} ${
+            disable ? "disabled" : ""
+          }`}
           onClick={() => {
-            handleOptionClick(idx);
-            setShowRiseUpMenu(false);
+            if (!disable) handleVoiceInput();
+          }}
+          title={disable ? "Voice input disabled" : "Voice Input"}
+          style={{ cursor: disable ? "not-allowed" : "pointer", opacity: disable ? 0.5 : 1 }}
+        >
+          <MicIcon />
+        </div>
+
+        <button
+          onClick={() => {
+            if (inputText.trim() === "") return;
+
+            const currentTime = new Date().toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+
+            const userMsg = {
+              type: "user",
+              text: inputText,
+              time: currentTime,
+            };
+
+            const botMsg = {
+              type: "bot",
+              text: "Thanks for your message! How else can I assist you?",
+              time: currentTime,
+            };
+
+            setMessages((prev) => [...prev, userMsg]);
+            setInputText("");
+
+            setTimeout(() => {
+              setMessages((prev) => [...prev, botMsg]);
+            }, 1000);
           }}
         >
-          {option}
+          ➤
         </button>
-      ))}
-    </div>
-  )}
-</div>
-
-        <div className="chatInputBar">
-          <label className="attachmentIcon">
-            <input
-              type="file"
-              onChange={(e) =>
-                console.log("File selected successfully:", e.target.files[0])
-              }
-            />
-            <img
-              src={paperpin}
-              alt="Attach"
-              style={{ width: "18px", height: "18px", cursor: disable ? "not-allowed" : "pointer" }}
-            />
-          </label>
-          <input
-            ref={inputRef}
-            type="text"
-            placeholder={disable ? "Select from menu" : "Type a message..."}
-            value={inputText}
-            disabled={disable}
-            onKeyDown={(e) => {
-    if (e.key === "Enter") handleSendMessage();
-  }}
-            onChange={(e) => setInputText(e.target.value)}
-          />
-         <div
-  className={`micIcon ${isListening ? 'listening' : ''} ${disable ? 'disabled' : ''}`}
-  onClick={() => {
-    if (!disable) handleVoiceInput();
-  }}
-  title={disable ? "Voice input disabled" : "Voice Input"}
-  style={{ cursor: disable ? "not-allowed" : "pointer", opacity: disable ? 0.5 : 1 }}
->
-  <MicIcon />
-</div>
-
-          <button
-            onClick={() => {
-              if (inputText.trim() === "") return;
-
-              const currentTime = new Date().toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              });
-
-              const userMsg = {
-                type: "user",
-                text: inputText,
-                time: currentTime,
-              };
-
-              const botMsg = {
-                type: "bot",
-                text: "Thanks for your message! How else can I assist you?",
-                time: currentTime,
-              };
-
-              setMessages((prev) => [...prev, userMsg]);
-              setInputText("");
-
-              setTimeout(() => {
-                setMessages((prev) => [...prev, botMsg]);
-              }, 1000);
-            }}
-          >
-            ➤
-          </button>
-        </div>
       </div>
-    );
+    </div>
+  );
+}
+
+function handleOptionClickByText(optionText) {
+  const time = new Date().toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  setMessages((prev) => [...prev, { type: "user", text: optionText, time }]);
+
+  if (optionText === "Yes, connect me") {
+    setTimeout(() => {
+      setMessages((prev) => [
+        ...prev,
+        {
+          type: "bot",
+          text: "Connecting you to customer care... Please visit our contact page or call us at 1800-123-4567.",
+          time: new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          contactInfo: true,
+          
+        },
+      ]);
+    }, 800);
+  } else if (optionText === "No, it's fine") {
+    setTimeout(() => {
+      setMessages((prev) => [
+        ...prev,
+        {
+          type: "bot",
+          text: "Alright! Let me know if you need any further assistance.",
+          time: new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        },
+      ]);
+    }, 800);
   }
+}
 
   return (
     <>
