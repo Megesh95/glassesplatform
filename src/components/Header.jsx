@@ -88,9 +88,10 @@ function Header({ onLoginClick, cartCount, wishlistCount, toggleWishlist }) {
                     onClick={() => handleSuggestionClick(product)}
                   >
                     {product.name}
-                  </li>
+                  </div>
                 ))}
-              </ul>
+              </div>
+              </div>
             )}
           </div>
           
@@ -215,6 +216,7 @@ function Header({ onLoginClick, cartCount, wishlistCount, toggleWishlist }) {
               <p className = "text-lg">SCREEN EYEGLASSES</p>
               <p className = "">Starting from Rs.600</p>
             </button>
+          </div>
         </div>}
 
         {gender == 2 && <div className = "flex flex-col">
@@ -404,7 +406,6 @@ function Header({ onLoginClick, cartCount, wishlistCount, toggleWishlist }) {
           </div>
         </div>
       }
-
     </div>
   );
 }
