@@ -8,8 +8,6 @@
     color: rgba(0,0,80,1);
     position: sticky;
     top: 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
 }
 
 
@@ -25,7 +23,7 @@
 
 #middleheader {
     padding-top: 2%;
-    padding-bottom: 2%;
+    padding-bottom: 1%;
     display: flex;
     justify-content: space-evenly;
 }
@@ -130,4 +128,9 @@
 
 .suggestion-item:hover {
   background-color: #f0f0f0;
+}
+
+#navleft>button:hover{
+    cursor: pointer;
+    border-bottom: 2px solid rgba(0,0,80,1)
 }
