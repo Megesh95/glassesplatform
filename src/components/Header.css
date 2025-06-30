@@ -53,11 +53,13 @@
     position: relative;
 }
 
-#searchbar>input{
-    width: 100%;
-    border: 1px solid black;
-    border-radius: 5px;
-    padding: 4px;
+#searchbar > input {
+  width: 100%;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
 }
 
 #middlerightheader {
@@ -109,25 +111,84 @@
     border-bottom: 2px solid rgba(0,0,80,1);
     cursor: pointer;
 }
+
 .suggestion-box {
   position: absolute;
-  top: 100%;
+  top: 110%; 
   left: 0;
   background: white;
   border: 1px solid #ccc;
   width: 100%;
-  max-height: 200px;
+  max-height: 300px;
   overflow-y: auto;
-  z-index: 100;
+  z-index: 9999;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  border-radius: 4px;
+  padding: 0.5rem 0;
+}
+
+.suggestion-section {
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.suggestion-heading {
+  font-weight: bold;
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 6px;
+  color: #333;
 }
 
 .suggestion-item {
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+
+.suggestion-item:hover {
+  background-color: #f4f4f4;
+}
+
+.suggestion-product-item {
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  align-items: center;
   padding: 8px 12px;
   cursor: pointer;
 }
 
-.suggestion-item:hover {
-  background-color: #f0f0f0;
+.suggestion-product-item:hover {
+  background-color: #f9f9f9;
+}
+
+.suggestion-product-image {
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+  margin-right: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.suggestion-product-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.product-price {
+  font-size: 13px;
+  color: #007bff;
+  font-weight: bold;
+  font-weight: 600;
 }
 
 #navleft>button:hover{

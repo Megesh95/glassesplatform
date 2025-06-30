@@ -24,18 +24,18 @@ function Header({ onLoginClick, cartCount, wishlistCount, toggleWishlist }) {
   const [category, setCategory] = useState(null)
 
   const handleSearchChange = (e) => {
-  const value = e.target.value;
-  setSearchTerm(value);
+    const value = e.target.value;
+    setSearchTerm(value);
 
-  if (value.length > 0) {
-    const filtered = sampleProducts.filter((product) =>
-      product.name.toLowerCase().includes(value.toLowerCase())
-    );
-    setSuggestions(filtered);
-  } else {
-    setSuggestions([]);
-  }
-};
+    if (value.length > 0) {
+      const filtered = sampleProducts.filter((product) =>
+        product.name.toLowerCase().includes(value.toLowerCase())
+      );
+      setSuggestions(filtered);
+    } else {
+      setSuggestions([]);
+    }
+  };
 
   const handleSuggestionClick = (product) => {
     setSearchTerm("");
@@ -62,26 +62,28 @@ function Header({ onLoginClick, cartCount, wishlistCount, toggleWishlist }) {
           </Link>
         </div>
 
-        <div id="middleheader">
-          <Link to="/" id="middleleftheader">
-            <h1 id="headerlogo">V-Lens</h1>
-            <h1 id="phonenumber">9XXXX-XXXXX</h1>
-          </Link>
-          
-          <div id="searchbar" style={{ position: 'relative' }}>
-            <input 
-              type="text" 
-              placeholder="What are you looking for?" 
-              aria-label="Search products"
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
+      <div id="middleheader">
+        <Link to="/" id="middleleftheader">
+          <h1 id="headerlogo">V-Lens</h1>
+          <h1 id="phonenumber">9XXXX-XXXXX</h1>
+        </Link>
 
-            {suggestions.length > 0 && (
-              <ul className="suggestion-box">
-                {suggestions.map((product) => (
-                  <li
-                    key={product.id}
+        <div id="searchbar" style={{ position: 'relative' }}>
+          <input
+            type="text"
+            placeholder="What are you looking for?"
+            aria-label="Search products"
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
+
+          {searchTerm && (
+            <div className="suggestion-box">
+              <div className="suggestion-section">
+                <h4 className="suggestion-heading">Matching Keywords</h4>
+                {suggestions.slice(0, 4).map((product, index) => (
+                  <div
+                    key={index}
                     className="suggestion-item"
                     onClick={() => handleSuggestionClick(product)}
                   >
@@ -103,26 +105,30 @@ function Header({ onLoginClick, cartCount, wishlistCount, toggleWishlist }) {
               Sign In & Sign Up
             </button>
             
-            <button onClick={toggleWishlist} className="relative ml-4 bg-transparent border-none outline-none cursor-pointer" style={{background: 'none'}} aria-label="Open wishlist">
-              <span className="wishlist-text">Wishlist</span>
-              {wishlistCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs px-1">
-                  {wishlistCount}
-                </span>
-              )}
-            </button>
-            <div className="nav-link relative">
-              <Link to="/cart">Cart</Link>
-              {cartCount > 0 && (
-                <span className="absolute -top-2 -right-3 bg-blue-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                  {cartCount}
-                </span>
-              )}
-            </div>
+            <button
+            onClick={toggleWishlist}
+            className="relative ml-4 bg-transparent border-none outline-none cursor-pointer"
+            style={{ background: 'none' }}
+            aria-label="Open wishlist"
+          >
+            <span className="wishlist-text">Wishlist</span>
+            {wishlistCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full text-xs px-1">
+                {wishlistCount}
+              </span>
+            )}
+          </button>
+
+          <div className="nav-link relative">
+            <Link to="/cart">Cart</Link>
+            {cartCount > 0 && (
+              <span className="absolute -top-2 -right-3 bg-blue-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                {cartCount}
+              </span>
+            )}
+          </div>
           </div>
         </div>
-
-        
       </div>
       <nav className = "flex bg-neutral-100 text-[rgba(0,0,80,1)] px-10 h-16" id="navigator">
         <div id = "navleft" className = "flex justify-evenly gap-4 font-semibold">
@@ -209,7 +215,6 @@ function Header({ onLoginClick, cartCount, wishlistCount, toggleWishlist }) {
               <p className = "text-lg">SCREEN EYEGLASSES</p>
               <p className = "">Starting from Rs.600</p>
             </button>
-          </div>
         </div>}
 
         {gender == 2 && <div className = "flex flex-col">

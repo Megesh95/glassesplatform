@@ -39,32 +39,21 @@ function ChatBot({cart}) {
     minute: "numeric",
     hour12: true,
   });
-  const [conversationHistory, setConversationHistory] = useState([
-  {
-    id: "#106482622",
-    title: "Card",
-    avatar: avatar1,
-    timeAgo: "3h ago",
-    sortIndex: 3,
-  },
-  {
-    id: "#106478427",
-    title: "Phone number",
-    avatar: avatar2,
-    timeAgo: "4h ago",
-    sortIndex: 2,
-  },
-  {
-    id: "#106471129",
-    title: "Store Locator",
-    avatar: avatar3,
-    timeAgo: "Yesterday",
-    sortIndex: 1,
-  },
-]);
+  const [expectingOrderId, setExpectingOrderId] = useState(false);
+  const [expectingOrderEmail, setExpectingOrderEmail] = useState(false);
+  const [conversationHistory, setConversationHistory] = useState([ ]);
 const [isListening, setIsListening] = useState(false);
-
+const options = ["Buy Eyewear", "Locate Nearby Store", "Track my order", "My Cart", "FAQ's"];
 const recognitionRef = useRef(null);
+const [showRiseUpMenu, setShowRiseUpMenu] = useState(false);
+const [orderEmail, setOrderEmail] = useState("");
+const [orderId, setOrderId] = useState("");
+const faqs = [
+  { question: "What is V-Lens?", answer: "V-Lens is an eyewear platform offering affordable and stylish glasses." },
+  { question: "How can I track my order?", answer: "Use the 'Track my order' option in the chatbot and provide your email and order ID." },
+  { question: "How do I cancel an order?", answer: "Please contact our support team to initiate an order cancellation." },
+  { question: "Do you offer home eye checkups?", answer: "Yes, we offer home eye checkups in selected cities." },
+];
 
 useEffect(() => {
   if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
@@ -92,6 +81,35 @@ const handleVoiceInput = () => {
     else recognitionRef.current.stop();
   }
 };
+const mockOrder = {
+  id: "VL2024001234",
+  email: "example@gmail.com",
+  status: "delivered",
+  orderDate: "June 20, 2025",
+  estimatedDelivery: "June 28, 2025",
+  trackingNumber: "VL1234567890",
+  items: [
+    {
+      name: "Blue Frame Glasses",
+      quantity: 1,
+      price: 2999,
+      image: "/images/glasses1.jpg",
+    },
+  ],
+  shippingAddress: {
+    name: "Yogesh Kumar",
+    address: "123 Main Street",
+    city: "Chennai",
+    pincode: "600001",
+    phone: "9876543210",
+  },
+  timeline: [
+    { status: "Order Placed", date: "June 20", time: "10:00 AM", description: "Order received", completed: true },
+    { status: "Processing", date: "June 21", time: "12:00 PM", description: "Preparing order", completed: true },
+    { status: "Shipped", date: "June 23", time: "03:00 PM", description: "Out for shipping", completed: true },
+    { status: "Delivered", date: "June 28", time: "10:00 AM", description: "Delivered", completed: true },
+  ],
+};
 
 
 function getOptionsMessage() {
@@ -107,15 +125,36 @@ function getOptionsMessage() {
             ))}
           </div>);
 }
+function startNewConversationHandler() {
+  if (messages.length > 0) {
+    const firstUserMsg = messages.find(msg => msg.type === "user");
+    const summaryTitle = firstUserMsg?.text?.slice(0, 20) || "Conversation";
 
-  const options = ["Buy Eyewear", "Locate Nearby Store", "Query about my order"];
+    const newHistoryItem = {
+      id: "#" + Math.floor(100000000 + Math.random() * 900000000),
+      title: summaryTitle,
+      avatar: [avatar1, avatar2, avatar3][Math.floor(Math.random() * 3)],
+      timeAgo: "Just now",
+      sortIndex: Date.now(),
+    };
+
+    setConversationHistory(prev => [newHistoryItem, ...prev]);
+  }
+
+  setStartNewConversation(true);
+  setMessages([]);
+  setInputText("");
+}
+
+
+  // const options = ["Buy Eyewear", "Locate Nearby Store", "My Cart"];
 
 useEffect(() => {
   if (isOpen && startNewConversation && inputRef.current) {
     inputRef.current.focus();
   }
 }, [isOpen, startNewConversation]);
-  useEffect(() => {
+  useEffect(() => { 
     
    function handleClickOutside(event) {
   if (
@@ -177,7 +216,7 @@ useEffect(() => {
     );
   }
 
-  function floatingNewConversationCard() {
+  function floatingNewConversationCard(conversationHistory) {
     return (
       <div className="floatingCard">
         <div>
@@ -189,7 +228,7 @@ useEffect(() => {
         </div>
         <button
           className="startBtn"
-          onClick={() => {setStartNewConversation(true);setMessages([]); setInputText("");}}
+          onClick={startNewConversationHandler}
         >
           New Conversation
         </button>
@@ -228,7 +267,7 @@ function newChatHeader() {
         {showDropdown && (
           <div
             className="newconvoDropdown"
-            style={{hover:"pointer"}}
+            style={{cursor:"pointer"}}
             onClick={() => {setMessages([]);
               setShowDropdown(false);
             }}
@@ -253,6 +292,24 @@ function newChatHeader() {
   );
 }
 
+function renderMessageWithLinks(text) {
+  const parts = text.split(/(https?:\/\/[^\s]+)/g);
+  return parts.map((part, index) =>
+    part.match(/https?:\/\/[^\s]+/) ? (
+      <a
+        key={index}
+        href={part}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ color: '#1976d2', textDecoration: 'underline' }}
+      >
+        {part}
+      </a>
+    ) : (
+      part
+    )
+  );
+}
 
 
   function handleOptionClick(index) {
@@ -273,12 +330,14 @@ function newChatHeader() {
       time,
     };
   } else if (optionText === "Locate Nearby Store") {
+    setDisable(true);
     botMsg = {
       type: "bot",
       text: "Please find the nearest stores by clicking here - https://stores.lenskart.com/",
       time,
     };
-  } else if (optionText === "Query about my order") {
+  } else if (optionText === "My Cart") {
+    setDisable(true);
     const productList = cart?.length
     ? cart.map((item, i) => `${i + 1}. ${item.name}`).join("\n")
     : "🛒 Your cart is currently empty.";
@@ -287,7 +346,46 @@ function newChatHeader() {
       text: `Here’s your current order:\n${productList}`,
       time,
     };
-  } else {
+  } else if (optionText === "Track my order") {
+        setExpectingPhone(false);
+    setExpectingOrderEmail(true);
+    setDisable(false);
+    botMsg = {
+      type: "bot",
+      text: "To track your order, please provide your EmailId and Order  ID.",
+      time, 
+    };
+
+    
+  } else if (optionText === "FAQ's") {
+  setDisable(true);
+  botMsg = {
+    type: "bot",
+    text: "Here are some frequently asked questions. Please click to view the answer:",
+    time,
+  };
+
+  // Push bot message and show FAQ buttons after a delay
+  setMessages((prev) => [...prev, userMsg]);
+  setTimeout(() => {
+    setMessages((prev) => [...prev, botMsg]);
+    faqs.forEach((faq) => {
+      setTimeout(() => {
+        setMessages((prev) => [
+          ...prev,
+          {
+            type: "faq-button",
+            text: faq.question,
+            time,
+          },
+        ]);
+      }, 500);
+    });
+  }, 1000);
+  return;
+}
+else {
+    setDisable(true);
     botMsg = {
       type: "bot",
       text: "Sorry, I didn't get that. Can you please select an option?",
@@ -295,10 +393,9 @@ function newChatHeader() {
     };
   }
 
-    setMessages((prev) => {if(optionText==="Buy Eyewear"){setDisable(false)};return [...prev, userMsg]});
+    setMessages((prev) => [...prev, userMsg]);
     setTimeout(() => {
-      setMessages((prev) => {if(optionText!=="Buy Eyewear")setDisable(true)
-        ;return [...prev, botMsg]});
+      setMessages((prev) => [...prev, botMsg]);
     }, 1000);
   }
 function handleSendMessage() {
@@ -317,6 +414,40 @@ function handleSendMessage() {
 
   let botMsg;
 
+if (expectingOrderEmail) {
+  setOrderEmail(inputText.trim());
+  setExpectingOrderEmail(false);
+  setExpectingOrderId(true);
+  botMsg = {
+    type: "bot",
+    text: "Please enter your Order ID now.",
+    time: currentTime,
+  };
+  setMessages((prev) => [...prev, userMsg]);
+  setInputText("");
+  setTimeout(() => setMessages((prev) => [...prev, botMsg]), 1000);
+  return;
+} if (expectingOrderId) {
+  setOrderId(inputText.trim());
+  setExpectingOrderId(false);
+  if (orderEmail.includes("example")) {
+    botMsg = {
+      type: "bot",
+      text: `✅ Order found!\n\n📦 Order ID: ${inputText}\n📬 Email: ${orderEmail}\n🗓️ Status: Delivered\n📅 Delivery Date: 28 June 2025`,
+      time: currentTime,
+    };
+  } else {
+    botMsg = {
+      type: "bot",
+      text: "❌ Order not found. Please check your details and try again.",
+      time: currentTime,
+    };
+  }
+    setMessages((prev) => [...prev, userMsg]);
+  setInputText("");
+  setTimeout(() => setMessages((prev) => [...prev, botMsg]), 1000);
+  return;
+}
 
   if (expectingPhone) {
     const phoneRegex = /^[6-9]\d{9}$/; 
@@ -350,6 +481,8 @@ function handleSendMessage() {
     setMessages((prev) => [...prev, botMsg]);
   }, 1000);
 }
+
+
 function handleFeedback(index, type) {
   setFeedbackMap((prev) => ({ ...prev, [index]: type }));
 }
@@ -376,89 +509,141 @@ function handleFeedback(index, type) {
             <p style={{ fontSize: "11px" }}>{formattedTime}</p>
           </div>
           {messages.map((msg, idx) => (
-  <Box
-    key={idx}
-    sx={{
-      display: 'flex',
-      flexDirection: 'column',
-       justifyContent: msg.type === 'user' ? 'flex-end' : 'flex-start',
-      alignItems: msg.type === 'user' ? 'flex-end' : 'flex-start', // user right, bot left
-      mb: 2,
-      maxWidth: '70%',
-      marginLeft: msg.type === 'user' ? 'auto' : 0,
-marginRight: msg.type === 'user' ? 0 : 'auto',
-    }}
-  >
-    {/* Message Bubble */}
+  msg.type === "faq-button" ? (
     <Box
-      sx={{
-        p: 1.5,
-        borderRadius: 2,
-        bgcolor: msg.type === 'user' ? '#4a6edb' : 'white', // brighter colors
-        color: msg.type === 'user' ? 'white' : 'black',
-        wordBreak: 'break-word',
-        whiteSpace: 'pre-line',
-        width: '100%',
-      }}
+      key={idx}
+      sx={{ display: 'flex', justifyContent: 'center', mb: 1 }}
     >
-      {msg.text}
+      <button
+        className="faqButton"
+        onClick={() => {
+          const faqAnswer = faqs.find(f => f.question === msg.text)?.answer || "Sorry, I couldn't find an answer.";
+          const botResponse = {
+            type: "bot",
+            text: faqAnswer,
+            time: new Date().toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+          };
+          setMessages((prev) => [...prev, {
+            type: "user",
+            text: msg.text,
+            time: msg.time,
+          }]);
+          setTimeout(() => {
+            setMessages((prev) => [...prev, botResponse]);
+          }, 800);
+        }}
+        style={{
+          padding: "8px 14px",
+          borderRadius: "20px",
+          border: "1px solid #ccc",
+          background: "#f2f2f2",
+          cursor: "pointer",
+        }}
+      >
+        {msg.text}
+      </button>
     </Box>
-
-    {/* Bottom bar with timestamp left and feedback right */}
+  ) : (
     <Box
+      key={idx}
       sx={{
         display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        mt: 0.3,
-        fontSize: 11,
-        color: 'text.secondary',
-        width: '100%',
-        userSelect: 'none',
+        flexDirection: 'column',
+        justifyContent: msg.type === 'user' ? 'flex-end' : 'flex-start',
+        alignItems: msg.type === 'user' ? 'flex-end' : 'flex-start',
+        mb: 2,
+        maxWidth: '70%',
+        marginLeft: msg.type === 'user' ? 'auto' : 0,
+        marginRight: msg.type === 'user' ? 0 : 'auto',
       }}
     >
-      {/* Timestamp left */}
-      <Box>{msg.time}</Box>
-
-      {/* Feedback icons right */}
-      <Box>
-        <Tooltip title="Like">
-          <IconButton
-            size="small"
-            sx={{ color: feedbackMap[idx] === 'up' ? '#1e88e5' : 'rgba(0,0,0,0.54)' }}
-            onClick={() => handleFeedback(idx, 'up')}
-          >
-            <ThumbUpAltOutlinedIcon fontSize="small" />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Dislike">
-          <IconButton
-            size="small"
-            sx={{ color: feedbackMap[idx] === 'down' ? '#e53935' : 'rgba(0,0,0,0.54)' }}
-            onClick={() => handleFeedback(idx, 'down')}
-          >
-            <ThumbDownAltOutlinedIcon fontSize="small" />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Report this message">
-          <IconButton
-            size="small"
-            color="error"
-            onClick={() => alert(`Reported message #${idx + 1}`)}
-          >
-            <ReportProblemOutlinedIcon fontSize="small" />
-          </IconButton>
-        </Tooltip>
+      <Box
+        sx={{
+          p: 1.5,
+          borderRadius: 2,
+          bgcolor: msg.type === 'user' ? '#4a6edb' : 'white',
+          color: msg.type === 'user' ? 'white' : 'black',
+          wordBreak: 'break-word',
+          whiteSpace: 'pre-line',
+          width: '100%',
+        }}
+      >
+        {msg.type === 'bot' ? renderMessageWithLinks(msg.text) : msg.text}
       </Box>
-    </Box>
+
+    {msg.type === 'bot' && (
+  <Box sx={{ display: "flex", gap: 1, mt: 0.5 }}>
+    <Tooltip title="Like">
+      <IconButton
+        size="small"
+        onClick={() => handleFeedback(idx, "like")}
+      >
+        {feedbackMap[idx] === "like" ? (
+          <ThumbUpAltIcon fontSize="small" color="primary" />
+        ) : (
+          <ThumbUpAltOutlinedIcon fontSize="small" />
+        )}
+      </IconButton>
+    </Tooltip>
+    <Tooltip title="Dislike">
+      <IconButton
+        size="small"
+        onClick={() => handleFeedback(idx, "dislike")}
+      >
+        {feedbackMap[idx] === "dislike" ? (
+          <ThumbDownAltIcon fontSize="small" color="error" />
+        ) : (
+          <ThumbDownAltOutlinedIcon fontSize="small" />
+        )}
+      </IconButton>
+    </Tooltip>
+    <Tooltip title="Report">
+      <IconButton size="small" onClick={() => alert("Reported!")}>
+        <ReportProblemOutlinedIcon fontSize="small" />
+      </IconButton>
+    </Tooltip>
   </Box>
+)}
+
+    </Box>
+  )
 ))}
+
 
 
 
 
             <div ref={chatMessagesEndRef} />
         </div>
+<div className="riseUpMenuContainer">
+  <div
+    className="menuButton"
+    onClick={() => setShowRiseUpMenu(prev => !prev)}
+    title="Menu"
+  >
+    ☰
+  </div>
+
+  {showRiseUpMenu && (
+    <div className="riseUpMenu">
+      {options.map((option, idx) => (
+        <button
+          key={idx}
+          className="riseUpOption"
+          onClick={() => {
+            handleOptionClick(idx);
+            setShowRiseUpMenu(false);
+          }}
+        >
+          {option}
+        </button>
+      ))}
+    </div>
+  )}
+</div>
 
         <div className="chatInputBar">
           <label className="attachmentIcon">
@@ -471,13 +656,13 @@ marginRight: msg.type === 'user' ? 0 : 'auto',
             <img
               src={paperpin}
               alt="Attach"
-              style={{ width: "18px", height: "18px" }}
+              style={{ width: "18px", height: "18px", cursor: disable ? "not-allowed" : "pointer" }}
             />
           </label>
           <input
             ref={inputRef}
             type="text"
-            placeholder="Type a message..."
+            placeholder={disable ? "Select from menu" : "Type a message..."}
             value={inputText}
             disabled={disable}
             onKeyDown={(e) => {
@@ -485,13 +670,17 @@ marginRight: msg.type === 'user' ? 0 : 'auto',
   }}
             onChange={(e) => setInputText(e.target.value)}
           />
-          <div
-          className={`micIcon ${isListening ? 'listening' : ''}`}
-    onClick={handleVoiceInput}
-    title="Voice Input"
-  >
-    <MicIcon />
-  </div>
+         <div
+  className={`micIcon ${isListening ? 'listening' : ''} ${disable ? 'disabled' : ''}`}
+  onClick={() => {
+    if (!disable) handleVoiceInput();
+  }}
+  title={disable ? "Voice input disabled" : "Voice Input"}
+  style={{ cursor: disable ? "not-allowed" : "pointer", opacity: disable ? 0.5 : 1 }}
+>
+  <MicIcon />
+</div>
+
           <button
             onClick={() => {
               if (inputText.trim() === "") return;
@@ -536,7 +725,7 @@ marginRight: msg.type === 'user' ? 0 : 'auto',
           {!startNewConversation ? (
             <>
               {chatPopUpHeader()}
-              {floatingNewConversationCard()}
+              {floatingNewConversationCard(conversationHistory)}
             </>
           ) : (
             <>

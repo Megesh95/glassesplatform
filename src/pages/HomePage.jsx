@@ -1,6 +1,7 @@
 import React from 'react';
 import SliderAnimation from '../components/SliderAnimation';
 import Products from '../components/Products/Products';
+import TrendingCarousel from "../components/TrendingCarousel";
 
 const HomePage = ({ addToCart, addToWishlist, wishlistItems, removeFromWishlist }) => {
   return (
@@ -17,6 +18,8 @@ const HomePage = ({ addToCart, addToWishlist, wishlistItems, removeFromWishlist 
         />
       </div>
 
+<TrendingCarousel />
+
       <SectionDivider title="Free Lens Replacement at Stores" />
       <BannerImage 
         src="https://static5.lenskart.com/media/uploads/Desktop-v2-topbanner-hustlrswitch-GJ-150525.png"
@@ -27,6 +30,24 @@ const HomePage = ({ addToCart, addToWishlist, wishlistItems, removeFromWishlist 
       <BannerImage 
         src="https://static1.lenskart.com/media/desktop/img/16-sep-24/r1.jpeg"
         alt="Premium Eyewear"
+      />
+
+      <SectionDivider title="BUY ONE GET ONE FREE" />
+      <BannerImage 
+      src="https://static5.lenskart.com/media/uploads/1920x520-desktop-banner.png"
+      alt="BUY ONE GET ONE FREE"
+      />
+
+      <SectionDivider title="AS SEEN ON SHARK TANK" />
+      <BannerImage 
+      src="https://static1.lenskart.com/media/desktop/img/Dec22/1-Dec/Homepage-Banner-web.gif"
+      alt="AS SEEN ON SHARK TANK"
+      />
+
+      <SectionDivider title="Trending Sunglasses" />
+      <BannerImage 
+      src="https://static1.lenskart.com/media/desktop/img/Jan23/sunglasses/Sun-Banner-web.gif"
+      alt="Trending Sunglasses"
       />
     </>
   );
@@ -43,11 +64,11 @@ const SectionDivider = ({ title }) => (
 );
 
 const BannerImage = ({ src, alt }) => (
-  <div className="w-full flex justify-center py-6">
+  <div className="w-full">
     <img
       src={src}
       alt={alt}
-      className="max-w-[1200px] w-full h-auto shadow"
+      className="w-full h-auto block"
     />
   </div>
 );
