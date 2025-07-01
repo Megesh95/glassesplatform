@@ -2,7 +2,8 @@ import React from 'react';
 import SliderAnimation from '../components/SliderAnimation';
 import Products from '../components/Products/Products';
 import TrendingCarousel from "../components/TrendingCarousel";
-import ContactLensesCarousel from '../components/ContactLensesCarousel';
+import ContactLensesCarousel from "../components/ContactLensesCarousel";
+import ProductsCategoryCarousel from "../components/ProductsCategoryCarousel";
 
 const HomePage = ({ addToCart, addToWishlist, wishlistItems, removeFromWishlist }) => {
   return (
@@ -50,6 +51,14 @@ const HomePage = ({ addToCart, addToWishlist, wishlistItems, removeFromWishlist 
       src="https://static1.lenskart.com/media/desktop/img/Jan23/sunglasses/Sun-Banner-web.gif"
       alt="Trending Sunglasses"
       />
+
+      <SectionDivider title="OUR BRANDS" />
+      <BannerImage 
+      src="https://static1.lenskart.com/media/desktop/img/Aug21/Desktop/VC-Banner.jpg"
+      alt="OUR BRANDS"
+      />
+
+      <ProductsCategoryCarousel />
     </>
   );
 };
