@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const GetOTP = ({ onBack, onOTPSent }) => {
+const GetOTP = ({ onBack, onOTPSent, darkMode }) => {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -27,12 +27,12 @@ const GetOTP = ({ onBack, onOTPSent }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/30 z-50">
-      <div className="bg-white rounded-xl shadow-lg p-8 w-96 max-w-full relative">
-        <h2 className="text-2xl font-semibold text-gray-800 text-center mb-4">Reset Password</h2>
+    <div className={`fixed inset-0 flex items-center justify-center backdrop-blur-sm ${darkMode ? 'bg-black/70' : 'bg-black/30'} z-50`}>
+      <div className={`${darkMode ? 'bg-zinc-800 text-zinc-100' : 'bg-white text-gray-800'} rounded-xl shadow-lg p-8 w-96 max-w-full relative`}>
+        <h2 className={`text-2xl font-semibold text-center mb-4 ${darkMode ? 'text-zinc-100' : 'text-gray-800'}`}>Reset Password</h2>
         
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <p className="text-sm text-gray-600 mb-2">
+          <p className={`text-sm mb-2 ${darkMode ? 'text-zinc-300' : 'text-gray-600'}`}>
             Enter your email to receive a verification code
           </p>
           
@@ -41,7 +41,11 @@ const GetOTP = ({ onBack, onOTPSent }) => {
             placeholder="Your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={`p-3 border rounded-md focus:outline-none focus:ring-2 ${
+              darkMode 
+                ? 'bg-zinc-700 border-zinc-600 focus:ring-blue-400 placeholder-zinc-400 text-zinc-100' 
+                : 'border-gray-300 focus:ring-blue-500'
+            }`}
           />
           
           {error && <p className="text-red-500 text-sm">{error}</p>}
@@ -49,7 +53,11 @@ const GetOTP = ({ onBack, onOTPSent }) => {
           <button
             type="submit"
             disabled={isLoading}
-            className="bg-gray-600 text-white py-2 rounded-md hover:bg-gray-800 transition-all disabled:opacity-70"
+            className={`py-2 rounded-md transition-all disabled:opacity-70 ${
+              darkMode 
+                ? 'bg-blue-600 hover:bg-blue-700 text-white' 
+                : 'bg-gray-600 hover:bg-gray-800 text-white'
+            }`}
           >
             {isLoading ? 'Sending...' : 'Send OTP'}
           </button>
@@ -57,7 +65,9 @@ const GetOTP = ({ onBack, onOTPSent }) => {
         
         <button
           onClick={onBack}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl"
+          className={`absolute top-4 right-4 text-xl ${
+            darkMode ? 'text-zinc-400 hover:text-zinc-200' : 'text-gray-400 hover:text-gray-600'
+          }`}
         >
           &times;
         </button>

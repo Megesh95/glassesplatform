@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
-const SignUp = ({ onClose, onSwitch }) => {
+const SignUp = ({ onClose, onSwitch, darkMode }) => {
   const [animate, setAnimate] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
-    phone: '', // Stores only the user-entered digits (without +91)
+    phone: '', 
     email: '',
     password: '',
   });
@@ -36,13 +36,13 @@ const SignUp = ({ onClose, onSwitch }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm bg-black/30 z-50">
+    <div className={`fixed inset-0 flex items-center justify-center backdrop-blur-sm ${darkMode ? 'bg-black/70' : 'bg-black/30'} z-50`}>
       <div
-        className={`bg-white rounded-xl shadow-lg p-8 w-96 max-w-full transform transition-all duration-300 ${
+        className={`${darkMode ? 'bg-zinc-800 text-zinc-100' : 'bg-white text-gray-800'} rounded-xl shadow-lg p-8 w-96 max-w-full transform transition-all duration-300 ${
           animate ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-4 scale-95'
         } relative`}
       >
-        <h2 className="text-2xl font-semibold text-gray-800 text-center mb-4">Sign Up</h2>
+        <h2 className={`text-2xl font-semibold text-center mb-4 ${darkMode ? 'text-zinc-100' : 'text-gray-800'}`}>Sign Up</h2>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           {/* Full Name */}
           <input
@@ -51,14 +51,21 @@ const SignUp = ({ onClose, onSwitch }) => {
             placeholder="Full Name"
             value={formData.fullName}
             onChange={handleChange}
-            className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={`p-3 border rounded-md focus:outline-none focus:ring-2 ${
+              darkMode 
+                ? 'bg-zinc-700 border-zinc-600 focus:ring-blue-400 placeholder-zinc-400 text-zinc-100' 
+                : 'border-gray-300 focus:ring-blue-500'
+            }`}
             required
           />
 
-          {/* Phone Number (with +91 prefix) */}
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none bg-gray-100 rounded-l-md border border-r-0 border-gray-300">
-              <span className="text-gray-600">+91</span>
+            <div className={`absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none rounded-l-md border border-r-0 ${
+              darkMode 
+                ? 'bg-zinc-900 border-zinc-900 text-zinc-300' 
+                : 'bg-gray-100 border-gray-300 text-gray-600'
+            }`}>
+              <span >+91</span>
             </div>
             <input
               type="tel"
@@ -66,9 +73,13 @@ const SignUp = ({ onClose, onSwitch }) => {
               placeholder="Phone Number"
               value={formData.phone}
               onChange={handleChange}
-              className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full pl-14"
+              className={`p-3 border rounded-md focus:outline-none focus:ring-2 w-full pl-14 ${
+                darkMode 
+                  ? 'bg-zinc-700 border-zinc-600 focus:ring-blue-400 placeholder-zinc-400 text-zinc-100' 
+                  : 'border-gray-300 focus:ring-blue-500'
+              }`}
               required
-              pattern="\d{10}" // Ensures 10 digits (without +91)
+              pattern="\d{10}" 
               title="Enter a 10-digit phone number"
             />
           </div>
@@ -80,7 +91,11 @@ const SignUp = ({ onClose, onSwitch }) => {
             placeholder="Email"
             value={formData.email}
             onChange={handleChange}
-            className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={`p-3 border rounded-md focus:outline-none focus:ring-2 ${
+              darkMode 
+                ? 'bg-zinc-700 border-zinc-600 focus:ring-blue-400 placeholder-zinc-400 text-zinc-100' 
+                : 'border-gray-300 focus:ring-blue-500'
+            }`}
             required
           />
 
@@ -91,22 +106,30 @@ const SignUp = ({ onClose, onSwitch }) => {
             placeholder="Password"
             value={formData.password}
             onChange={handleChange}
-            className="p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={`p-3 border rounded-md focus:outline-none focus:ring-2 ${
+              darkMode 
+                ? 'bg-zinc-700 border-zinc-600 focus:ring-blue-400 placeholder-zinc-400 text-zinc-100' 
+                : 'border-gray-300 focus:ring-blue-500'
+            }`}
             required
           />
 
           <button
             type="submit"
-            className="bg-gray-600 text-white py-2 rounded-md hover:bg-gray-700 transition-all"
+            className={`py-2 rounded-md transition-all ${
+              darkMode 
+                ? 'bg-blue-600 hover:bg-blue-700 text-white' 
+                : 'bg-gray-600 hover:bg-gray-700 text-white'
+            }`}
           >
             Sign Up
           </button>
 
-          <p className="text-center text-sm text-gray-600">
+          <p className={`text-center text-sm ${darkMode ? 'text-zinc-300' : 'text-gray-600'}`}>
             Already have an account?{' '}
             <span
               onClick={onSwitch}
-              className="text-blue-600 cursor-pointer hover:underline"
+              className={`${darkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-800'} cursor-pointer hover:underline`}
             >
               Sign In
             </span>
@@ -114,7 +137,9 @@ const SignUp = ({ onClose, onSwitch }) => {
         </form>
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl"
+          className={`absolute top-4 right-4 text-xl ${
+            darkMode ? 'text-zinc-400 hover:text-zinc-200' : 'text-gray-400 hover:text-gray-600'
+          }`}
         >
           &times;
         </button>
