@@ -64,7 +64,7 @@ function Header({ onLoginClick, darkMode, cartCount, wishlistCount, toggleWishli
 
       <div id="middleheader">
         <Link to="/" id="middleleftheader">
-          <h1 id="headerlogo">V-Lens</h1>
+          <h1 id="headerlogo"><img src = "/logotrans.png" className = "h-8"/></h1>
           <h1 id="phonenumber">9XXXX-XXXXX</h1>
         </Link>
 
