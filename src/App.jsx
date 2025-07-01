@@ -18,7 +18,7 @@ const App = () => {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [user, setUser] = useState(null)
-
+  const [darkMode, setDarkMode] = useState(false)
   const [cartItems, setCartItems] = useState([]);
   const [wishlistItems, setWishlistItems] = useState([]);
   const [showWishlist, setShowWishlist] = useState(false);
@@ -75,40 +75,49 @@ const App = () => {
   const clearWishlist = () => setWishlistItems([]);
 
   return (
-    <Router>
-      <div className="font-sans min-h-screen bg-gray-100 flex flex-col">
-        <Header 
-          onLoginClick={() => openAuthModal('signin')}
-          cartCount={cartItems.length}
-          wishlistCount={wishlistItems.length}
+    <div className = {`${darkMode ? "dark": ""}`}>
+      <Router>
+        <div className="font-sans min-h-screen dark:bg-zinc-950 bg-zinc-100 flex flex-col">
+          <Header 
+            darkMode = {darkMode}
+            onLoginClick={() => openAuthModal('signin')}
+            cartCount={cartItems.length}
+            wishlistCount={wishlistItems.length}
+            toggleWishlist={() => setShowWishlist((prev) => !prev)}
+          />
+          <button onClick={() => {setDarkMode(!darkMode)}} className = {`fixed bottom-8 shadow-[0_2px_5px_1px_rgba(0,0,0,0.25)] hover:scale-[1.05] left-5 z-30 ${darkMode ? "bg-zinc-700": "bg-zinc-200"} w-[10vh] h-[10vh] rounded-full flex items-center justify-center`}>
+            {darkMode ? 
+              <img src = "/dark.svg" className = "size-[50%]"/>
+              :
+              <img src = "/lightblack.svg" className = "size-[50%]"/>
+            }
+          </button>
+          <main className="flex-grow">
+            <Routes>
+              <Route path="/" element={<HomePage addToCart={addToCart} addToWishlist={addToWishlist} wishlistItems={wishlistItems} removeFromWishlist={removeFromWishlist} />} />
+              <Route path="/cart" element={<Cart cart={cartItems} removeFromCart={removeFromCart} />} />
+              <Route path="/trackorder" element={<TrackOrder />} />
+            </Routes>
+          </main>
+          <FooterSection className="py-4" />
+          <AuthModalManager
+            authModal={authModal}
+            closeAuthModal={closeAuthModal}
+            switchAuthModal={switchAuthModal}
+            handleOTPSent={handleOTPSent}
+            onAuthSuccess={handleAuthSuccess}
+          />
+          <ChatBot cart={cartItems} wishlist={wishlistItems} />
+        </div>
+        <Wishlist
+          wishlist={wishlistItems}
+          removeFromWishlist={removeFromWishlist}
+          clearWishlist={clearWishlist}
           toggleWishlist={() => setShowWishlist((prev) => !prev)}
+          show={showWishlist}
         />
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<HomePage addToCart={addToCart} addToWishlist={addToWishlist} wishlistItems={wishlistItems} removeFromWishlist={removeFromWishlist} />} />
-            <Route path="/cart" element={<Cart cart={cartItems} removeFromCart={removeFromCart} />} />
-            <Route path="/trackorder" element={<TrackOrder />} />
-          </Routes>
-        </main>
-        <FooterSection className="py-4" />
-        <AuthModalManager
-          authModal={authModal}
-          closeAuthModal={closeAuthModal}
-          switchAuthModal={switchAuthModal}
-          handleOTPSent={handleOTPSent}
-          onAuthSuccess={handleAuthSuccess}
-        />
-        <ChatBot cart={cartItems} wishlist={wishlistItems} />
-      </div>
-      <Wishlist
-        wishlist={wishlistItems}
-        removeFromWishlist={removeFromWishlist}
-        clearWishlist={clearWishlist}
-        toggleWishlist={() => setShowWishlist((prev) => !prev)}
-        show={showWishlist}
-      />
-    </Router>
-    
+      </Router>
+    </div>
   );
 };
 
