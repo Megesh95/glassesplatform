@@ -106,6 +106,7 @@ const App = () => {
             switchAuthModal={switchAuthModal}
             handleOTPSent={handleOTPSent}
             onAuthSuccess={handleAuthSuccess}
+            darkMode={darkMode} 
           />
           <ChatBot cart={cartItems} wishlist={wishlistItems} />
         </div>
