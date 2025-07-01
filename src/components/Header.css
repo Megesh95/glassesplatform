@@ -1,11 +1,9 @@
 #header {
-    background-color: white;
     display: flex;
     flex-direction: column;
     padding-left: 2.5%;
     padding-right: 2.5%;
     padding-top: 1%;
-    color: rgba(0,0,80,1);
     position: sticky;
     top: 0;
 }
@@ -193,5 +191,5 @@
 
 #navleft>button:hover{
     cursor: pointer;
-    border-bottom: 2px solid rgba(0,0,80,1)
+    border-bottom: 3px solid rgba(100,100,180,1)
 }
