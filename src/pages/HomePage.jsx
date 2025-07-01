@@ -2,12 +2,12 @@ import React from 'react';
 import SliderAnimation from '../components/SliderAnimation';
 import Products from '../components/Products/Products';
 import TrendingCarousel from "../components/TrendingCarousel";
+import ContactLensesCarousel from '../components/ContactLensesCarousel';
 
 const HomePage = ({ addToCart, addToWishlist, wishlistItems, removeFromWishlist }) => {
   return (
     <>
       <SliderAnimation />
-      
       <SectionDivider title="New Models" />
       <div className="py-16 px-4 flex items align-middle">
         <Products 
@@ -18,7 +18,8 @@ const HomePage = ({ addToCart, addToWishlist, wishlistItems, removeFromWishlist 
         />
       </div>
 
-<TrendingCarousel />
+      <TrendingCarousel />
+      <ContactLensesCarousel />
 
       <SectionDivider title="Free Lens Replacement at Stores" />
       <BannerImage 
