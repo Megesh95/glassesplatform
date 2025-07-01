@@ -6,7 +6,6 @@ import logo from "../assets/ChatBot_pics/glasses.png";
 import avatar1 from "../assets/ChatBot_pics/avatar1.png";
 import avatar2 from "../assets/ChatBot_pics/avatar2.png";
 import avatar3 from "../assets/ChatBot_pics/avatar3.png";
-import back from "../assets/ChatBot_pics/back.png";
 import bgimage from "../assets/ChatBot_pics/Backgroundimage.jpg";
 import paperpin from "../assets/ChatBot_pics/paperpin.png";
 import MicIcon from '@mui/icons-material/Mic';
@@ -48,9 +47,8 @@ const recognitionRef = useRef(null);
 const [showRiseUpMenu, setShowRiseUpMenu] = useState(false);
 const [orderEmail, setOrderEmail] = useState("");
 const [orderId, setOrderId] = useState("");
-const [showAgentList, setShowAgentList] = useState(false);
 const [selectedAgent, setSelectedAgent] = useState(null);
-const [mode, setMode] = useState("bot"); // or "agent"
+const [mode, setMode] = useState("bot"); 
 const [agentMessages, setAgentMessages] = useState([]);
 const [agents, setAgents] = useState([
   { id: 1, name: "Agent A", status: "free" },
@@ -140,12 +138,13 @@ function startNewConversationHandler() {
     const summaryTitle = firstUserMsg?.text?.slice(0, 20) || "Conversation";
 
     const newHistoryItem = {
-      id: "#" + Math.floor(100000000 + Math.random() * 900000000),
-      title: summaryTitle,
-      avatar: [avatar1, avatar2, avatar3][Math.floor(Math.random() * 3)],
-      timeAgo: "Just now",
-      sortIndex: Date.now(),
-    };
+  id: "#" + Math.floor(100000000 + Math.random() * 900000000),
+  title: summaryTitle,
+  avatar: [avatar1, avatar2, avatar3][Math.floor(Math.random() * 3)],
+  timeAgo: "Just now",
+  sortIndex: Date.now(),
+  messages: [...messages],
+};
 
     setConversationHistory(prev => [newHistoryItem, ...prev]);
   }
@@ -156,7 +155,6 @@ function startNewConversationHandler() {
 }
 
 
-  // const options = ["Buy Eyewear", "Locate Nearby Store", "My Cart"];
 
 useEffect(() => {
   if (isOpen && startNewConversation && inputRef.current) {
@@ -256,7 +254,17 @@ useEffect(() => {
         </div>
         <div className="timeAgo">{convo.timeAgo}</div>
       </div>
-      <div className="arrow">→</div>
+     <div
+  className="arrow"
+  style={{ cursor: "pointer" }}
+  onClick={() => {
+    setMessages(convo.messages || []);
+    setStartNewConversation(true);
+  }}
+>
+  →
+</div>
+
     </div>
 ))}
 </div>
@@ -286,7 +294,11 @@ function newChatHeader() {
         )}
       </div>
 
-      <div className="backiconclass" onClick={() => setStartNewConversation(false)}>
+      <div className="backiconclass" onClick={() => {
+        setStartNewConversation(false);
+       
+        
+      }}>
         <div>
           <KeyboardBackspaceIcon />
         </div>
@@ -494,27 +506,34 @@ else {
       <div className="agentMessages" style={{ flexGrow: 1, padding: "10px", overflowY: "auto" }}>
         {agentMsgs.map((m, i) => (
           <div
-            key={i}
-            style={{
-              marginBottom: "8px",
-              alignSelf: m.from === "user" ? "flex-end" : "flex-start",
-              background: m.from === "user" ? "#4a6edb" : "#e3f2fd",
-              color: m.from === "user" ? "white" : "#000",
-              padding: "10px 14px",
-              borderRadius: "20px",
-              maxWidth: "75%",
-              wordBreak: "break-word",
-            }}
-          >
-            {m.text}
-          </div>
+  key={i}
+  style={{
+    display: "flex",
+    justifyContent: m.from === "user" ? "flex-end" : "flex-start",
+    marginBottom: "8px",
+  }}
+>
+  <div
+    style={{
+      background: m.from === "user" ? "#4a6edb" : "#e3f2fd",
+      color: m.from === "user" ? "white" : "#000",
+      padding: "10px 14px",
+      borderRadius: "20px",
+      maxWidth: "75%",
+      wordBreak: "break-word",
+    }}
+  >
+    {m.text}
+  </div>
+</div>
+
         ))}
       </div>
 
       <div className="chatInputBar" style={{ display: "flex", alignItems: "center", padding: "10px", borderTop: "1px solid #ddd" }}>
         <label className="attachmentIcon" style={{ marginRight: "8px" }}>
           <input type="file" style={{ display: "none" }} />
-          <img src="paperpin.png" alt="Attach" style={{ width: "20px", cursor: "pointer" }} />
+          <img  src={paperpin} alt="Attach" style={{ width: "20px", cursor: "pointer" }} />
         </label>
 
         <input
@@ -542,7 +561,7 @@ else {
           onClick={sendMessage}
           style={{ marginLeft: "8px", background: "#4a6edb", color: "white", border: "none", borderRadius: "20px", padding: "8px 16px", cursor: "pointer" }}
         >
-          Send
+          ➤
         </button>
       </div>
     </div>
@@ -621,13 +640,13 @@ if (expectingOrderEmail) {
   if (orderEmail.includes("example")) {
     botMsg = {
       type: "bot",
-      text: `✅ Order found!\n\n📦 Order ID: ${inputText}\n📬 Email: ${orderEmail}\n🗓️ Status: Delivered\n📅 Delivery Date: 28 June 2025`,
+      text: ` Order found!\n\n Order ID: ${inputText}\n Email: ${orderEmail}\n Status: Delivered\n Delivery Date: 28 June 2025`,
       time: currentTime,
     };
   } else {
     botMsg = {
       type: "bot",
-      text: "❌ Order not found. Please check your details and try again.",
+      text: "Order not found. Please check your details and try again.",
       time: currentTime,
     };
   }
@@ -642,14 +661,14 @@ if (expectingOrderEmail) {
     if (phoneRegex.test(inputText.trim())) {
       botMsg = {
         type: "bot",
-        text: "✅ Valid phone number! Enter the OTP sent to your mobile.",
+        text: " Valid phone number! Enter the OTP sent to your mobile.",
         time: currentTime,
       };
     } else {
       setShowOptions(true);
       botMsg = {
         type: "bot",
-        text: "❌ Invalid phone number. Please enter a 10-digit valid number starting with 6-9.",
+        text: " Invalid phone number. Please enter a 10-digit valid number starting with 6-9.",
         time: currentTime,
       };
     }
@@ -767,7 +786,7 @@ function chatBody() {
       ...prev,
       {
         type: "bot",
-        text: `✅ You are now connected with ${agent.name}. They will assist you shortly.`,
+        text: ` You are now connected with ${agent.name}. They will assist you shortly.`,
         time,
       },
     ]);
@@ -805,8 +824,8 @@ function chatBody() {
       fontWeight: 'bold',
     }}
   >
-    📞 Customer Care: <a href="tel:18001234567" style={{color:'#1976d2', textDecoration:'underline'}}>1800-123-4567</a><br />
-    🌐 Or visit <a href="/contact" target="" rel="" style={{color:'#1976d2', textDecoration:'underline'}}>Contact Us</a> page
+     Customer Care: <a href="tel:18001234567" style={{color:'#1976d2', textDecoration:'underline'}}>1800-123-4567</a><br />
+     Or visit <a href="/contact" target="" rel="" style={{color:'#1976d2', textDecoration:'underline'}}>Contact Us</a> page
   </Box>);
           }
 
@@ -1010,7 +1029,6 @@ function chatBody() {
         <div ref={chatMessagesEndRef} />
       </div>
 
-      {/* Rise Up Menu */}
       <div className="riseUpMenuContainer">
         <div
           className="menuButton"
@@ -1038,7 +1056,7 @@ function chatBody() {
         )}
       </div>
 
-      {/* Input Bar */}
+
       <div className="chatInputBar">
         <label className="attachmentIcon">
           <input
