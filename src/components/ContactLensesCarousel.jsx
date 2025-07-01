@@ -53,7 +53,9 @@ const ContactLensesCarousel = () => {
   };
 
   return (
-    <section className="w-full max-w-6xl mx-auto mt-12 mb-16 px-4">
+    
+    <section className="w-full max-w-6xl mx-auto mt-12 mb-16 px-4 py-4">
+      <img src="https://static1.lenskart.com/media/desktop/img/June22/Our-Brands-Banner.jpg"></img>
       <div className="flex items-center justify-between mb-2">
         <h2 className="text-2xl font-semibold tracking-wide">CONTACT LENSES</h2>
         <a href="#" className="text-teal-600 font-medium hover:underline">View Range</a>
