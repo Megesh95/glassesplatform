@@ -108,7 +108,7 @@ const App = () => {
             onAuthSuccess={handleAuthSuccess}
             darkMode={darkMode} 
           />
-          <ChatBot cart={cartItems} wishlist={wishlistItems} />
+          <ChatBot cart={cartItems} wishlist={wishlistItems} darkMode={darkMode} />
         </div>
         <Wishlist
           wishlist={wishlistItems}
