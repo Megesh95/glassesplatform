@@ -3,7 +3,7 @@ import SliderAnimation from '../components/SliderAnimation';
 import Products from '../components/Products/Products';
 import TrendingCarousel from "../components/TrendingCarousel";
 import ContactLensesCarousel from "../components/ContactLensesCarousel";
-import ProductsCategoryCarousel from "../components/ProductsCategoryCarousel";
+import EyeglassesSunglassesCarousel from '../components/EyeglassesSunglassesCarousel';
 
 const HomePage = ({ addToCart, addToWishlist, wishlistItems, removeFromWishlist, cartItems }) => {
   return (
@@ -64,7 +64,13 @@ const HomePage = ({ addToCart, addToWishlist, wishlistItems, removeFromWishlist,
       alt="OUR BRANDS"
       />
 
-      <ProductsCategoryCarousel />
+<EyeglassesSunglassesCarousel
+  addToCart={addToCart}
+  addToWishlist={addToWishlist}
+  wishlistItems={wishlistItems}
+  removeFromWishlist={removeFromWishlist}
+  cartItems={cartItems}
+/>
     </>
   );
 };

@@ -118,7 +118,7 @@ const WishlistSection = () => (
   </div>
 );
 
-const CartPage = ({ cart , removeFromCart }) => {
+const CartPage = ({ cart , removeFromCart, addToWishlist}) => {
   const [showModal, setShowModal] = useState(false);
   const [removeIndex, setRemoveIndex] = useState(null);
 
@@ -133,7 +133,7 @@ const CartPage = ({ cart , removeFromCart }) => {
           cart.map((item, index) => (
             <CartItem
               key={index}
-              image={item.image}
+              image={item.src || item.image}
               property1={item.name}
               price1={item.price}
               property2={item.size}
@@ -179,7 +179,12 @@ const CartPage = ({ cart , removeFromCart }) => {
         <button
           className="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-800"
           onClick={() => {
-            // Optional: You can move to wishlist logic here
+            addToWishlist({
+              name: cart[removeIndex].name,
+              price: cart[removeIndex].price,
+              image: cart[removeIndex].image
+  });
+            
             setShowModal(false);
           }}
         >
