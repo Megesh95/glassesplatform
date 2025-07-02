@@ -7,6 +7,7 @@ import avatar1 from "../assets/ChatBot_pics/avatar1.png";
 import avatar2 from "../assets/ChatBot_pics/avatar2.png";
 import avatar3 from "../assets/ChatBot_pics/avatar3.png";
 import bgimage from "../assets/ChatBot_pics/Backgroundimage.jpg";
+import darkbg from "../assets/ChatBot_pics/darkbg.png";
 import paperpin from "../assets/ChatBot_pics/paperpin.png";
 import MicIcon from '@mui/icons-material/Mic';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
@@ -18,7 +19,7 @@ import ThumbDownAltOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
 import ReportProblemOutlinedIcon from '@mui/icons-material/ReportProblemOutlined';
 
 
-function ChatBot({cart}) {
+function ChatBot({cart, wishlist, darkMode}) {
   const [feedbackMap, setFeedbackMap] = useState({});
   const [showOptions, setShowOptions] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -225,7 +226,12 @@ useEffect(() => {
 
   function floatingNewConversationCard(conversationHistory) {
     return (
-      <div className="floatingCard">
+      <div className="floatingCard"
+      style={{
+    backgroundColor: darkMode ? "#1e1e1e" : "white",
+    color: darkMode ? "#e0e0e0" : "black",
+    border: darkMode ? "1px solid #333" : "none",
+  }}>
         <div>
         <h3>Start a conversation with our team of experts now!</h3>
         <div className="avatars">
@@ -245,14 +251,25 @@ useEffect(() => {
   {conversationHistory && conversationHistory
   .sort((a, b) => b.sortIndex - a.sortIndex)
   .map((convo, index) => (
-    <div key={index} className="conversationItem">
+    <div key={index} className="conversationItem" style={{
+    backgroundColor: darkMode ? "#1e1e1e" : "white",
+    color: darkMode ? "#e0e0e0" : "#333",
+    borderBottom: darkMode ? "1px solid #444" : "1px solid #eee",
+  }}>
       <img src={convo.avatar} alt="avatar" className="conversationAvatar" />
-      <div className="conversationText">
+      <div className="conversationText"
+       style={{
+    color: darkMode ? "#e0e0e0" : "#333",
+  }}>
         <div>
           <strong>{convo.title}</strong>
-          <span className="conversationId">{convo.id}</span>
+          <span className="conversationId" style={{
+    color: darkMode ? "#e0e0e0" : "#333",
+  }}>{convo.id}</span>
         </div>
-        <div className="timeAgo">{convo.timeAgo}</div>
+        <div className="timeAgo" style={{
+    color: darkMode ? "#e0e0e0" : "#333",
+  }}>{convo.timeAgo}</div>
       </div>
      <div
   className="arrow"
@@ -491,7 +508,7 @@ else {
   }
 
   return (
-    <div className="chatBody fade-slide-in" style={{ backgroundImage: `url(${bgimage})`, backgroundRepeat: "repeat", backgroundSize: "contain", backgroundColor: "#f9f9f9", height: "100%", display: "flex", flexDirection: "column" }}>
+    <div className="chatBody fade-slide-in" style={{ backgroundImage: !darkMode ? `url(${bgimage})` : `url(${darkbg})`, backgroundRepeat: "repeat", backgroundSize: "contain", backgroundColor: "#f9f9f9", height: "100%", display: "flex", flexDirection: "column" }}>
 
       <div className="agentHeader" style={{ display: "flex", alignItems: "center", padding: "12px", background: "#0b3d91", color: "white", fontWeight: "bold" }}>
         <span>🧑‍💼 {agent.name}</span>
@@ -530,7 +547,7 @@ else {
         ))}
       </div>
 
-      <div className="chatInputBar" style={{ display: "flex", alignItems: "center", padding: "10px", borderTop: "1px solid #ddd" }}>
+      <div className="chatInputBar" style={{ display: "flex", alignItems: "center", padding: "10px",  backgroundColor: darkMode ? "#1e1e1e" : "#fff",borderTop: `1px solid ${darkMode ? "#333" : "#ddd"}`}}>
         <label className="attachmentIcon" style={{ marginRight: "8px" }}>
           <input type="file" style={{ display: "none" }} />
           <img  src={paperpin} alt="Attach" style={{ width: "20px", cursor: "pointer" }} />
@@ -541,6 +558,9 @@ else {
           onChange={(e) => setText(e.target.value)}
           placeholder="Type your message..."
           style={{
+          
+          backgroundColor: darkMode ? "#1e1e1e" : "#fff",
+          borderTop: `1px solid ${darkMode ? "#333" : "#ddd"}`,
             flex: 1,
             padding: "8px 12px",
             borderRadius: "20px",
@@ -559,7 +579,15 @@ else {
 
         <button
           onClick={sendMessage}
-          style={{ marginLeft: "8px", background: "#4a6edb", color: "white", border: "none", borderRadius: "20px", padding: "8px 16px", cursor: "pointer" }}
+          style={{
+            backgroundColor: darkMode ? "#4a6edb" : "#4a6edb",
+            color: "white",
+            border: "none",
+            borderRadius: "20px",
+            padding: "8px 16px",
+            marginLeft: "10px",
+            cursor: "pointer",
+          }}
         >
           ➤
         </button>
@@ -717,14 +745,18 @@ function chatBody() {
     <div
       className="chatBody fade-slide-in"
       style={{
-        backgroundImage: `url(${bgimage})`,
+        backgroundImage: !darkMode ? `url(${bgimage})` : `url(${darkbg})`,
         backgroundRepeat: "repeat",
         backgroundSize: "contain",
-        backgroundColor: "#f9f9f9",
+        color: darkMode ? "#e0e0e0" : "black",
+       backgroundColor: darkMode ? "#121212" : "#f9f9f9",
       }}
     >
       <div className="chatMessages">
-        <div className="botMessage">
+        <div className="botMessage" style={{
+            backgroundColor: darkMode ? "#2a2a2a" : "#fff",
+            color: darkMode ? "#e0e0e0" : "#000",
+          }}>
           Hello! Welcome to V-Lens, India’s largest online tech support team.
           How can I help you today?
         </div>
@@ -1057,7 +1089,10 @@ function chatBody() {
       </div>
 
 
-      <div className="chatInputBar">
+      <div className="chatInputBar" style={{
+          backgroundColor: darkMode ? "#1e1e1e" : "#fff",
+          borderTop: `1px solid ${darkMode ? "#333" : "#ddd"}`,
+        }}>
         <label className="attachmentIcon">
           <input
             type="file"
@@ -1080,6 +1115,10 @@ function chatBody() {
           type="text"
           placeholder={disable ? "Select from menu" : "Type a message..."}
           value={inputText}
+          style={{
+            background: darkMode ? "#2a2a2a" : "#f1f1f1",
+            color: darkMode ? "white" : "black",
+          }}
           disabled={disable}
           onKeyDown={(e) => {
             if (e.key === "Enter") handleSendMessage();
@@ -1100,6 +1139,15 @@ function chatBody() {
         </div>
 
         <button
+        style={{
+            backgroundColor: darkMode ? "#4a6edb" : "#4a6edb",
+            color: "white",
+            border: "none",
+            borderRadius: "20px",
+            padding: "8px 16px",
+            marginLeft: "10px",
+            cursor: "pointer",
+          }}
           onClick={() => {
             if (inputText.trim() === "") return;
 
@@ -1180,10 +1228,10 @@ function handleOptionClickByText(optionText) {
 
 
   return (
-    <>
+    <div className={darkMode ? "dark" : ""}>
       {chatIcon()}
       {isOpen && (
-        <div className={`chatPopup ${isOpen ? "open" : ""}`} ref={chatPopupRef}>
+        <div className={`chatPopup ${isOpen ? "open" : ""} ${darkMode ? "dark" : ""}`} ref={chatPopupRef}>
           {!startNewConversation ? (
             <>
               {chatPopUpHeader()}
@@ -1202,17 +1250,11 @@ function handleOptionClickByText(optionText) {
     }}
     delayStart={true} 
   />
-)}
-
-
-
-
-
-            </>
+)}   </>
           )}
         </div>
       )}
-    </>
+    </div>
   );
 }
 
