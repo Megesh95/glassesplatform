@@ -756,3 +756,64 @@ input:checked + .slider:before {
 .faqButton:hover {
   background-color: #e0e0e0;
 }
+.dark .chatPopup {
+  background: #1f1f1f;
+  color: #e0e0e0;
+}
+
+.dark .chatHeader,
+.dark .newHeader {
+  background: linear-gradient(135deg, #0a0a0a, #1e1e1e);
+  color: white;
+}
+
+.dark .chatBody {
+  background-color: #121212;
+}
+
+.dark .chatMessages .botMessage,
+.dark .chatMessages .faqButton,
+.dark .chatMessages .optionButton {
+  background-color: #2c2c2c;
+  color: #e0e0e0;
+  border: 1px solid #444;
+}
+
+.dark .chatInputBar {
+  background: #1e1e1e;
+  border-top: 1px solid #333;
+}
+
+.dark .chatInputBar input[type="text"] {
+  background: #2a2a2a;
+  color: white;
+}
+
+.dark .floatingCard {
+  background: #222;
+  color: white;
+}
+
+.dark .riseUpMenu {
+  background-color: #1f1f1f;
+  color: #e0e0e0;
+  border: 1px solid #444;
+}
+.dark .riseUpOption {
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+  border-bottom: 1px solid #333;
+}
+
+
+.dark .riseUpOption:hover {
+  background-color: #444;
+  color: white;
+}
+.dark .faqButton,
+.dark .optionButton {
+  background-color: #2a2a2a !important;
+  color: #e0e0e0 !important;
+  border: 1px solid #444 !important;
+  opacity: 1 !important;
+}
