@@ -5,7 +5,7 @@ import TrendingCarousel from "../components/TrendingCarousel";
 import ContactLensesCarousel from "../components/ContactLensesCarousel";
 import ProductsCategoryCarousel from "../components/ProductsCategoryCarousel";
 
-const HomePage = ({ addToCart, addToWishlist, wishlistItems, removeFromWishlist }) => {
+const HomePage = ({ addToCart, addToWishlist, wishlistItems, removeFromWishlist, cartItems }) => {
   return (
     <>
       <SliderAnimation />
@@ -20,7 +20,13 @@ const HomePage = ({ addToCart, addToWishlist, wishlistItems, removeFromWishlist 
       </div>
 
       <TrendingCarousel />
-      <ContactLensesCarousel />
+      <ContactLensesCarousel 
+        addToCart={addToCart}
+        addToWishlist={addToWishlist}
+        wishlistItems={wishlistItems}
+        removeFromWishlist={removeFromWishlist}
+        cartItems={cartItems}
+      />
 
       <SectionDivider title="Free Lens Replacement at Stores" />
       <BannerImage 
