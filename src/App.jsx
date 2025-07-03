@@ -37,9 +37,7 @@ const App = () => {
     setAuthModal((prev) => ({ ...prev, show: true, type }))
   }
 
-  const handleOTPSent = (email) => {
-    setAuthModal((prev) => ({ ...prev, type: "verifyotp", email }))
-  }
+  
 
   const handleAuthSuccess = (userData) => {
     setIsAuthenticated(true)
@@ -104,7 +102,6 @@ const App = () => {
             authModal={authModal}
             closeAuthModal={closeAuthModal}
             switchAuthModal={switchAuthModal}
-            handleOTPSent={handleOTPSent}
             onAuthSuccess={handleAuthSuccess}
             darkMode={darkMode} 
           />
