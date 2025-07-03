@@ -7,6 +7,8 @@ const SignUp = ({ onClose, onSwitch, darkMode }) => {
     phone: '', 
     email: '',
     password: '',
+    gender: 'male', // default
+    firebaseUID: '', // will be set programmatically (e.g., after Firebase sign-up)
   });
 
   useEffect(() => {
@@ -15,7 +17,6 @@ const SignUp = ({ onClose, onSwitch, darkMode }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    // Ensure phone input only contains digits
     if (name === 'phone') {
       const digitsOnly = value.replace(/\D/g, '');
       setFormData({ ...formData, [name]: digitsOnly });
@@ -26,13 +27,15 @@ const SignUp = ({ onClose, onSwitch, darkMode }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Prepend +91 to the phone number before sending to the backend
+
     const payload = {
       ...formData,
-      phone: `+91${formData.phone}`, // Full E.164 format
+      phone: `+91${formData.phone}`,
+      loginMethod: 'email',
     };
+
     console.log('Submitting:', payload);
-    // TODO: Send payload to your API (e.g., via fetch/axios)
+    // TODO: Send `payload` to backend (after Firebase sign-up, attach firebaseUID)
   };
 
   return (
@@ -59,13 +62,14 @@ const SignUp = ({ onClose, onSwitch, darkMode }) => {
             required
           />
 
+          {/* Phone Number */}
           <div className="relative">
             <div className={`absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none rounded-l-md border border-r-0 ${
               darkMode 
                 ? 'bg-zinc-900 border-zinc-900 text-zinc-300' 
                 : 'bg-gray-100 border-gray-300 text-gray-600'
             }`}>
-              <span >+91</span>
+              <span>+91</span>
             </div>
             <input
               type="tel"
@@ -79,7 +83,7 @@ const SignUp = ({ onClose, onSwitch, darkMode }) => {
                   : 'border-gray-300 focus:ring-blue-500'
               }`}
               required
-              pattern="\d{10}" 
+              pattern="\d{10}"
               title="Enter a 10-digit phone number"
             />
           </div>
@@ -113,6 +117,23 @@ const SignUp = ({ onClose, onSwitch, darkMode }) => {
             }`}
             required
           />
+
+          {/* Gender */}
+          <select
+            name="gender"
+            value={formData.gender}
+            onChange={handleChange}
+            className={`p-3 border rounded-md focus:outline-none focus:ring-2 ${
+              darkMode 
+                ? 'bg-zinc-700 border-zinc-600 focus:ring-blue-400 text-zinc-100' 
+                : 'border-gray-300 focus:ring-blue-500'
+            }`}
+            required
+          >
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
 
           <button
             type="submit"

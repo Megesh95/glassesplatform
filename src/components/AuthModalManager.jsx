@@ -2,7 +2,6 @@ import React from 'react';
 import SignIn from './Signin';
 import SignUp from './Signup';
 import GetOTP from './GetOTP';
-import VerifyOTP from './VerifyOTP';
 
 const AuthModalManager = ({ 
   authModal, 
@@ -40,17 +39,7 @@ const AuthModalManager = ({
         />
       )}
 
-      {authModal.type === 'verifyotp' && (
-        <VerifyOTP
-          email={authModal.email}
-          onBack={closeAuthModal}
-          onSuccess={() => {
-            alert('OTP verified! Redirecting to password reset...');
-            closeAuthModal();
-          }}
-          darkMode={darkMode} // Pass to VerifyOTP
-        />
-      )}
+      
     </>
   );
 };
