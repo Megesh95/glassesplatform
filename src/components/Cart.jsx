@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Cart.css';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import EastIcon from '@mui/icons-material/East';
 import WestIcon from '@mui/icons-material/West';
-import { useState } from 'react';
 
 const popularBanks = [
   { id: 'sbi', name: 'State Bank of India (SBI)' },
@@ -22,9 +21,7 @@ const CartItem = ({ image, property1, property2, price1, price2, notice, finalPr
         <div className="text">{property1} <span className="quantity-badge">x{quantity}</span></div>
         <div className="price">
           {originalPrice ? (
-            <>
-              <span style={{textDecoration:'line-through', color:'#888', marginRight:6}}>₹{originalPrice}</span>
-            </>
+            <span style={{textDecoration:'line-through', color:'#888', marginRight:6}}>₹{originalPrice}</span>
           ) : null}
         </div>
       </div>
@@ -59,31 +56,6 @@ const CartSummary = ({ totalItemPrice, totalDiscount, fittingFee, totalPayable, 
       <hr />
       <div className="bill-row total"><strong>Total payable</strong><strong>₹{totalPayable}</strong></div>
     </div>
-
-    <div className="gold-membership">
-      <strong className='MerriweatherSans500'>Add Gold Max Membership and</strong>
-      <p className='MerriweatherSans300'>Avail Buy 1 Get 1 Free + 10% Cashback</p>
-      <button className="gold-btn MerriweatherSans300">
-        Add Gold <span className="arrow"><EastIcon fontSize="small" /></span>
-      </button>
-    </div>
-
-    <div className="welcome-box">
-      <div>
-        <strong className='MerriweatherSans500'>WELCOME applied</strong>
-        <p className='MerriweatherSans300'>You are saving ₹333</p>
-      </div>
-      <button className="remove-btn MerriweatherSans500">REMOVE</button>
-    </div>
-
-    <div className="insurance-box">
-      <div>
-        <strong className='MerriweatherSans500'>Apply Insurance</strong>
-        <p className='MerriweatherSans300'>Tap to view your benefits</p>
-      </div>
-      <button className="arrow-btn"><EastIcon fontSize="small" /></button>
-    </div>
-
     <button className="checkout-btn MerriweatherSans500" onClick={onCheckout}>Proceed To Checkout <KeyboardArrowRightIcon /></button>
   </div>
 );
@@ -95,7 +67,9 @@ const WishlistItem = ({ image, title, price, originalPrice, tag, onAddToCart, on
       <div className="wishlist-Title MerriweatherSans500">{title}</div>
       <div className="wishlist-price MerriweatherSans300">
         ₹{price}{" "}
-        {originalPrice && <span className="original-price MerriweatherSans300">₹{originalPrice}</span>}
+        {originalPrice && (
+          <span className="original-price MerriweatherSans300">₹{originalPrice}</span>
+        )}
       </div>
       {tag && <span className="tag MerriweatherSans300">{tag}</span>}
       <div className="wishlist-actions">
@@ -175,7 +149,6 @@ const CartPage = ({ cart , removeFromCart, addToWishlist, increaseQuantity, wish
     <div className="cart-container">
       <div className="cart-section">
         <h2 className="cart-item-number">Cart ({cart.length} items)</h2>
-
         {cart.length === 0 ? (
           <p>Your cart is empty.</p>
         ) : (
@@ -200,10 +173,8 @@ const CartPage = ({ cart , removeFromCart, addToWishlist, increaseQuantity, wish
             />
           ))
         )}
-
         <WishlistSection wishlistItems={wishlistItems} addToCart={addToCart} removeFromWishlist={removeFromWishlist} />
       </div>
-
       <CartSummary 
         totalItemPrice={totalItemPrice}
         totalDiscount={totalDiscount}
@@ -212,47 +183,46 @@ const CartPage = ({ cart , removeFromCart, addToWishlist, increaseQuantity, wish
         onCheckout={() => setShowPaymentModal(true)}
       />
       {showModal && (
-  <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center z-50">
-    <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-sm relative text-center">
-      <button
-        className="absolute top-2 right-2 text-gray-600 hover:text-black"
-        onClick={() => setShowModal(false)}
-      >
-        &times;
-      </button>
-      <h2 className="text-lg font-semibold mb-2">Remove Item From Cart?</h2>
-      <p className="text-sm text-gray-600 mb-4">
-        Instead, you could wishlist this item and access it later.
-      </p>
-      <div className="flex justify-around">
-        <button
-          className="border border-blue-900 text-blue-900 px-4 py-2 rounded hover:bg-blue-50"
-          onClick={() => {
-            removeFromCart(removeIndex);
-            setShowModal(false);
-          }}
-        >
-          Yes, remove
-        </button>
-        <button
-          className="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-800"
-          onClick={() => {
-            addToWishlist({
-              name: cart[removeIndex].name,
-              price: cart[removeIndex].price,
-              image: cart[removeIndex].image
-  });
-            
-            setShowModal(false);
-          }}
-        >
-          Move to wishlist
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-sm relative text-center">
+            <button
+              className="absolute top-2 right-2 text-gray-600 hover:text-black"
+              onClick={() => setShowModal(false)}
+            >
+              &times;
+            </button>
+            <h2 className="text-lg font-semibold mb-2">Remove Item From Cart?</h2>
+            <p className="text-sm text-gray-600 mb-4">
+              Instead, you could wishlist this item and access it later.
+            </p>
+            <div className="flex justify-around">
+              <button
+                className="border border-blue-900 text-blue-900 px-4 py-2 rounded hover:bg-blue-50"
+                onClick={() => {
+                  removeFromCart(removeIndex);
+                  setShowModal(false);
+                }}
+              >
+                Yes, remove
+              </button>
+              <button
+                className="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-800"
+                onClick={() => {
+                  addToWishlist({
+                    name: cart[removeIndex].name,
+                    price: cart[removeIndex].price,
+                    image: cart[removeIndex].image
+                  });
+                  removeFromCart(removeIndex);
+                  setShowModal(false);
+                }}
+              >
+                Move to wishlist
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {showPaymentModal && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center z-50">
           <div className="bg-white p-8 rounded-xl shadow-lg w-[95%] max-w-md relative text-center">
@@ -344,7 +314,7 @@ const CartPage = ({ cart , removeFromCart, addToWishlist, increaseQuantity, wish
             <div className="text-lg mb-4">
               {confirmedPayment === 'cod' && 'Cash on Delivery (COD)'}
               {confirmedPayment === 'upi' && 'UPI'}
-              {confirmedPayment === 'netbanking' && 'Net Banking'}
+              {confirmedPayment && confirmedPayment.startsWith('netbanking') && confirmedPayment.replace('netbanking', 'Net Banking')}
               {confirmedPayment === 'card' && 'Credit/Debit Card'}
             </div>
             <button className="checkout-btn MerriweatherSans500 w-full" onClick={() => setConfirmedPayment(null)}>Close</button>
