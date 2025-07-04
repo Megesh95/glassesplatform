@@ -1,50 +1,166 @@
 import React, { useEffect, useState } from 'react';
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { app } from '../firebase/firebaseConfig'; // Your Firebase config file
 
 const SignUp = ({ onClose, onSwitch, darkMode }) => {
   const [animate, setAnimate] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
-    phone: '', 
+    phone: '',
     email: '',
     password: '',
-    gender: 'male', // default
-    firebaseUID: '', // will be set programmatically (e.g., after Firebase sign-up)
+    gender: 'male',
   });
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const auth = getAuth(app);
 
   useEffect(() => {
     setAnimate(true);
   }, []);
 
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formData.fullName.trim()) {
+      newErrors.fullName = 'Full name is required';
+    } else if (formData.fullName.length < 3) {
+      newErrors.fullName = 'Name must be at least 3 characters';
+    }
+    
+    if (!formData.phone) {
+      newErrors.phone = 'Phone number is required';
+    } else if (formData.phone.length !== 10) {
+      newErrors.phone = 'Phone number must be 10 digits';
+    }
+    
+    if (!formData.email) {
+      newErrors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email';
+    }
+    
+    if (!formData.password) {
+      newErrors.password = 'Password is required';
+    } else if (formData.password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === 'phone') {
-      const digitsOnly = value.replace(/\D/g, '');
+      const digitsOnly = value.replace(/\D/g, '').slice(0, 10);
       setFormData({ ...formData, [name]: digitsOnly });
     } else {
       setFormData({ ...formData, [name]: value });
     }
+    
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
   };
 
-  const handleSubmit = (e) => {
+  const registerUserInBackend = async (firebaseUser, idToken) => {
+    try {
+      const response = await fetch('/user/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fullName: formData.fullName,
+          phone: `+91${formData.phone}`,
+          idToken,
+          isAdmin: false,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to register user in backend');
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Backend registration error:', error);
+      throw error;
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!validateForm()) return;
+    
+    setIsSubmitting(true);
+    
+    try {
+      // 1. Create user in Firebase Auth
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
 
-    const payload = {
-      ...formData,
-      phone: `+91${formData.phone}`,
-      loginMethod: 'email',
-    };
+      // 2. Update user profile with display name
+      await updateProfile(userCredential.user, {
+        displayName: formData.fullName,
+      });
 
-    console.log('Submitting:', payload);
-    // TODO: Send `payload` to backend (after Firebase sign-up, attach firebaseUID)
+      // 3. Get the Firebase ID token
+      const idToken = await userCredential.user.getIdToken();
+
+      // 4. Register user in your backend
+      const backendResponse = await registerUserInBackend(userCredential.user, idToken);
+
+      // 5. Handle successful registration
+      console.log('User registered successfully:', backendResponse);
+      alert('Account created successfully! You can now login.');
+      onSwitch(); // Switch to login form
+    } catch (error) {
+      console.error('Signup error:', error);
+      
+      let errorMessage = 'Signup failed. Please try again.';
+      switch (error.code) {
+        case 'auth/email-already-in-use':
+          errorMessage = 'This email is already registered.';
+          break;
+        case 'auth/invalid-email':
+          errorMessage = 'Please enter a valid email address.';
+          break;
+        case 'auth/weak-password':
+          errorMessage = 'Password should be at least 6 characters.';
+          break;
+        default:
+          errorMessage = error.message || errorMessage;
+      }
+      
+      alert(errorMessage);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <div className={`fixed inset-0 flex items-center justify-center backdrop-blur-sm ${darkMode ? 'bg-black/70' : 'bg-black/30'} z-50`}>
       <div
-        className={`${darkMode ? 'bg-zinc-800 text-zinc-100' : 'bg-white text-gray-800'} rounded-xl shadow-lg p-8 w-96 max-w-full transform transition-all duration-300 ${
+        className={`${darkMode ? 'bg-zinc-800 text-zinc-100' : 'bg-white text-gray-800'} rounded-xl shadow-lg p-8 w-full max-w-md mx-4 transform transition-all duration-300 ${
           animate ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-4 scale-95'
         } relative`}
       >
+        {/* ... (rest of the JSX remains the same as in the previous example) ... */}
+        {/* ❌ Close Button */}
+  <button
+    onClick={onClose}
+    className="absolute top-4 right-4 text-gray-500 hover:text-red-500 transition duration-200 text-xl font-bold"
+    aria-label="Close"
+  >
+    ×
+  </button>
         <h2 className={`text-2xl font-semibold text-center mb-4 ${darkMode ? 'text-zinc-100' : 'text-gray-800'}`}>Sign Up</h2>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           {/* Full Name */}
@@ -134,36 +250,28 @@ const SignUp = ({ onClose, onSwitch, darkMode }) => {
             <option value="female">Female</option>
             <option value="other">Other</option>
           </select>
-
-          <button
-            type="submit"
-            className={`py-2 rounded-md transition-all ${
-              darkMode 
-                ? 'bg-blue-600 hover:bg-blue-700 text-white' 
-                : 'bg-gray-600 hover:bg-gray-700 text-white'
-            }`}
-          >
-            Sign Up
-          </button>
-
-          <p className={`text-center text-sm ${darkMode ? 'text-zinc-300' : 'text-gray-600'}`}>
-            Already have an account?{' '}
-            <span
-              onClick={onSwitch}
-              className={`${darkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-800'} cursor-pointer hover:underline`}
-            >
-              Sign In
-            </span>
-          </p>
-        </form>
         <button
-          onClick={onClose}
-          className={`absolute top-4 right-4 text-xl ${
-            darkMode ? 'text-zinc-400 hover:text-zinc-200' : 'text-gray-400 hover:text-gray-600'
-          }`}
+          type="submit"
+          disabled={isSubmitting}
+          className={`w-full py-3 rounded-md transition-all flex items-center justify-center ${
+            darkMode 
+              ? 'bg-blue-600 hover:bg-blue-700 text-white' 
+              : 'bg-blue-600 hover:bg-blue-700 text-white'
+          } ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
         >
-          &times;
+          {isSubmitting ? (
+            <>
+              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Creating Account...
+            </>
+          ) : (
+            'Sign Up'
+          )}
         </button>
+        </form>
       </div>
     </div>
   );
