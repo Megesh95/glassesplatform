@@ -47,12 +47,32 @@ const App = () => {
 
   // Add to cart function
   const addToCart = (product) => {
-    setCartItems((prev) => [...prev, product]);
+    setCartItems((prev) => {
+      const idx = prev.findIndex((item) => item.name === product.name && item.size === product.size);
+      if (idx !== -1) {
+        // If already in cart, increase quantity
+        return prev.map((item, i) =>
+          i === idx ? { ...item, quantity: (item.quantity || 1) + 1 } : item
+        );
+      } else {
+        // Add new item with quantity 1
+        return [...prev, { ...product, quantity: 1 }];
+      }
+    });
   };
 
   // Remove from cart function
   const removeFromCart = (index) => {
     setCartItems((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  // Increase quantity function
+  const increaseQuantity = (index) => {
+    setCartItems((prev) =>
+      prev.map((item, i) =>
+        i === index ? { ...item, quantity: (item.quantity || 1) + 1 } : item
+      )
+    );
   };
 
   // Add to wishlist function
@@ -93,7 +113,7 @@ const App = () => {
           <main className="flex-grow">
             <Routes>
               <Route path="/" element={<HomePage addToCart={addToCart} addToWishlist={addToWishlist} wishlistItems={wishlistItems} removeFromWishlist={removeFromWishlist} />} />
-              <Route path="/cart" element={<Cart cart={cartItems} removeFromCart={removeFromCart} />} />
+              <Route path="/cart" element={<Cart cart={cartItems} removeFromCart={removeFromCart} increaseQuantity={increaseQuantity} wishlistItems={wishlistItems} addToCart={addToCart} removeFromWishlist={removeFromWishlist} addToWishlist={addToWishlist}/>} />
               <Route path="/trackorder" element={<TrackOrder />} />
             </Routes>
           </main>

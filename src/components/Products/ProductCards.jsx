@@ -22,6 +22,8 @@ const ProductCard = ({ product, addToCart, wishlistItems, addToWishlist, removeF
         className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 p-5 w-full cursor-pointer border border-gray-100 group relative overflow-hidden"
         style={{ fontFamily: "'Inter', sans-serif" }}
         onClick={() => setIsOpen(true)}
+        tabIndex={0}
+        aria-label={`View details for ${product.name}`}
       >
         {/* Wishlist Button */}
         <button
@@ -35,11 +37,12 @@ const ProductCard = ({ product, addToCart, wishlistItems, addToWishlist, removeF
         </button>
 
         {/* Product Image */}
-        <div className="w-full h-40 flex justify-center items-center mb-4 p-0 m-0">
+        <div className="w-full h-40 flex justify-center items-center mb-4 bg-gray-50 rounded-lg">
           <img
             src={product.image}
             alt={product.name}
-            className="w-full h-full object-contain rounded-t-2xl p-0 m-0"
+            className="w-full h-full object-contain"
+            loading="lazy"
           />
         </div>
 
@@ -47,33 +50,45 @@ const ProductCard = ({ product, addToCart, wishlistItems, addToWishlist, removeF
         <div className="flex items-center gap-2 mb-2">
           <span className="flex items-center gap-1 bg-blue-50 text-blue-700 font-semibold text-sm px-2 py-0.5 rounded-full">
             {product.rating}
-            <svg xmlns='http://www.w3.org/2000/svg' fill='#00b386' viewBox='0 0 20 20' width='16' height='16'><path d='M10 15.27L16.18 19l-1.64-7.03L20 7.24l-7.19-.61L10 0 7.19 6.63 0 7.24l5.46 4.73L3.82 19z'/></svg>
+            <Heart size={14} fill="#00b386" />
           </span>
           <span className="text-gray-500 text-sm font-medium">{product.reviews}</span>
         </div>
 
         {/* Product Info */}
         <div className="mb-2">
-          <h3 className="text-base font-bold text-gray-900 truncate leading-tight">
+          <h3
+            className="text-base font-bold text-gray-900 truncate leading-tight"
+            title={product.name}
+          >
             {product.name}
           </h3>
-          <p className="text-xs text-gray-500 mt-0.5">Size: {product.size}</p>
+          {product.size && (
+            <p className="text-xs text-gray-500 mt-0.5">Size: {product.size}</p>
+          )}
         </div>
 
         {/* Price and Color Swatches */}
         <div className="flex items-center justify-between mt-3">
           <div className="flex items-center gap-2">
             <span className="text-gray-900 font-bold text-lg">₹{product.price}</span>
-            <span className="text-gray-400 line-through text-sm">₹{product.originalPrice}</span>
-            <span className="text-green-600 text-sm font-semibold">({product.discount}% OFF)</span>
+            {product.originalPrice && (
+              <span className="text-gray-400 line-through text-sm">₹{product.originalPrice}</span>
+            )}
+            {product.discount && (
+              <span className="bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded">
+                {product.discount}% OFF
+              </span>
+            )}
           </div>
-          {product.colors && product.colors.length > 0 && (
+          {product.colors?.length > 0 && (
             <div className="flex gap-1">
               {product.colors.map((color, idx) => (
                 <span
                   key={idx}
                   className="w-5 h-5 rounded-full border border-gray-300"
                   style={{ backgroundColor: color }}
+                  aria-label={`Color option ${color}`}
                 ></span>
               ))}
             </div>
