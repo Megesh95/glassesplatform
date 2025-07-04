@@ -147,9 +147,13 @@ const CartPage = ({ cart, removeFromCart, addToWishlist }) => {
               notice="You can upload prescription after payment"
               finalPrice={item.price}
               onRemove={() => {
-                setItemToRemove({ ...item, index });
-                setShowModal(true);
-              }}
+                setItemToRemove({ 
+    ...item, 
+    image: item.image || item.src, 
+    index 
+  });
+  setShowModal(true);
+}}
             />
           ))
         )}
