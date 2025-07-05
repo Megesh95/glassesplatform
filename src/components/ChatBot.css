@@ -790,7 +790,7 @@ input:checked + .slider:before {
 }
 
 .dark .floatingCard {
-  background: #222;
+  background: #2e2e2e;
   color: white;
 }
 
@@ -816,4 +816,29 @@ input:checked + .slider:before {
   color: #e0e0e0 !important;
   border: 1px solid #444 !important;
   opacity: 1 !important;
+}
+
+.dark .feedbackButtons,
+.dark .msgMeta,
+.dark .reportText {
+  color: #ccc !important; /* Light gray for visibility */
+}
+
+.dark .thumbIcon {
+  color: #bbb !important; /* Lighter icon color */
+}
+
+.dark .thumbIcon.selected {
+  color: #4a90e2 !important; /* Highlight selected icon */
+}
+
+.dark .reportText {
+  text-decoration: underline;
+  font-size: 11px;
+  color: #ccc !important;
+  cursor: pointer;
+}
+
+.dark .reportText:hover {
+  color: red !important;
 }

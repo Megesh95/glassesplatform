@@ -17,6 +17,8 @@ import { Box, IconButton, Tooltip } from '@mui/material';
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 import ThumbDownAltOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
 import ReportProblemOutlinedIcon from '@mui/icons-material/ReportProblemOutlined';
+import { Typography } from "@mui/material";
+import { motion } from "framer-motion";
 
 
 function ChatBot({cart, wishlist, darkMode}) {
@@ -62,6 +64,12 @@ const faqs = [
   { question: "How do I cancel an order?", answer: "Please contact our support team to initiate an order cancellation." },
   { question: "Do you offer home eye checkups?", answer: "Yes, we offer home eye checkups in selected cities." },
 ];
+
+function getCurrentTime() {
+  const now = new Date();
+  return now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+}
+
 
 useEffect(() => {
   if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
@@ -226,9 +234,9 @@ useEffect(() => {
 
   function floatingNewConversationCard(conversationHistory) {
     return (
-      <div className="floatingCard"
+      <motion.div className= "floatingCard"
       style={{
-    backgroundColor: darkMode ? "#1e1e1e" : "white",
+    backgroundColor: darkMode ? "#2e2e2e" : "white",
     color: darkMode ? "#e0e0e0" : "black",
     border: darkMode ? "1px solid #333" : "none",
   }}>
@@ -246,13 +254,16 @@ useEffect(() => {
           New Conversation
         </button>
         </div>
-        <div className="conversationList">
-          <h2>History</h2>
+         <div className="conversationList" style={{
+    backgroundColor: darkMode ? "#2e2e2e" : "white",
+    color: darkMode ? "white" : "black",
+  }}>
+          <h2 style={{color: darkMode ? "white" : "black"}}>History</h2>
   {conversationHistory && conversationHistory
   .sort((a, b) => b.sortIndex - a.sortIndex)
   .map((convo, index) => (
     <div key={index} className="conversationItem" style={{
-    backgroundColor: darkMode ? "#1e1e1e" : "white",
+    backgroundColor: darkMode ? "#2e2e2e" : "white",
     color: darkMode ? "#e0e0e0" : "#333",
     borderBottom: darkMode ? "1px solid #444" : "1px solid #eee",
   }}>
@@ -285,7 +296,7 @@ useEffect(() => {
     </div>
 ))}
 </div>
-      </div>
+      </motion.div>
     );
   }
 
@@ -352,10 +363,7 @@ function renderMessageWithLinks(text) {
 
   function handleOptionClick(index) {
     const optionText = options[index];
-    const time = new Date().toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    const time = getCurrentTime();
     const userMsg = { type: "user", text: optionText, time };
     let botMsg;
 if (optionText === "Chat with Agent") {
@@ -419,7 +427,7 @@ if (optionText === "Chat with Agent") {
           {
             type: "faq-button",
             text: faq.question,
-            time,
+            time: getCurrentTime(),
           },
         ]);
       }, 500);
@@ -596,7 +604,7 @@ else {
   );
 }const freeAgents = agents.filter((a) => a.status === "free");
 if (freeAgents.length === 0) {
-  const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  const time = getCurrentTime();
   const noAgentsMsg = {
     type: "bot",
     text: "😔 Sorry, all our agents are currently busy. Please try again later or continue with the bot.",
@@ -618,10 +626,7 @@ const handleAgentSelect = (agent) => {
 function handleSendMessage() {
   if (inputText.trim() === "") return;
 
-  const currentTime = new Date().toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  const currentTime = getCurrentTime();
 
   const userMsg = {
     type: "user",
@@ -722,10 +727,7 @@ function handleFeedback(index, type) {
   setFeedbackMap((prev) => ({ ...prev, [index]: type }));
 
   if (type === "dislike") {
-    const time = new Date().toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    const time = getCurrentTime();
 
     const unresolvedBotMsg = {
       type: "bot",
@@ -741,32 +743,58 @@ function handleFeedback(index, type) {
 }
 
 function chatBody() {
+  const isDark = darkMode;
+
+  const iconColor = isDark ? "#ccc" : undefined;
+  const cardBg = isDark ? "#2a2a2a" : "#fff";
+  const cardText = isDark ? "#e0e0e0" : "#000";
+
   return (
     <div
       className="chatBody fade-slide-in"
       style={{
-        backgroundImage: !darkMode ? `url(${bgimage})` : `url(${darkbg})`,
+        backgroundImage: !isDark ? `url(${bgimage})` : `url(${darkbg})`,
         backgroundRepeat: "repeat",
         backgroundSize: "contain",
-        color: darkMode ? "#e0e0e0" : "black",
-       backgroundColor: darkMode ? "#121212" : "#f9f9f9",
+        color: cardText,
+        backgroundColor: isDark ? "#121212" : "#f9f9f9",
       }}
     >
       <div className="chatMessages">
-        <div className="botMessage" style={{
-            backgroundColor: darkMode ? "#2a2a2a" : "#fff",
-            color: darkMode ? "#e0e0e0" : "#000",
-          }}>
+        <div
+          className="botMessage"
+          style={{
+            backgroundColor: cardBg,
+            color: cardText,
+          }}
+        >
           Hello! Welcome to V-Lens, India’s largest online tech support team.
           How can I help you today?
         </div>
+
         {getOptionsMessage()}
+
         <div className="time">
           <p style={{ fontSize: "11px" }}>{formattedTime}</p>
         </div>
 
         {messages.map((msg, idx) => {
-          if (msg.agentOptions?.length > 0) {
+          const commonMsgBoxProps = {
+            p: 1.5,
+            borderRadius: 2,
+            bgcolor:
+              msg.type === "user"
+                ? "#4a6edb"
+                : isDark
+                ? "#1e1e1e"
+                : "white",
+            color: msg.type === "user" ? "white" : cardText,
+            wordBreak: "break-word",
+            whiteSpace: "pre-line",
+            width: "100%",
+          };
+
+         if (msg.agentOptions?.length > 0) {
   return (
     <Box
       key={idx}
@@ -779,51 +807,59 @@ function chatBody() {
         marginRight: "auto",
       }}
     >
+      {/* Message bubble */}
       <Box
         sx={{
           p: 1.5,
           borderRadius: 2,
-          bgcolor: "white",
-          color: "black",
+          bgcolor: darkMode ? "#3a3a3a" : "#f0f0f0",
+          color: darkMode ? "#f0f0f0" : "#000",
           wordBreak: "break-word",
           whiteSpace: "pre-line",
-          mb: 1,
+          width: "100%",
         }}
       >
         Please select an available agent:
       </Box>
 
-      <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+
+  <div style={{
+    fontSize: "10px",
+    color: isDark ? "#aaa" : "#666",
+    marginTop: "2px",
+    textAlign: msg.type === "user" ? "right" : "left",
+    width: '100%',
+  }}>
+    {msg.time}
+  </div>
+
+      {/* Buttons */}
+      <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", mt: 1 }}>
         {msg.agentOptions.map((agent) => (
           <button
             key={agent.id}
             className="faqButton"
-            onClick={() => {handleAgentSelect(agent);
-  const time = new Date().toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-
-  const selected = { ...agent, status: "busy" };
-  setSelectedAgent(selected);
-  setMode("agent");
-
-  setMessages((prev) => [
-    ...prev,
-    { type: "user", text: agent.name, time },
-  ]);
-
-  setTimeout(() => {
-    setMessages((prev) => [
-      ...prev,
-      {
-        type: "bot",
-        text: ` You are now connected with ${agent.name}. They will assist you shortly.`,
-        time,
-      },
-    ]);
-  }, 800);
-}}
+            onClick={() => {
+              handleAgentSelect(agent);
+              const time = getCurrentTime();
+              const selected = { ...agent, status: "busy" };
+              setSelectedAgent(selected);
+              setMode("agent");
+              setMessages((prev) => [
+                ...prev,
+                { type: "user", text: agent.name, time },
+              ]);
+              setTimeout(() => {
+                setMessages((prev) => [
+                  ...prev,
+                  {
+                    type: "bot",
+                    text: ` You are now connected with ${agent.name}. They will assist you shortly.`,
+                    time,
+                  },
+                ]);
+              }, 800);
+            }}
             style={{
               padding: "8px 14px",
               borderRadius: "20px",
@@ -844,50 +880,49 @@ function chatBody() {
 }
 
 
-          if(msg.type === 'bot' && msg.contactInfo) {
-            return(  <Box
-            key={idx}
-    sx={{
-      mt: 1,
-      p: 1,
-      bgcolor: '#e3f2fd',
-      borderRadius: 2,
-      color: '#1976d2',
-      fontWeight: 'bold',
-    }}
-  >
-     Customer Care: <a href="tel:18001234567" style={{color:'#1976d2', textDecoration:'underline'}}>1800-123-4567</a><br />
-     Or visit <a href="/contact" target="" rel="" style={{color:'#1976d2', textDecoration:'underline'}}>Contact Us</a> page
-  </Box>);
+          if (msg.type === "bot" && msg.contactInfo) {
+            return (
+              <Box
+                key={idx}
+                sx={{
+                  mt: 1,
+                  p: 1,
+                  bgcolor: "#e3f2fd",
+                  borderRadius: 2,
+                  color: "#1976d2",
+                  fontWeight: "bold",
+                }}
+              >
+                Customer Care:{" "}
+                <a href="tel:18001234567" style={{ color: "#1976d2", textDecoration: "underline" }}>
+                  1800-123-4567
+                </a>
+                <br />
+                Or visit{" "}
+                <a href="/contact" style={{ color: "#1976d2", textDecoration: "underline" }}>
+                  Contact Us
+                </a>{" "}
+                page
+              </Box>
+            );
           }
 
           if (msg.type === "faq-button") {
             return (
-              <Box
-                key={idx}
-                sx={{ display: "flex", justifyContent: "center", mb: 1 }}
-              >
+              <Box key={idx} sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
                 <button
                   className="faqButton"
                   onClick={() => {
                     const faqAnswer =
-                      faqs.find((f) => f.question === msg.text)?.answer ||
-                      "Sorry, I couldn't find an answer.";
+                      faqs.find((f) => f.question === msg.text)?.answer || "Sorry, I couldn't find an answer.";
                     const botResponse = {
                       type: "bot",
                       text: faqAnswer,
-                      time: new Date().toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      }),
+                      time: getCurrentTime(),
                     };
                     setMessages((prev) => [
                       ...prev,
-                      {
-                        type: "user",
-                        text: msg.text,
-                        time: msg.time,
-                      },
+                      { type: "user", text: msg.text, time: msg.time },
                     ]);
                     setTimeout(() => {
                       setMessages((prev) => [...prev, botResponse]);
@@ -903,51 +938,34 @@ function chatBody() {
                 >
                   {msg.text}
                 </button>
+                
               </Box>
+              
             );
-          } else if (msg.type === "bot" && msg.options?.length > 0) {
+          }
+
+          if (msg.type === "bot" && msg.options?.length > 0) {
             return (
-              <Box
-                key={idx}
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "flex-start",
-                  alignItems: "flex-start",
-                  mb: 2,
-                  maxWidth: "70%",
-                  marginRight: "auto",
-                }}
-              >
-                <Box
-                  sx={{
-                    p: 1.5,
-                    borderRadius: 2,
-                    bgcolor: "white",
-                    color: "black",
-                    wordBreak: "break-word",
-                    whiteSpace: "pre-line",
-                    width: "100%",
-                    mb: 1,
-                  }}
-                >
-                  {renderMessageWithLinks(msg.text)}
-                </Box>
+              <Box key={idx} sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start", mb: 2, maxWidth: "70%", marginRight: "auto" }}>
+                <Box sx={commonMsgBoxProps}>
+  {msg.type === "bot" ? renderMessageWithLinks(msg.text) : msg.text}
+</Box>
+{msg.time && (
+    <div style={{ fontSize: "11px", color: isDark ? "#aaa" : "#666", marginTop: "4px" }}>
+      {msg.time}
+    </div>
+  )}
                 <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
                   {msg.options.map((optionText, optionIdx) => (
                     <button
                       key={optionIdx}
                       className="faqButton"
                       onClick={() => {
-                        const time = new Date().toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        });
-                    setMessages((prev) => [
+                        const time = getCurrentTime();
+                        setMessages((prev) => [
                           ...prev,
                           { type: "user", text: optionText, time },
                         ]);
-
                         setMessages((prev) =>
                           prev.map((m, i) =>
                             i === idx ? { ...m, options: [] } : m
@@ -955,10 +973,10 @@ function chatBody() {
                         );
 
                         if (optionText === "Yes, connect me") {
-  handleOptionClickByText("Yes, connect me");
-} else if (optionText === "No, it's fine") {
-  handleOptionClickByText("No, it's fine");
-} else {
+                          handleOptionClickByText("Yes, connect me");
+                        } else if (optionText === "No, it's fine") {
+                          handleOptionClickByText("No, it's fine");
+                        } else {
                           setTimeout(() => {
                             setMessages((prev) => [
                               ...prev,
@@ -985,77 +1003,70 @@ function chatBody() {
                 </Box>
               </Box>
             );
-          } else {
-            return (
-              <Box
-                key={idx}
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent:
-                    msg.type === "user" ? "flex-end" : "flex-start",
-                  alignItems: msg.type === "user" ? "flex-end" : "flex-start",
-                  mb: 2,
-                  maxWidth: "70%",
-                  marginLeft: msg.type === "user" ? "auto" : 0,
-                  marginRight: msg.type === "user" ? 0 : "auto",
-                }}
-              >
-                <Box
-                  sx={{
-                    p: 1.5,
-                    borderRadius: 2,
-                    bgcolor: msg.type === "user" ? "#4a6edb" : "white",
-                    color: msg.type === "user" ? "white" : "black",
-                    wordBreak: "break-word",
-                    whiteSpace: "pre-line",
-                    width: "100%",
-                  }}
-                >
-                  {msg.type === "bot"
-                    ? renderMessageWithLinks(msg.text)
-                    : msg.text}
-                </Box>
-
-                {msg.type === "bot" && (
-                  <Box sx={{ display: "flex", gap: 1, mt: 0.5 }}>
-                    <Tooltip title="Like">
-                      <IconButton
-                        size="small"
-                        onClick={() => handleFeedback(idx, "like")}
-                      >
-                        {feedbackMap[idx] === "like" ? (
-                          <ThumbUpAltIcon fontSize="small" color="primary" />
-                        ) : (
-                          <ThumbUpAltOutlinedIcon fontSize="small" />
-                        )}
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Dislike">
-                      <IconButton
-                        size="small"
-                        onClick={() => handleFeedback(idx, "dislike")}
-                      >
-                        {feedbackMap[idx] === "dislike" ? (
-                          <ThumbDownAltIcon fontSize="small" color="error" />
-                        ) : (
-                          <ThumbDownAltOutlinedIcon fontSize="small" />
-                        )}
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Report">
-                      <IconButton
-                        size="small"
-                        onClick={() => alert("Reported!")}
-                      >
-                        <ReportProblemOutlinedIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                  </Box>
-                )}
-              </Box>
-            );
           }
+
+          return (
+            <Box
+              key={idx}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: msg.type === "user" ? "flex-end" : "flex-start",
+                alignItems: msg.type === "user" ? "flex-end" : "flex-start",
+                mb: 2,
+                maxWidth: "70%",
+                marginLeft: msg.type === "user" ? "auto" : 0,
+                marginRight: msg.type === "user" ? 0 : "auto",
+              }}
+            >
+              <Box sx={commonMsgBoxProps}>
+                {msg.type === "bot" ? renderMessageWithLinks(msg.text) : msg.text}
+              </Box>
+              {msg.time && (
+    <div
+      style={{
+        fontSize: "10px",
+        fontWeight:"bolder",
+        color: isDark ? "#aaa" : "#666",
+        marginTop: "4px",
+        textAlign: msg.type === "user" ? "right" : "left",
+        width: "100%",
+      }}
+    >
+      {msg.time}
+    </div>
+  )}
+
+
+              {msg.type === "bot" && (
+                <Box sx={{ display: "flex", gap: 1, mt: 0.5 }}>
+                  <Tooltip title="Like">
+                    <IconButton size="small" onClick={() => handleFeedback(idx, "like")}>
+                      {feedbackMap[idx] === "like" ? (
+                        <ThumbUpAltIcon fontSize="small" color="primary" />
+                      ) : (
+                        <ThumbUpAltOutlinedIcon fontSize="small" style={{ color: iconColor }} />
+                      )}
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Dislike">
+                    <IconButton size="small" onClick={() => handleFeedback(idx, "dislike")}>
+                      {feedbackMap[idx] === "dislike" ? (
+                        <ThumbDownAltIcon fontSize="small" color="error" />
+                      ) : (
+                        <ThumbDownAltOutlinedIcon fontSize="small" style={{ color: iconColor }} />
+                      )}
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Report">
+                    <IconButton size="small" onClick={() => alert("Reported!")}>
+                      <ReportProblemOutlinedIcon fontSize="small" style={{ color: iconColor }} />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+              )}
+            </Box>
+          );
         })}
 
         <div ref={chatMessagesEndRef} />
@@ -1151,10 +1162,7 @@ function chatBody() {
           onClick={() => {
             if (inputText.trim() === "") return;
 
-            const currentTime = new Date().toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            });
+            const currentTime = getCurrentTime();
 
             const userMsg = {
               type: "user",
@@ -1183,10 +1191,7 @@ function chatBody() {
   );
 }
 function handleOptionClickByText(optionText) {
-  const time = new Date().toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  const time = getCurrentTime();
 
   if (optionText === "Yes, connect me") {
 
@@ -1230,30 +1235,34 @@ function handleOptionClickByText(optionText) {
   return (
     <div className={darkMode ? "dark" : ""}>
       {chatIcon()}
-      {isOpen && (
-        <div className={`chatPopup ${isOpen ? "open" : ""} ${darkMode ? "dark" : ""}`} ref={chatPopupRef}>
-          {!startNewConversation ? (
-            <>
-              {chatPopUpHeader()}
-              {floatingNewConversationCard(conversationHistory)}
-            </>
-          ) : (
-            <>
-              {newChatHeader()}
-              {!selectedAgent && chatBody()}
-              {mode === "agent" && selectedAgent && (
-  <AgentChat
-    agent={selectedAgent}
-    onBack={() => {
-      setMode("bot");
-      setSelectedAgent(null);
-    }}
-    delayStart={true} 
-  />
-)}   </>
-          )}
-        </div>
+      <div
+  className={`chatPopup ${isOpen ? "open" : ""} ${darkMode ? "dark" : ""}`}
+  ref={chatPopupRef}
+  style={{ display: isOpen ? 'flex' : 'none' }}
+>
+  {!startNewConversation ? (
+    <>
+      {chatPopUpHeader()}
+      {floatingNewConversationCard(conversationHistory)}
+    </>
+  ) : (
+    <>
+      {newChatHeader()}
+      {!selectedAgent && chatBody()}
+      {mode === "agent" && selectedAgent && (
+        <AgentChat
+          agent={selectedAgent}
+          onBack={() => {
+            setMode("bot");
+            setSelectedAgent(null);
+          }}
+          delayStart={true}
+        />
       )}
+    </>
+  )}
+</div>
+  
     </div>
   );
 }
