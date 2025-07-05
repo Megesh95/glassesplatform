@@ -4,8 +4,10 @@ import Products from '../components/Products/Products';
 import TrendingCarousel from "../components/TrendingCarousel";
 import ContactLensesCarousel from "../components/ContactLensesCarousel";
 import EyeglassesSunglassesCarousel from '../components/EyeglassesSunglassesCarousel';
+import CustomerReview from "../components/CustomerReview";
 
-const HomePage = ({ addToCart, addToWishlist, wishlistItems, removeFromWishlist, cartItems }) => {
+
+const HomePage = ({ addToCart, addToWishlist, wishlistItems, removeFromWishlist, cartItems, darkMode }) => {
   return (
     <>
       <SliderAnimation />
@@ -18,8 +20,17 @@ const HomePage = ({ addToCart, addToWishlist, wishlistItems, removeFromWishlist,
           removeFromWishlist={removeFromWishlist}
         />
       </div>
+      
 
-      <TrendingCarousel />
+      <TrendingCarousel
+  darkMode={darkMode}
+  addToCart={addToCart}
+  addToWishlist={addToWishlist}
+  wishlistItems={wishlistItems}
+        removeFromWishlist={removeFromWishlist}
+        cartItems={cartItems}
+/>
+
       <ContactLensesCarousel 
         addToCart={addToCart}
         addToWishlist={addToWishlist}
@@ -71,6 +82,7 @@ const HomePage = ({ addToCart, addToWishlist, wishlistItems, removeFromWishlist,
   removeFromWishlist={removeFromWishlist}
   cartItems={cartItems}
 />
+<CustomerReview />
     </>
   );
 };

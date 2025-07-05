@@ -58,6 +58,33 @@
   font-weight: 600;
 }
 
+/* Light Mode */
+.light-background {
+  background-color: #f3f3f3;
+}
+
+.text-dark {
+  color: #222222 !important;
+}
+
+.light-card {
+  background-color: white;
+  border: 1px solid #ccc;
+}
+
+/* Dark Mode */
+.dark-background {
+  background-color: #1f2937; /* Tailwind dark bg-zinc-800 similar */
+}
+
+.text-light {
+  color: #ffffff !important;
+}
+
+.dark-card {
+  background-color: #374151; /* Tailwind dark bg-zinc-700 similar */
+  border: 1px solid #555;
+}
 
 
 
