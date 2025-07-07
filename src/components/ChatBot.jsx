@@ -25,7 +25,6 @@ function ChatBot({cart, wishlist, darkMode}) {
   const [feedbackMap, setFeedbackMap] = useState({});
   const [showOptions, setShowOptions] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [disable, setDisable] = useState(true);
   const [showMute, setShowMute] = useState(false);
   const [messages, setMessages] = useState([]);
   const [startNewConversation, setStartNewConversation] = useState(false);
@@ -374,24 +373,21 @@ if (optionText === "Chat with Agent") {
 
     if (optionText === "Buy Eyewear") {
       setExpectingPhone(true);
-      setDisable(false);
     botMsg = {
       type: "bot",
       text: "Please provide your Phone Number",
       time,
     };
   } else if (optionText === "Locate Nearby Store") {
-    setDisable(true);
     botMsg = {
       type: "bot",
       text: "Please find the nearest stores by clicking here - https://stores.lenskart.com/",
       time,
     };
   } else if (optionText === "My Cart") {
-    setDisable(true);
     const productList = cart?.length
     ? cart.map((item, i) => `${i + 1}. ${item.name}`).join("\n")
-    : "🛒 Your cart is currently empty.";
+    : " Your cart is currently empty.";
     botMsg = {
       type: "bot",
       text: `Here’s your current order:\n${productList}`,
@@ -400,7 +396,6 @@ if (optionText === "Chat with Agent") {
   } else if (optionText === "Track my order") {
         setExpectingPhone(false);
     setExpectingOrderEmail(true);
-    setDisable(false);
     botMsg = {
       type: "bot",
       text: "To track your order, please provide your EmailId and Order  ID.",
@@ -409,7 +404,6 @@ if (optionText === "Chat with Agent") {
 
     
   } else if (optionText === "FAQ's") {
-  setDisable(true);
   botMsg = {
     type: "bot",
     text: "Here are some frequently asked questions. Please click to view the answer:",
@@ -436,7 +430,6 @@ if (optionText === "Chat with Agent") {
   return;
 }
 else {
-    setDisable(true);
     botMsg = {
       type: "bot",
       text: "Sorry, I didn't get that. Can you please select an option?",
@@ -627,13 +620,84 @@ function handleSendMessage() {
   if (inputText.trim() === "") return;
 
   const currentTime = getCurrentTime();
-
+  const trimmedText = inputText.trim();
   const userMsg = {
     type: "user",
-    text: inputText,
+    text: trimmedText,
     time: currentTime,
   };
+if (trimmedText.startsWith("/")) {
+    let command = trimmedText.toLowerCase();
 
+    let botResponse = {
+      type: "bot",
+      text: "",
+      time: currentTime,
+    };
+
+    if (command === "/help") {
+      botResponse.text = " Available commands:\n/help - Show available commands\n/feedback - Give feedback\n/exit - End chat\n/cart - View your cart\n/faq - Frequently Asked Questions\n/agent - Connect with an agent";
+    } else if (command === "/feedback") {
+      botResponse.text = " We'd love to hear your feedback. Please share what we can improve.";
+    } else if (command === "/exit") {
+      botResponse.text = " Thank you for chatting with us.";
+      setTimeout(() => startNewConversationHandler(), 2000);
+    } else if (command === "/cart") {
+  const productList = cart?.length
+    ? cart.map((item, i) => `${i + 1}. ${item.name}`).join("\n")
+    : "Your cart is currently empty.";
+  botResponse.text = `Here’s your current order:\n${productList}`;
+}else if (command === "/faq") {
+  botResponse.text = "Here are some frequently asked questions:";
+  setMessages((prev) => [...prev, userMsg, botResponse]);
+  faqs.forEach((faq) => {
+    setTimeout(() => {
+      setMessages((prev) => [
+        ...prev,
+        {
+          type: "faq-button",
+          text: faq.question,
+          time: getCurrentTime(),
+        },
+      ]);
+    }, 300);
+  });
+  setInputText("");
+  return;
+}else if (command === "/agent") {
+  const freeAgents = agents.filter(agent => agent.status === "free");
+
+  if (freeAgents.length === 0) {
+    botResponse.text = "Sorry, all our agents are currently busy. Please try again later.";
+  } else {
+    setMessages((prev) => [...prev, userMsg]);
+    setInputText("");
+    setTimeout(() => {
+      setMessages((prev) => [
+        ...prev,
+        {
+          type: "bot",
+          text: "Please select an available agent:",
+          time: currentTime,
+          agentOptions: freeAgents,
+        },
+      ]);
+    }, 800);
+    return;
+  }
+}
+
+
+else {
+      botResponse.text = " Unknown command. Type /help to see available options.";
+    }
+    setMessages((prev) => [...prev, userMsg]);
+    setTimeout(() => {
+      setMessages((prev) => [...prev,botResponse]);
+    }, 800);
+    setInputText("");
+    return;
+  }
   let botMsg;
   if (
   inputText.toLowerCase().includes("not resolved") ||
@@ -869,7 +933,6 @@ function chatBody() {
               cursor: agent.status === "free" ? "pointer" : "not-allowed",
               opacity: agent.status === "free" ? 1 : 0.6,
             }}
-            disabled={agent.status !== "free"}
           >
             {agent.name}
           </button>
@@ -1117,34 +1180,31 @@ function chatBody() {
             style={{
               width: "18px",
               height: "18px",
-              cursor: disable ? "not-allowed" : "pointer",
+              cursor:  "pointer",
             }}
           />
         </label>
         <input
           ref={inputRef}
           type="text"
-          placeholder={disable ? "Select from menu" : "Type a message..."}
           value={inputText}
           style={{
             background: darkMode ? "#2a2a2a" : "#f1f1f1",
             color: darkMode ? "white" : "black",
           }}
-          disabled={disable}
           onKeyDown={(e) => {
             if (e.key === "Enter") handleSendMessage();
           }}
           onChange={(e) => setInputText(e.target.value)}
         />
         <div
-          className={`micIcon ${isListening ? "listening" : ""} ${
-            disable ? "disabled" : ""
-          }`}
+          className={`micIcon ${isListening ? "listening" : ""}`}
           onClick={() => {
-            if (!disable) handleVoiceInput();
+            handleVoiceInput();
+            setIsListening((prev) => !prev);
           }}
-          title={disable ? "Voice input disabled" : "Voice Input"}
-          style={{ cursor: disable ? "not-allowed" : "pointer", opacity: disable ? 0.5 : 1 }}
+          title="Voice Input"
+          style={{ cursor:"pointer", opacity:  1 }}
         >
           <MicIcon />
         </div>
