@@ -1,3 +1,4 @@
+//src/components/ChatBot.jsx
 import React, { useState, useEffect, useRef } from "react";
 import "./ChatBot.css";
 import arrow from "../assets/ChatBot_pics/image.png";
@@ -40,9 +41,11 @@ function ChatBot({cart, wishlist, darkMode}) {
     minute: "numeric",
     hour12: true,
   });
+  const [isTyping, setIsTyping] = useState(false);
   const [expectingOrderId, setExpectingOrderId] = useState(false);
   const [expectingOrderEmail, setExpectingOrderEmail] = useState(false);
   const [conversationHistory, setConversationHistory] = useState([ ]);
+  const [lastMessageTime, setLastMessageTime] = useState(0);
 const [isListening, setIsListening] = useState(false);
 const options = ["Buy Eyewear", "Locate Nearby Store", "Track my order", "My Cart", "FAQ's", "Chat with Agent"];
 const recognitionRef = useRef(null);
@@ -626,6 +629,18 @@ function handleSendMessage() {
     text: trimmedText,
     time: currentTime,
   };
+  const nowTime = Date.now();
+if (nowTime - lastMessageTime < 1500) {
+  const botMsg = {
+    type: "bot",
+    text: " Please wait a moment before sending another message.",
+    time: getCurrentTime(),
+  };
+  setMessages((prev) => [...prev, botMsg]);
+  return;
+}
+setLastMessageTime(nowTime);
+
 if (trimmedText.startsWith("/")) {
     let command = trimmedText.toLowerCase();
 
