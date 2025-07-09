@@ -1269,22 +1269,21 @@ function handleOptionClickByText(optionText) {
   const time = getCurrentTime();
 
   if (optionText === "Yes, connect me") {
+  const dummyAgent = { id: 999, name: "Support Agent" };
+  setSelectedAgent(dummyAgent);
+  setMode("agent");
 
-    const freeAgents = agents.filter(agent => agent.status === "free");
+  setMessages(prev => [
+    ...prev,
+    {
+      type: "bot",
+      text: `You are now connected with ${dummyAgent.name}. They will assist you shortly.`,
+      time,
+    },
+  ]);
+  return;
+}
 
-    setTimeout(() => {
-      setMessages(prev => [
-        ...prev,
-        {
-          type: "bot",
-          text: "Please select an available agent:",
-          time,
-          agentOptions: freeAgents,
-        },
-      ]);
-    }, 800);
-    return;
-  }
 
   if (optionText === "No, it's fine") {
     setMessages(prev => [
