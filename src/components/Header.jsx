@@ -351,16 +351,21 @@ function Header({ onLoginClick, darkMode, cartCount, wishlistCount, toggleWishli
       </div>}
 
       {navCard === "eyetest" && 
-        <div className = "absolute top-[28.3vh] flex right-10 z-50 h-[72vh] left-10 bg-zinc-100 dark:bg-zinc-950">
-          <img src = "/navpics/eyetest.webp"/>
-          <div className = "flex flex-col items-center text-center justify-evenly">
-            <h1 className = "text-4xl">Get your eyes checked at home</h1>
-            <p className = "text-2xl font-thin">A certified refractionist will visit you with latest eye testing machines & 100 trial frames</p>
-            <button className = "p-3 rounded-full text-lg border dark:border-[rgba(230,230,255,1)] border-[rgba(0,0,80,1)]">Book Appointment</button>
-          </div>
-        </div>
+  <div className="absolute top-[28.3vh] flex right-10 z-50 h-[72vh] left-10 bg-zinc-100 dark:bg-zinc-950">
+    <img src="/navpics/eyetest.webp" alt="Eye Test" />
+    <div className="flex flex-col items-center text-center justify-evenly">
+      <h1 className="text-4xl">Get your eyes checked at home</h1>
+      <p className="text-2xl font-thin">
+        A certified refractionist will visit you with latest eye testing machines & 100 trial frames
+      </p>
+            <Link to="/appointment">
+        <button className="p-3 rounded-full text-lg font-medium transition-all duration-200 bg-white text-blue-600 hover:bg-blue-800 border border-blue-600">
+          Book Appointment
+        </button>
+      </Link> 
+      </div>
+    </div>
       }
-
       {navCard === "storelocator" && 
         <div className = "absolute top-[28.3vh] flex right-10 z-50 h-[72vh] left-10 bg-zinc-100 dark:bg-zinc-950">
           <div className = "flex flex-col items-center text-center justify-evenly">
