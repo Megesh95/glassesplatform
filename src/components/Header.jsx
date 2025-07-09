@@ -131,55 +131,36 @@ function Header({ onLoginClick, darkMode, cartCount, wishlistCount, toggleWishli
           </div>
         </div>
       </div>
-      <nav className = "flex bg-zinc-200 dark:bg-zinc-700 text-[rgba(0,0,80,1)] dark:text-[rgba(230,230,255,1)] px-10 h-16" id="navigator">
+      <nav className = "flex bg-zinc-200 dark:bg-zinc-700 text-[rgba(0,0,80,1)] dark:text-[rgba(230,230,255,1)] px-10 h-16" id="navigator"
+        onMouseLeave={() => setNavCard("")}
+      >
         <div id = "navleft" className = "flex justify-evenly gap-4 font-semibold">
-          <button onClick = {() => {
-            navCard === "eyeglasses" ? setNavCard("") : setNavCard("eyeglasses")
-            setGender(0)
-            setCategory(classiceyeglasses)
-          }}>
-            EYEGLASSES
-          </button>
-          <button onClick = {() => {
-            navCard === "screenglasses" ? setNavCard("") : setNavCard("screenglasses")
-            setGender(0)
-            setCategory(null)
-          }}
+          <div 
+            onMouseEnter={() => { setNavCard("eyeglasses"); setGender(0); setCategory(classiceyeglasses); }}
+            style={{ display: 'flex', alignItems: 'center', height: '100%' }}
           >
+            <Link to="/eyeglasses" style={{ padding: '0 12px', height: '100%', display: 'flex', alignItems: 'center' }}>
+              EYEGLASSES
+            </Link>
+          </div>
+          <button onMouseEnter={() => { setNavCard("screenglasses"); setGender(0); setCategory(null); }}>
             SCREEN GLASSES
           </button>
-          <button onClick = {() => {
-            navCard === "kidsglasses" ? setNavCard("") : setNavCard("kidsglasses")
-            setGender(0)
-            setCategory(null)
-          }}
-          >
+          <button onMouseEnter={() => { setNavCard("kidsglasses"); setGender(0); setCategory(null); }}>
             KIDS GLASSES
           </button>
-          <button onClick = {() => {
-            navCard === "contactlenses" ? setNavCard("") : setNavCard("contactlenses")
-            setGender(null)
-            setCategory(contactlenses)
-          }}
-          >
+          <button onMouseEnter={() => { setNavCard("contactlenses"); setGender(null); setCategory(contactlenses); }}>
             CONTACT LENSES
           </button>
-          <button onClick = {() => {
-            navCard === "sunglasses" ? setNavCard("") : setNavCard("sunglasses")
-            setGender(0)
-            setCategory(classiceyeglasses)
-          }}
-          >
+          <button onMouseEnter={() => { setNavCard("sunglasses"); setGender(0); setCategory(classiceyeglasses); }}>
             SUN GLASSES
           </button>
-          <button onClick = {() => {
-            navCard === "eyetest" ? setNavCard("") : setNavCard("eyetest")
-          }}
-          >HOME EYE-TEST</button>
-          <button onClick = {() => {
-            navCard === "storelocator" ? setNavCard("") : setNavCard("storelocator")
-          }}
-          >STORE LOCATOR</button>
+          <button onMouseEnter={() => { setNavCard("eyetest"); }}>
+            HOME EYE-TEST
+          </button>
+          <button onMouseEnter={() => { setNavCard("storelocator"); }}>
+            STORE LOCATOR
+          </button>
         </div>
       </nav>
       {navCard === "eyeglasses" && 
