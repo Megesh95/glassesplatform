@@ -98,7 +98,7 @@ const Appointment = () => {
     <section className="flex flex-col lg:flex-row justify-center items-center gap-8 px-6 py-12 md:px-12 lg:px-20 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       <div className="w-full max-w-xl rounded-2xl overflow-hidden shadow-md">
         <video
-          src="/navpics/EyeTest-Square-LK@Home.mp4"
+          src="#"
           className="w-full object-cover"
           autoPlay
           muted
