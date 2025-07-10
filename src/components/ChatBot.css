@@ -42,7 +42,7 @@ html {
   flex-direction: column;
   animation: fadeIn 0.4s ease-in-out;
 
-}@media (max-width: 600px) {
+}@media (max-width: 600px ) {
   .chatPopup {
     z-index: 9999;
   }
@@ -179,7 +179,7 @@ html {
   z-index: 1;
   overflow-y: auto;
   flex-grow: 1;
-  padding: 10px;
+  padding: 10px;;
 }
 .botMessage {
   background: white;
@@ -690,11 +690,16 @@ input:checked + .slider:before {
   color: red;
 }
 
+
 .riseUpMenuContainer {
-  position: relative;
+  position: fixed;
+  bottom: 90px; 
+  right: 180px;   
+  width: 40px;
+  z-index: 10000;
   display: flex;
   justify-content: center;
-  margin-bottom: 10px;
+  align-items: center;
 }
 
 .menuButton {
@@ -718,7 +723,7 @@ input:checked + .slider:before {
 
 .riseUpMenu {
   position: absolute;
-  bottom: 50px; /* adjust to rise above input */
+  bottom: 50px;
   display: flex;
   flex-direction: column;
   background: white;
@@ -731,6 +736,7 @@ input:checked + .slider:before {
 
 .riseUpOption {
   padding: 10px 15px;
+  width: 150px;
   background: white;
   border: none;
   border-bottom: 1px solid #eee;

@@ -19,7 +19,9 @@ import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 import ThumbDownAltOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
 import ReportProblemOutlinedIcon from '@mui/icons-material/ReportProblemOutlined';
 import { Typography } from "@mui/material";
-import { motion } from "framer-motion";
+import { motion, time } from "framer-motion";
+import Rating from '@mui/material/Rating';
+import StarIcon from '@mui/icons-material/Star';
 
 
 function ChatBot({cart, wishlist, darkMode}) {
@@ -41,7 +43,6 @@ function ChatBot({cart, wishlist, darkMode}) {
     minute: "numeric",
     hour12: true,
   });
-  const [isTyping, setIsTyping] = useState(false);
   const [expectingOrderId, setExpectingOrderId] = useState(false);
   const [expectingOrderEmail, setExpectingOrderEmail] = useState(false);
   const [conversationHistory, setConversationHistory] = useState([ ]);
@@ -54,7 +55,9 @@ const [orderEmail, setOrderEmail] = useState("");
 const [orderId, setOrderId] = useState("");
 const [selectedAgent, setSelectedAgent] = useState(null);
 const [mode, setMode] = useState("bot"); 
-const [agentMessages, setAgentMessages] = useState([]);
+const [whenBackToBot, setWhenBackToBot] = useState(false);
+const [numStars, setNumStars] = useState(0);
+const [hoverStars, setHoverStars] = useState(-1);
 const [agents, setAgents] = useState([
   { id: 1, name: "Agent A", status: "free" },
   { id: 2, name: "Agent B", status: "free" },
@@ -71,7 +74,17 @@ function getCurrentTime() {
   const now = new Date();
   return now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 }
-
+useEffect(() => {
+  if (whenBackToBot) {
+    const botRes = {
+      type:"bot",
+      text: "Please provide your valuble feedback to help us improve.",
+      time: getCurrentTime(),
+      ratingStars : true,
+    }
+      setTimeout(() => {setMessages((prev) => [...prev, botRes]);}, 800);
+  }
+}, [whenBackToBot]);
 
 useEffect(() => {
   if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
@@ -326,6 +339,8 @@ function newChatHeader() {
 
       <div className="backiconclass" onClick={() => {
         setStartNewConversation(false);
+        setMode("bot");
+        setSelectedAgent(null);
        
         
       }}>
@@ -445,9 +460,6 @@ else {
       setMessages((prev) => [...prev, botMsg]);
     }, 1000);
   }
-
-  
-
   function AgentChat({ agent, onBack, delayStart }) {
   const [agentMsgs, setAgentMsgs] = useState([]);
   const [text, setText] = useState("");
@@ -553,7 +565,7 @@ else {
 
       <div className="chatInputBar" style={{ display: "flex", alignItems: "center", padding: "10px",  backgroundColor: darkMode ? "#1e1e1e" : "#fff",borderTop: `1px solid ${darkMode ? "#333" : "#ddd"}`}}>
         <label className="attachmentIcon" style={{ marginRight: "8px" }}>
-          <input type="file" style={{ display: "none" }} />
+          <input type="file" style={{ display: "none" }} ref={inputRef}/>
           <img  src={paperpin} alt="Attach" style={{ width: "20px", cursor: "pointer" }} />
         </label>
 
@@ -576,10 +588,17 @@ else {
           }}
         />
 
-        <button
-          onClick={handleVoiceInput}
-          style={{ background: "none", border: "none", marginLeft: "8px", cursor: "pointer" }}
-        >🎤</button>
+        <div
+          className={`micIcon ${isListening ? "listening" : ""}`}
+          onClick={() => {
+            handleVoiceInput();
+            setIsListening((prev) => !prev);
+          }}
+          title="Voice Input"
+          style={{ cursor:"pointer", opacity:  1 }}
+        >
+          <MicIcon />
+        </div>
 
         <button
           onClick={sendMessage}
@@ -603,7 +622,7 @@ if (freeAgents.length === 0) {
   const time = getCurrentTime();
   const noAgentsMsg = {
     type: "bot",
-    text: "😔 Sorry, all our agents are currently busy. Please try again later or continue with the bot.",
+    text: "Sorry, all our agents are currently busy. Please try again later or continue with the bot.",
     time,
   };
   setMessages((prev) => [...prev, noAgentsMsg]);
@@ -633,7 +652,7 @@ function handleSendMessage() {
 if (nowTime - lastMessageTime < 1500) {
   const botMsg = {
     type: "bot",
-    text: " Please wait a moment before sending another message.",
+    text: `Please wait a moment before sending another message .`,
     time: getCurrentTime(),
   };
   setMessages((prev) => [...prev, botMsg]);
@@ -709,7 +728,7 @@ else {
     setMessages((prev) => [...prev, userMsg]);
     setTimeout(() => {
       setMessages((prev) => [...prev,botResponse]);
-    }, 800);
+    }, 500);
     setInputText("");
     return;
   }
@@ -821,6 +840,23 @@ function handleFeedback(index, type) {
   }
 }
 
+const labels = {
+  0.5: 'Useless',
+  1: 'Useless+',
+  1.5: 'Poor',
+  2: 'Poor+',
+  2.5: 'Ok',
+  3: 'Ok+',
+  3.5: 'Good',
+  4: 'Good+',
+  4.5: 'Excellent',
+  5: 'Excellent+',
+};
+
+function getLabelText(value) {
+  return `${value} Star${value !== 1 ? 's' : ''}, ${labels[value]}`;
+}
+
 function chatBody() {
   const isDark = darkMode;
 
@@ -886,7 +922,6 @@ function chatBody() {
         marginRight: "auto",
       }}
     >
-      {/* Message bubble */}
       <Box
         sx={{
           p: 1.5,
@@ -912,7 +947,6 @@ function chatBody() {
     {msg.time}
   </div>
 
-      {/* Buttons */}
       <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", mt: 1 }}>
         {msg.agentOptions.map((agent) => (
           <button
@@ -955,10 +989,7 @@ function chatBody() {
       </Box>
     </Box>
   );
-}
-
-
-          if (msg.type === "bot" && msg.contactInfo) {
+} if (msg.type === "bot" && msg.contactInfo) {
             return (
               <Box
                 key={idx}
@@ -1100,6 +1131,29 @@ function chatBody() {
               <Box sx={commonMsgBoxProps}>
                 {msg.type === "bot" ? renderMessageWithLinks(msg.text) : msg.text}
               </Box>
+             {msg.ratingStars && (
+      <Box sx={{ mt: 1,opacity: 1,}}>
+       <Rating
+        name="simple-controlled"
+        size="large"
+        precision={0.5}
+        value={numStars}
+        getLabelText={getLabelText}
+        onChange={(event, newValue) => {
+         if (newValue !== null) {
+      setNumStars(newValue); 
+    }
+        }}
+        emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
+        onChangeActive={(event,newHover)=>{
+          setHoverStars(newHover);
+        }}
+      />
+      {numStars !== null && (
+        <Box sx={{ ml: 2 }}>{labels[hoverStars !== -1 ? hoverStars : numStars]}</Box>
+      )}
+      </Box>
+    )}
               {msg.time && (
     <div
       style={{
@@ -1146,11 +1200,7 @@ function chatBody() {
             </Box>
           );
         })}
-
-        <div ref={chatMessagesEndRef} />
-      </div>
-
-      <div className="riseUpMenuContainer">
+<div className="riseUpMenuContainer">
         <div
           className="menuButton"
           onClick={() => setShowRiseUpMenu((prev) => !prev)}
@@ -1175,8 +1225,11 @@ function chatBody() {
             ))}
           </div>
         )}
+      </div>  
+        <div ref={chatMessagesEndRef} />
       </div>
 
+      
 
       <div className="chatInputBar" style={{
           backgroundColor: darkMode ? "#1e1e1e" : "#fff",
@@ -1329,6 +1382,8 @@ function handleOptionClickByText(optionText) {
           onBack={() => {
             setMode("bot");
             setSelectedAgent(null);
+            setWhenBackToBot(true);
+            setExpectingPhone(false);
           }}
           delayStart={true}
         />
@@ -1336,7 +1391,6 @@ function handleOptionClickByText(optionText) {
     </>
   )}
 </div>
-  
     </div>
   );
 }
