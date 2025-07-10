@@ -5,9 +5,11 @@ import TrendingCarousel from "../components/TrendingCarousel";
 import ContactLensesCarousel from "../components/ContactLensesCarousel";
 import EyeglassesSunglassesCarousel from '../components/EyeglassesSunglassesCarousel';
 import CustomerReview from "../components/CustomerReview";
+import { useNavigate } from "react-router-dom";
 
 
 const HomePage = ({ addToCart, addToWishlist, wishlistItems, removeFromWishlist, cartItems, darkMode }) => {
+  const navigate = useNavigate();
   return (
     <>
       <SliderAnimation />
@@ -61,6 +63,7 @@ const HomePage = ({ addToCart, addToWishlist, wishlistItems, removeFromWishlist,
       <BannerImage 
       src="https://static1.lenskart.com/media/desktop/img/Dec22/1-Dec/Homepage-Banner-web.gif"
       alt="AS SEEN ON SHARK TANK"
+      onClick={() => navigate("/brand/hustlr")}
       />
 
       <SectionDivider title="Trending Sunglasses" />
@@ -97,8 +100,8 @@ const SectionDivider = ({ title }) => (
   </div>
 );
 
-const BannerImage = ({ src, alt }) => (
-  <div className="w-full">
+const BannerImage = ({ src, alt, onClick }) => (
+  <div className="w-full cursor-pointer" onClick={onClick}>
     <img
       src={src}
       alt={alt}

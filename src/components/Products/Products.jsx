@@ -3,10 +3,18 @@ import { useState } from "react";
 import { sampleProducts } from "./productData";
 
 
-function Products({ addToCart, wishlistItems, addToWishlist, removeFromWishlist, cartItems }) {
+function Products({ addToCart, wishlistItems, selectedBrand, addToWishlist, removeFromWishlist, cartItems }) {
+
   const [sortOption, setSortOption] = useState("");
 
-  let sortedProducts = [...sampleProducts];
+  let filteredProducts = [...sampleProducts];
+
+if (selectedBrand) {
+  filteredProducts = filteredProducts.filter(
+    (product) =>
+      product.brand?.toLowerCase() === selectedBrand.toLowerCase()
+  );
+}
 
   if (sortOption === "priceLowHigh") {
     sortedProducts.sort((a, b) => a.price - b.price);
@@ -105,7 +113,7 @@ function Products({ addToCart, wishlistItems, addToWishlist, removeFromWishlist,
         {/* Product Grid */}
         <div className="flex-1">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full justify-center">
-            {sortedProducts.map((product, index) => (
+            {filteredProducts.map((product, index) => (
               <ProductCard 
                 key={index} 
                 product={product} 
