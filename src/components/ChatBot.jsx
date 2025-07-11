@@ -23,8 +23,187 @@ import { motion, time } from "framer-motion";
 import Rating from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';
 
+ function AgentChat({ agent, onBack, delayStart, darkMode, mode }) {
+
+  const[agentMsgs, setAgentMsgs] = useState([]);
+  const [text, setText] = useState("");
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef(null);
+  const [ready, setReady] = useState(!delayStart);
+  const inputRef = useRef(null);
+  const chatMessagesEndRef = useRef(null);
+
+useEffect(() => {
+  if (chatMessagesEndRef.current) {
+    chatMessagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+  }
+
+}, [agentMsgs]);
+
+  useEffect(() => {
+  if (mode === "bot" && inputRef.current) {
+    inputRef.current.focus();
+  }
+}, [mode]);
+
+  useEffect(() => {
+    if (delayStart) {
+      const timeout = setTimeout(() => setReady(true), 2000);
+      return () => clearTimeout(timeout);
+    }
+  }, [delayStart]);
+
+  useEffect(() => {
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'en-IN';
+      recognition.interimResults = false;
+      recognition.continuous = false;
+
+      recognition.onstart = () => setIsListening(true);
+      recognition.onend = () => setIsListening(false);
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        setText((prev) => prev + " " + transcript);
+      };
+
+      recognitionRef.current = recognition;
+    }
+  }, []);
+
+  const handleVoiceInput = () => {
+    if (recognitionRef.current) {
+      if (!isListening) recognitionRef.current.start();
+      else recognitionRef.current.stop();
+    }
+  };
+
+  const sendMessage = () => {
+    if (!text.trim()) return;
+    const newMsg = { from: "user", text };
+    setAgentMsgs((prev) => [...prev, newMsg]);
+    setText("");
+
+    setTimeout(() => {
+      setAgentMsgs((prev) => [
+        ...prev,
+        { from: "agent", text: " Got it! Let me check that for you." },
+      ]);
+    }, 1500);
+  };
+
+  if (!ready) {
+    return (
+      <div className="chatBody fade-slide-in" style={{ backgroundColor: "#f9f9f9", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <span style={{ color: "#555", fontSize: "16px" }}>Connecting you to {agent.name}...</span>
+      </div>
+    );
+  }
+
+  return (<>
+    <div className="chatBody fade-slide-in" style={{ backgroundImage: !darkMode ? `url(${bgimage})` : `url(${darkbg})`, backgroundRepeat: "repeat", backgroundSize: "contain", backgroundColor: "#f9f9f9", height: "100%", display: "flex", flexDirection: "column" }}>
+
+      <div className="agentHeader" style={{ display: "flex", alignItems: "center", padding: "12px", background: "#0b3d91", color: "white", fontWeight: "bold" }}>
+        <span>🧑‍💼 {agent.name}</span>
+        <span
+          onClick={onBack}
+          style={{ color: "white", marginLeft: "auto", cursor: "pointer", fontWeight: "bold" }}
+        >
+          ← Back to Bot
+        </span>
+      </div>
+
+      <div className="agentMessages" style={{ flexGrow: 1, padding: "10px", overflowY: "auto" }}>
+        {agentMsgs.map((m, i) => (
+          <div
+  key={i}
+  style={{
+    display: "flex",
+    justifyContent: m.from === "user" ? "flex-end" : "flex-start",
+    marginBottom: "8px",
+  }}
+>
+  <div
+    style={{
+      background: m.from === "user" ? "#4a6edb" : "#e3f2fd",
+      color: m.from === "user" ? "white" : "#000",
+      padding: "10px 14px",
+      borderRadius: "20px",
+      maxWidth: "75%",
+      wordBreak: "break-word",
+    }}
+  >
+    {m.text}
+  </div>
+</div>
+
+        ))}
+               <div ref={chatMessagesEndRef} />
+      </div>
+
+      <div className="chatInputBar" style={{ display: "flex", alignItems: "center", padding: "10px",  backgroundColor: darkMode ? "#1e1e1e" : "#fff",borderTop: `1px solid ${darkMode ? "#333" : "#ddd"}`}}>
+        <label className="attachmentIcon" style={{ marginRight: "8px" }}>
+          <input type="file" style={{ display: "none" }} ref={inputRef}/>
+          <img  src={paperpin} alt="Attach" style={{ width: "20px", cursor: "pointer" }} />
+        </label>
+
+        <input
+        ref={inputRef}
+        type="text"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="Type your message..."
+          style={{
+            background: darkMode ? "#2a2a2a" : "#f1f1f1",
+            color: darkMode ? "white" : "black",
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") sendMessage();
+          }}
+        />
+
+        <div
+          className={`micIcon ${isListening ? "listening" : ""}`}
+          onClick={() => {
+            handleVoiceInput();
+            setIsListening((prev) => !prev);
+          }}
+          title="Voice Input"
+          style={{ cursor:"pointer", opacity:  1 }}
+        >
+          <MicIcon />
+        </div>
+
+        <button
+          onClick={sendMessage}
+          style={{
+            backgroundColor: darkMode ? "#4a6edb" : "#4a6edb",
+            color: "white",
+            border: "none",
+            borderRadius: "20px",
+            padding: "8px 16px",
+            marginLeft: "10px",
+            cursor: "pointer",
+          }}
+        >
+          ➤
+        </button>
+      </div>
+
+    </div>
+   
+      </>
+  );
+}
 
 function ChatBot({cart, wishlist, darkMode}) {
+  const [ratingMap, setRatingMap] = useState({});
+  const[feedBackAck, setFeedBackAck] = useState(false);
+  const [reviewMsg, setReviewMsg] = useState([]);
+  const [hearFeedBack, setHearFeedback] = useState(false);
+    const [agentMsgs, setAgentMsgs] = useState([]);
   const [feedbackMap, setFeedbackMap] = useState({});
   const [showOptions, setShowOptions] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -85,6 +264,42 @@ useEffect(() => {
       setTimeout(() => {setMessages((prev) => [...prev, botRes]);}, 800);
   }
 }, [whenBackToBot]);
+useEffect(()=>{
+    if(hearFeedBack && reviewMsg.length > 0 && !feedBackAck){
+      const botRes = {
+        type:"bot",
+        text: "Thank you for your feedback! We will rectify the issue as soon as possible.",
+          time: getCurrentTime(),
+      }
+      setTimeout(() => {setMessages((prev) => [...prev, botRes]);}, 800);
+      setHearFeedback(false);
+      setFeedBackAck(true);
+      setWhenBackToBot(false);
+    }
+},[hearFeedBack, reviewMsg]);
+useEffect(()=>{
+  const keysOfRatingMap = Object.keys(ratingMap);
+  if(keysOfRatingMap.length ===0) return ;
+  const lastKey = keysOfRatingMap[keysOfRatingMap.length - 1]; 
+  if(ratingMap[lastKey] <= 2.5){
+      const botRes = {
+        type:"bot",
+        text: "We're sorry to hear that you had a less than satisfactory experience. Could you please provide more details about your feedback?",
+        time: getCurrentTime(),
+      }
+      setTimeout(() => {setMessages((prev) => [...prev, botRes]);}, 800);
+      setHearFeedback(true);
+    }
+    else{
+      const userMsg = {
+        type: "bot",
+        text:"Thank you for your feedback! Your input helps us improve our service.",
+        time: getCurrentTime(),
+      }
+      setTimeout(() => {setMessages((prev) => [...prev, userMsg]);}, 800);
+            setWhenBackToBot(false);
+    }
+},[ratingMap])
 
 useEffect(() => {
   if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
@@ -112,35 +327,35 @@ const handleVoiceInput = () => {
     else recognitionRef.current.stop();
   }
 };
-const mockOrder = {
-  id: "VL2024001234",
-  email: "example@gmail.com",
-  status: "delivered",
-  orderDate: "June 20, 2025",
-  estimatedDelivery: "June 28, 2025",
-  trackingNumber: "VL1234567890",
-  items: [
-    {
-      name: "Blue Frame Glasses",
-      quantity: 1,
-      price: 2999,
-      image: "/images/glasses1.jpg",
-    },
-  ],
-  shippingAddress: {
-    name: "Yogesh Kumar",
-    address: "123 Main Street",
-    city: "Chennai",
-    pincode: "600001",
-    phone: "9876543210",
-  },
-  timeline: [
-    { status: "Order Placed", date: "June 20", time: "10:00 AM", description: "Order received", completed: true },
-    { status: "Processing", date: "June 21", time: "12:00 PM", description: "Preparing order", completed: true },
-    { status: "Shipped", date: "June 23", time: "03:00 PM", description: "Out for shipping", completed: true },
-    { status: "Delivered", date: "June 28", time: "10:00 AM", description: "Delivered", completed: true },
-  ],
-};
+// const mockOrder = {
+//   id: "VL2024001234",
+//   email: "example@gmail.com",
+//   status: "delivered",
+//   orderDate: "June 20, 2025",
+//   estimatedDelivery: "June 28, 2025",
+//   trackingNumber: "VL1234567890",
+//   items: [
+//     {
+//       name: "Blue Frame Glasses",
+//       quantity: 1,
+//       price: 2999,
+//       image: "/images/glasses1.jpg",
+//     },
+//   ],
+//   shippingAddress: {
+//     name: "Yogesh Kumar",
+//     address: "123 Main Street",
+//     city: "Chennai",
+//     pincode: "600001",
+//     phone: "9876543210",
+//   },
+//   timeline: [
+//     { status: "Order Placed", date: "June 20", time: "10:00 AM", description: "Order received", completed: true },
+//     { status: "Processing", date: "June 21", time: "12:00 PM", description: "Preparing order", completed: true },
+//     { status: "Shipped", date: "June 23", time: "03:00 PM", description: "Out for shipping", completed: true },
+//     { status: "Delivered", date: "June 28", time: "10:00 AM", description: "Delivered", completed: true },
+//   ],
+// };
 
 
 function getOptionsMessage() {
@@ -174,6 +389,7 @@ function startNewConversationHandler() {
   }
 
   setStartNewConversation(true);
+  setRatingMap({});
   setMessages([]);
   setInputText("");
 }
@@ -207,6 +423,7 @@ useEffect(() => {
   if (chatMessagesEndRef.current) {
     chatMessagesEndRef.current.scrollIntoView({ behavior: "smooth" });
   }
+
 }, [messages]);
 
   function chatPopUpHeader() {
@@ -460,164 +677,7 @@ else {
       setMessages((prev) => [...prev, botMsg]);
     }, 1000);
   }
-  function AgentChat({ agent, onBack, delayStart }) {
-  const [agentMsgs, setAgentMsgs] = useState([]);
-  const [text, setText] = useState("");
-  const [isListening, setIsListening] = useState(false);
-  const recognitionRef = useRef(null);
-  const [ready, setReady] = useState(!delayStart);
-
-  useEffect(() => {
-    if (delayStart) {
-      const timeout = setTimeout(() => setReady(true), 2000);
-      return () => clearTimeout(timeout);
-    }
-  }, [delayStart]);
-
-  useEffect(() => {
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      const SpeechRecognition =
-        window.SpeechRecognition || window.webkitSpeechRecognition;
-      const recognition = new SpeechRecognition();
-      recognition.lang = 'en-IN';
-      recognition.interimResults = false;
-      recognition.continuous = false;
-
-      recognition.onstart = () => setIsListening(true);
-      recognition.onend = () => setIsListening(false);
-      recognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        setText((prev) => prev + " " + transcript);
-      };
-
-      recognitionRef.current = recognition;
-    }
-  }, []);
-
-  const handleVoiceInput = () => {
-    if (recognitionRef.current) {
-      if (!isListening) recognitionRef.current.start();
-      else recognitionRef.current.stop();
-    }
-  };
-
-  const sendMessage = () => {
-    if (!text.trim()) return;
-    const newMsg = { from: "user", text };
-    setAgentMsgs((prev) => [...prev, newMsg]);
-    setText("");
-
-    setTimeout(() => {
-      setAgentMsgs((prev) => [
-        ...prev,
-        { from: "agent", text: "👩‍💼 Got it! Let me check that for you." },
-      ]);
-    }, 1500);
-  };
-
-  if (!ready) {
-    return (
-      <div className="chatBody fade-slide-in" style={{ backgroundColor: "#f9f9f9", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <span style={{ color: "#555", fontSize: "16px" }}>Connecting you to {agent.name}...</span>
-      </div>
-    );
-  }
-
-  return (
-    <div className="chatBody fade-slide-in" style={{ backgroundImage: !darkMode ? `url(${bgimage})` : `url(${darkbg})`, backgroundRepeat: "repeat", backgroundSize: "contain", backgroundColor: "#f9f9f9", height: "100%", display: "flex", flexDirection: "column" }}>
-
-      <div className="agentHeader" style={{ display: "flex", alignItems: "center", padding: "12px", background: "#0b3d91", color: "white", fontWeight: "bold" }}>
-        <span>🧑‍💼 {agent.name}</span>
-        <span
-          onClick={onBack}
-          style={{ color: "white", marginLeft: "auto", cursor: "pointer", fontWeight: "bold" }}
-        >
-          ← Back to Bot
-        </span>
-      </div>
-
-      <div className="agentMessages" style={{ flexGrow: 1, padding: "10px", overflowY: "auto" }}>
-        {agentMsgs.map((m, i) => (
-          <div
-  key={i}
-  style={{
-    display: "flex",
-    justifyContent: m.from === "user" ? "flex-end" : "flex-start",
-    marginBottom: "8px",
-  }}
->
-  <div
-    style={{
-      background: m.from === "user" ? "#4a6edb" : "#e3f2fd",
-      color: m.from === "user" ? "white" : "#000",
-      padding: "10px 14px",
-      borderRadius: "20px",
-      maxWidth: "75%",
-      wordBreak: "break-word",
-    }}
-  >
-    {m.text}
-  </div>
-</div>
-
-        ))}
-      </div>
-
-      <div className="chatInputBar" style={{ display: "flex", alignItems: "center", padding: "10px",  backgroundColor: darkMode ? "#1e1e1e" : "#fff",borderTop: `1px solid ${darkMode ? "#333" : "#ddd"}`}}>
-        <label className="attachmentIcon" style={{ marginRight: "8px" }}>
-          <input type="file" style={{ display: "none" }} ref={inputRef}/>
-          <img  src={paperpin} alt="Attach" style={{ width: "20px", cursor: "pointer" }} />
-        </label>
-
-        <input
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder="Type your message..."
-          style={{
-          
-          backgroundColor: darkMode ? "#1e1e1e" : "#fff",
-          borderTop: `1px solid ${darkMode ? "#333" : "#ddd"}`,
-            flex: 1,
-            padding: "8px 12px",
-            borderRadius: "20px",
-            border: "1px solid #ccc",
-            outline: "none",
-          }}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") sendMessage();
-          }}
-        />
-
-        <div
-          className={`micIcon ${isListening ? "listening" : ""}`}
-          onClick={() => {
-            handleVoiceInput();
-            setIsListening((prev) => !prev);
-          }}
-          title="Voice Input"
-          style={{ cursor:"pointer", opacity:  1 }}
-        >
-          <MicIcon />
-        </div>
-
-        <button
-          onClick={sendMessage}
-          style={{
-            backgroundColor: darkMode ? "#4a6edb" : "#4a6edb",
-            color: "white",
-            border: "none",
-            borderRadius: "20px",
-            padding: "8px 16px",
-            marginLeft: "10px",
-            cursor: "pointer",
-          }}
-        >
-          ➤
-        </button>
-      </div>
-    </div>
-  );
-}const freeAgents = agents.filter((a) => a.status === "free");
+ const freeAgents = agents.filter((a) => a.status === "free");
 if (freeAgents.length === 0) {
   const time = getCurrentTime();
   const noAgentsMsg = {
@@ -639,6 +699,10 @@ const handleAgentSelect = (agent) => {
 };
 
 function handleSendMessage() {
+  if(hearFeedBack){
+    setReviewMsg((prev)=>[...prev,inputText]);
+    
+  }
   if (inputText.trim() === "") return;
 
   const currentTime = getCurrentTime();
@@ -787,7 +851,7 @@ if (expectingOrderEmail) {
   return;
 }
 
-  if (expectingPhone) {
+  if (expectingPhone && !hearFeedBack) {
     const phoneRegex = /^[6-9]\d{9}$/; 
     if (phoneRegex.test(inputText.trim())) {
       botMsg = {
@@ -817,7 +881,7 @@ if (expectingOrderEmail) {
 
   setTimeout(() => {
     setMessages((prev) => [...prev, botMsg]);
-  }, 1000);
+  }, 1500);
 }
 
 
@@ -1137,11 +1201,11 @@ function chatBody() {
         name="simple-controlled"
         size="large"
         precision={0.5}
-        value={numStars}
+        value={ratingMap[idx] || 0}
         getLabelText={getLabelText}
         onChange={(event, newValue) => {
          if (newValue !== null) {
-      setNumStars(newValue); 
+      setRatingMap((prev) => ({ ...prev, [idx]: newValue }));
     }
         }}
         emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
@@ -1149,9 +1213,12 @@ function chatBody() {
           setHoverStars(newHover);
         }}
       />
-      {numStars !== null && (
-        <Box sx={{ ml: 2 }}>{labels[hoverStars !== -1 ? hoverStars : numStars]}</Box>
-      )}
+      
+       {ratingMap[idx] !== undefined && (
+      <Box sx={{ ml: 2 }}>
+        {labels[hoverStars !== -1 ? hoverStars : ratingMap[idx]]}
+      </Box>
+    )}
       </Box>
     )}
               {msg.time && (
@@ -1386,6 +1453,8 @@ function handleOptionClickByText(optionText) {
             setExpectingPhone(false);
           }}
           delayStart={true}
+          darkMode={darkMode}
+          mode = {mode}
         />
       )}
     </>
