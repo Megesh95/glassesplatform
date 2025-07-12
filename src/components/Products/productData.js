@@ -435,3 +435,261 @@ export const kidsGlassesProducts = [
     description: "Extra narrow blue sky full rim glasses from Hustlr for stylish kids."
   },
 ];
+
+export const contactLensProducts = [
+  {
+    name: "Aqualens Nxt Monthly (3 Lens)",
+    image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//a/i/aqualens-nxt-monthly_144127_1_23_06_2025.png",
+    price: 899,
+    originalPrice: 1295,
+    discount: 31,
+    rating: 4.9,
+    reviews: 2996,
+    description: "Aqualens Nxt Monthly disposable contact lenses. 3 lenses per box.",
+    brand: "Aqualens",
+    size: "3 Lens per Box"
+  },
+  {
+    name: "Aqualens Daily Disposable 10Hrs (10 Lens)",
+    image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//a/i/aqualens-10h-dailies_134722_1_23_06_2025.png",
+    price: 399,
+    originalPrice: 499,
+    discount: 20,
+    rating: 4.9,
+    reviews: 3721,
+    description: "Aqualens Daily Disposable 10Hrs. 10 lenses per box.",
+    brand: "Aqualens",
+    size: "10 Lens per Box"
+  },
+  {
+    name: "Aqualens Nxt Power Clear Monthly (1 Lens)",
+    image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//a/i/aqualens-24h-nxt-power-clear-monthly_148700_1_23_06_2025.png",
+    price: 299,
+    originalPrice: 399,
+    discount: 25,
+    rating: 4.8,
+    reviews: 1148,
+    description: "Aqualens Nxt Power Clear Monthly disposable contact lens. 1 lens per box.",
+    brand: "Aqualens",
+    size: "1 Lens per Box"
+  },
+  {
+    name: "Bausch & Lomb Soflens 59 (6 Lens)",
+    image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//b/i/soflens-59-6-lens-per-box-bausch-lomb_sl59.jpg",
+    price: 1099,
+    originalPrice: 1499,
+    discount: 27,
+    rating: 4.7,
+    reviews: 2100,
+    description: "Bausch & Lomb Soflens 59. 6 lenses per box.",
+    brand: "Bausch & Lomb",
+    size: "6 Lens per Box"
+  },
+  {
+    name: "Aqualens 10H Monthly (3 Lens)",
+    image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//a/i/aqualens-10h-monthly_134538_1_23_06_2025.png",
+    price: 799,
+    originalPrice: 999,
+    discount: 20,
+    rating: 4.8,
+    reviews: 980,
+    description: "Aqualens 10H Monthly disposable contact lenses. 3 lenses per box.",
+    brand: "Aqualens",
+    size: "3 Lens per Box"
+  },
+  {
+    name: "Bausch & Lomb iConnect (3 Lens)",
+    image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//b/i/bausch---lomb-iconnect--3-lens-box_iconnect3monthpack-new_iconnect3monthpack-new_1_3.jpg.png",
+    price: 499,
+    originalPrice: 599,
+    discount: 17,
+    rating: 4.6,
+    reviews: 800,
+    description: "Bausch & Lomb iConnect monthly disposable contact lenses. 3 lenses per box.",
+    brand: "Bausch & Lomb",
+    size: "3 Lens per Box"
+  },
+  {
+    name: "Bausch & Lomb PureVision2 HD (6 Lens)",
+    image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//b/i/bausch-lomb-purevision2-hd-contact-lenses-6-lens-per-box_csvfile-1711626905044-dsc_0561.jpg",
+    price: 1999,
+    originalPrice: 2499,
+    discount: 20,
+    rating: 4.8,
+    reviews: 1200,
+    description: "Bausch & Lomb PureVision2 HD contact lenses. 6 lenses per box.",
+    brand: "Bausch & Lomb",
+    size: "6 Lens per Box"
+  },
+  {
+    name: "Bausch & Lomb Optima 38 Daily Wear (1 Lens)",
+    image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//b/i/optima-38-daily-wear-lens--1-lens-per-box--bausch---lomb---prefix-duplicate_b_boptima38daily-new_3_2.jpg.png",
+    price: 299,
+    originalPrice: 399,
+    discount: 25,
+    rating: 4.5,
+    reviews: 600,
+    description: "Bausch & Lomb Optima 38 daily wear lens. 1 lens per box.",
+    brand: "Bausch & Lomb",
+    size: "1 Lens per Box"
+  },
+  {
+    name: "Johnson & Johnson Acuvue Moist Dailies (10 Lens)",
+    image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//j/o/johnson-johnson-acuvue-moist-dailies_10-lens-pack_g_9717.jpg",
+    price: 1199,
+    originalPrice: 1499,
+    discount: 20,
+    rating: 4.9,
+    reviews: 900,
+    description: "Johnson & Johnson Acuvue Moist Dailies. 10 lenses per pack.",
+    brand: "Acuvue",
+    size: "10 Lens per Pack"
+  },
+  {
+    name: "Aqualens 24H Dailies (30 Lens)",
+    image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//a/i/aqualens-24h-dailies_118538_1_23_06_2025.png",
+    price: 1499,
+    originalPrice: 1999,
+    discount: 25,
+    rating: 4.8,
+    reviews: 1100,
+    description: "Aqualens 24H Dailies. 30 lenses per box.",
+    brand: "Aqualens",
+    size: "30 Lens per Box"
+  },
+  {
+    name: "Aqualens 10H Monthly (1 Lens)",
+    image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//a/i/aqualens-10hmonthly_aquacolor-turquoise-premium-powered-monthly---1lp_aquacolor_premium_1_lp(power).png.png",
+    price: 299,
+    originalPrice: 399,
+    discount: 25,
+    rating: 4.7,
+    reviews: 500,
+    description: "Aqualens 10H Monthly. 1 lens per box.",
+    brand: "Aqualens",
+    size: "1 Lens per Box"
+  },
+  {
+    name: "Aqualens Daily Disposable (5 Lens)",
+    image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//a/i/aqualens-daily-disposable-contact-lenses--5-lenses-box_aqualens-dly-dspoble-cntct-lense-5-lenses_aqualens-dly-dspoble-cntct-lense-5-lenses_aqualens-dly-dspoble-cntct-lense-5-lenses_g_9723_1.png",
+    price: 299,
+    originalPrice: 399,
+    discount: 25,
+    rating: 4.7,
+    reviews: 700,
+    description: "Aqualens Daily Disposable contact lenses. 5 lenses per box.",
+    brand: "Aqualens",
+    size: "5 Lens per Box"
+  }
+];
+
+export const sunglassesProducts = [
+  {
+    name: "Brown Gold Black Geometric Vincent Chase Polarized Pilot",
+    image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//v/i/brown-gold-black-full-rim-geometric-vincent-chase-polarized-pilot-collection-vc-s15403-c2-sunglasses_g_0715_01_02_2023.jpg",
+    price: 2499,
+    originalPrice: 2999,
+    discount: 17,
+    rating: 4.8,
+    reviews: 1200,
+    description: "Brown gold black full rim geometric Vincent Chase polarized pilot sunglasses.",
+    brand: "Vincent Chase",
+    size: "Medium"
+  },
+  {
+    name: "Black Full Rim Square Vincent Chase MIRAGE1 Polarized",
+    image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//v/i/Black-Full-Rim-Square-Vincent-Chase--MIRAGE1VC-S11748-C8-Polorized-Sunglasses_vincent-chase-vc-s11748-c8-sunglasses_g_5574_218_02_2022.jpg",
+    price: 2299,
+    originalPrice: 2799,
+    discount: 18,
+    rating: 4.7,
+    reviews: 1100,
+    description: "Black full rim square Vincent Chase MIRAGE1 polarized sunglasses.",
+    brand: "Vincent Chase",
+    size: "Medium"
+  },
+  {
+    name: "Vincent Chase VC-S15407-C1 Sunglasses",
+    image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//v/i/vincent-chase-vc-s15407-c1-sunglasses_g_2710_07_02_2023.jpg",
+    price: 2199,
+    originalPrice: 2699,
+    discount: 19,
+    rating: 4.6,
+    reviews: 900,
+    description: "Vincent Chase VC-S15407-C1 sunglasses, stylish and protective.",
+    brand: "Vincent Chase",
+    size: "Medium"
+  },
+  {
+    name: "Gold Brown Cat Eye Vincent Chase Polarized Metal Edit",
+    image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//v/i/gold-brown-full-rim-cat-eye-vincent-chase-polarized-polarized-the-metal-edit-vc-s11470-c5-sunglasses_vincent-chase-vc-s11470-c5-sunglasses_sunglasses_g_2462_1_28july23.jpg",
+    price: 2399,
+    originalPrice: 2899,
+    discount: 17,
+    rating: 4.8,
+    reviews: 950,
+    description: "Gold brown full rim cat eye Vincent Chase polarized metal edit sunglasses.",
+    brand: "Vincent Chase",
+    size: "Medium"
+  },
+  {
+    name: "Brown Full Rim Aviator Vincent Chase Metal Edit",
+    image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//v/i/brown-full-rim-aviator-vincent-chase-the-metal-edit-vc-s13835-c3-polarized-sunglasses_vincent-chose-vc-s13835-frll-rum-c3-sunglasses_sunglasses_g_3405_1_28july23.jpg",
+    price: 2499,
+    originalPrice: 2999,
+    discount: 17,
+    rating: 4.7,
+    reviews: 1000,
+    description: "Brown full rim aviator Vincent Chase the metal edit sunglasses.",
+    brand: "Vincent Chase",
+    size: "Medium"
+  },
+  {
+    name: "Gold Blue Gradient Aviator Vincent Chase Polarized Vintage",
+    image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//v/i/gold-blue-gradient-full-rim-aviator-vincent-chase-polarized-vintage-vc-s11075-c12-sunglasses_g_3383_6_02_22.jpg",
+    price: 2599,
+    originalPrice: 3099,
+    discount: 16,
+    rating: 4.9,
+    reviews: 1100,
+    description: "Gold blue gradient full rim aviator Vincent Chase polarized vintage sunglasses.",
+    brand: "Vincent Chase",
+    size: "Medium"
+  },
+  {
+    name: "Green Gold Geometric Vincent Chase Polarized Pilot",
+    image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//v/i/green-gold-full-rim-geometric-vincent-chase-polarized-pilot-collection-vc-s15403-c1-sunglasses_g_0755_01_02_2023.jpg",
+    price: 2499,
+    originalPrice: 2999,
+    discount: 17,
+    rating: 4.8,
+    reviews: 1050,
+    description: "Green gold full rim geometric Vincent Chase polarized pilot sunglasses.",
+    brand: "Vincent Chase",
+    size: "Medium"
+  },
+  {
+    name: "Silver Pink Gradient Square Vincent Chase Polarized Met Effect",
+    image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//v/i/silver-pink-gradient-full-rim-square-vincent-chase-polarized-met-effect-vc-s15400-c3-sunglasses_g_1035_02_02_23.jpg",
+    price: 2299,
+    originalPrice: 2799,
+    discount: 18,
+    rating: 4.7,
+    reviews: 980,
+    description: "Silver pink gradient full rim square Vincent Chase polarized met effect sunglasses.",
+    brand: "Vincent Chase",
+    size: "Medium"
+  },
+  {
+    name: "Grey Transparent Geometric Vincent Chase Style Cast",
+    image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//v/i/grey-transparent-full-rim-geometric-vincent-chase-style-cast-pc-vc-s13833-c2-sunglasses_vincent-chase-vc-s13833-c2-suglasses_sunglasses_g_6203_28july23.jpg",
+    price: 2199,
+    originalPrice: 2699,
+    discount: 19,
+    rating: 4.6,
+    reviews: 900,
+    description: "Grey transparent full rim geometric Vincent Chase style cast sunglasses.",
+    brand: "Vincent Chase",
+    size: "Medium"
+  }
+];

@@ -149,15 +149,15 @@ function Header({ onLoginClick, darkMode, cartCount, wishlistCount, toggleWishli
           <Link to="/kidsglasses" style={{ padding: '0 12px', height: '100%', display: 'flex', alignItems: 'center' }}>
             KIDS GLASSES
           </Link>
-          <button onMouseEnter={() => { setNavCard("contactlenses"); setGender(null); setCategory(contactlenses); }}>
+          <Link to="/contactlenses" style={{ padding: '0 12px', height: '100%', display: 'flex', alignItems: 'center' }}>
             CONTACT LENSES
-          </button>
-          <button onMouseEnter={() => { setNavCard("sunglasses"); setGender(0); setCategory(classiceyeglasses); }}>
+          </Link>
+          <Link to="/sunglasses" style={{ padding: '0 12px', height: '100%', display: 'flex', alignItems: 'center' }}>
             SUN GLASSES
-          </button>
-          <button onMouseEnter={() => { setNavCard("eyetest"); }}>
+          </Link>
+          <Link to="/home-eye-test" style={{ padding: '0 12px', height: '100%', display: 'flex', alignItems: 'center' }}>
             HOME EYE-TEST
-          </button>
+          </Link>
           <button onMouseEnter={() => { setNavCard("storelocator"); }}>
             STORE LOCATOR
           </button>
