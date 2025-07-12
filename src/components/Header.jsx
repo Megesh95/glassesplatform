@@ -143,12 +143,12 @@ function Header({ onLoginClick, darkMode, cartCount, wishlistCount, toggleWishli
               EYEGLASSES
             </Link>
           </div>
-          <button onMouseEnter={() => { setNavCard("screenglasses"); setGender(0); setCategory(null); }}>
+          <Link to="/screenglasses" style={{ padding: '0 12px', height: '100%', display: 'flex', alignItems: 'center' }}>
             SCREEN GLASSES
-          </button>
-          <button onMouseEnter={() => { setNavCard("kidsglasses"); setGender(0); setCategory(null); }}>
+          </Link>
+          <Link to="/kidsglasses" style={{ padding: '0 12px', height: '100%', display: 'flex', alignItems: 'center' }}>
             KIDS GLASSES
-          </button>
+          </Link>
           <button onMouseEnter={() => { setNavCard("contactlenses"); setGender(null); setCategory(contactlenses); }}>
             CONTACT LENSES
           </button>

@@ -20,6 +20,7 @@ const HomePage = ({ addToCart, addToWishlist, wishlistItems, removeFromWishlist,
           addToWishlist={addToWishlist}
           wishlistItems={wishlistItems}
           removeFromWishlist={removeFromWishlist}
+          showFilterSidebar={false}
         />
       </div>
       

@@ -3,11 +3,11 @@ import { useState } from "react";
 import { sampleProducts } from "./productData";
 
 
-function Products({ addToCart, wishlistItems, selectedBrand, addToWishlist, removeFromWishlist, cartItems }) {
+function Products({ addToCart, wishlistItems, selectedBrand, addToWishlist, removeFromWishlist, cartItems, showFilterSidebar = true, customProducts, hideHeader = false }) {
 
   const [sortOption, setSortOption] = useState("");
 
-  let filteredProducts = [...sampleProducts];
+  let filteredProducts = customProducts ? [...customProducts] : [...sampleProducts];
 
 if (selectedBrand) {
   filteredProducts = filteredProducts.filter(
@@ -25,9 +25,12 @@ if (selectedBrand) {
   return (
     <div className="w-full py-4 bg-gray-50 min-h-screen flex flex-col items-center">
       {/* Header */}
-      <h2 className="text-xl font-semibold text-center w-full mb-2">Eyeglasses for You</h2>
+      {!hideHeader && (
+        <h2 className="text-xl font-semibold text-center w-full mb-2">Eyeglasses for You</h2>
+      )}
       <div className="flex w-full max-w-7xl mx-auto">
         {/* Filter Sidebar */}
+        {showFilterSidebar && (
         <aside className="w-64 min-w-[200px] max-w-xs bg-white rounded-lg shadow p-6 mr-8 h-fit sticky top-24 self-start hidden md:block">
           {/* FRAME TYPE */}
           <div className="mb-6">
@@ -110,8 +113,9 @@ if (selectedBrand) {
             </div>
           </div>
         </aside>
+        )}
         {/* Product Grid */}
-        <div className="flex-1">
+        <div className={showFilterSidebar ? "flex-[2_1_0%]" : "flex-1 w-full"}>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full justify-center">
             {filteredProducts.map((product, index) => (
               <ProductCard 

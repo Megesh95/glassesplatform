@@ -10,6 +10,8 @@ import HomePage from "./pages/HomePage"
 import AuthModalManager from "./components/AuthModalManager"
 import Products from "./components/Products/Products";
 import BrandPage from "./BrandPage";
+import ScreenGlassesPage from "./pages/ScreenGlassesPage";
+import KidsGlassesPage from "./pages/KidsGlassesPage";
 
 const App = () => {
   const [authModal, setAuthModal] = useState({
@@ -118,6 +120,8 @@ const App = () => {
               <Route path="/cart" element={<Cart cart={cartItems} removeFromCart={removeFromCart} increaseQuantity={increaseQuantity} wishlistItems={wishlistItems} addToCart={addToCart} removeFromWishlist={removeFromWishlist} addToWishlist={addToWishlist}/>} />
               <Route path="/trackorder" element={<TrackOrder />} />
               <Route path="/eyeglasses" element={<Products addToCart={addToCart} wishlistItems={wishlistItems} addToWishlist={addToWishlist} removeFromWishlist={removeFromWishlist} cartItems={cartItems} />} />
+              <Route path="/screenglasses" element={<ScreenGlassesPage addToCart={addToCart} addToWishlist={addToWishlist} wishlistItems={wishlistItems} removeFromWishlist={removeFromWishlist} cartItems={cartItems} />} />
+              <Route path="/kidsglasses" element={<KidsGlassesPage addToCart={addToCart} addToWishlist={addToWishlist} wishlistItems={wishlistItems} removeFromWishlist={removeFromWishlist} cartItems={cartItems} />} />
               <Route path="/brand/:brandName" element={<BrandPage addToCart={addToCart} wishlistItems={wishlistItems} addToWishlist={addToWishlist} removeFromWishlist={removeFromWishlist} cartItems={cartItems} /> }/>
             </Routes>
           </main>
