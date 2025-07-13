@@ -131,36 +131,55 @@ function Header({ onLoginClick, darkMode, cartCount, wishlistCount, toggleWishli
           </div>
         </div>
       </div>
-      <nav className = "flex bg-zinc-200 dark:bg-zinc-700 text-[rgba(0,0,80,1)] dark:text-[rgba(230,230,255,1)] px-10 h-16" id="navigator"
-        onMouseLeave={() => setNavCard("")}
-      >
+      <nav className = "flex bg-zinc-200 dark:bg-zinc-700 text-[rgba(0,0,80,1)] dark:text-[rgba(230,230,255,1)] px-10 h-16" id="navigator">
         <div id = "navleft" className = "flex justify-evenly gap-4 font-semibold">
-          <div 
-            onMouseEnter={() => { setNavCard("eyeglasses"); setGender(0); setCategory(classiceyeglasses); }}
-            style={{ display: 'flex', alignItems: 'center', height: '100%' }}
-          >
-            <Link to="/eyeglasses" style={{ padding: '0 12px', height: '100%', display: 'flex', alignItems: 'center' }}>
-              EYEGLASSES
-            </Link>
-          </div>
-          <Link to="/screenglasses" style={{ padding: '0 12px', height: '100%', display: 'flex', alignItems: 'center' }}>
-            SCREEN GLASSES
-          </Link>
-          <Link to="/kidsglasses" style={{ padding: '0 12px', height: '100%', display: 'flex', alignItems: 'center' }}>
-            KIDS GLASSES
-          </Link>
-          <Link to="/contactlenses" style={{ padding: '0 12px', height: '100%', display: 'flex', alignItems: 'center' }}>
-            CONTACT LENSES
-          </Link>
-          <Link to="/sunglasses" style={{ padding: '0 12px', height: '100%', display: 'flex', alignItems: 'center' }}>
-            SUN GLASSES
-          </Link>
-          <Link to="/home-eye-test" style={{ padding: '0 12px', height: '100%', display: 'flex', alignItems: 'center' }}>
-            HOME EYE-TEST
-          </Link>
-          <button onMouseEnter={() => { setNavCard("storelocator"); }}>
-            STORE LOCATOR
+          <button onClick = {() => {
+            navCard === "eyeglasses" ? setNavCard("") : setNavCard("eyeglasses")
+            setGender(0)
+            setCategory(classiceyeglasses)
+          }}>
+            EYEGLASSES
           </button>
+          <button onClick = {() => {
+            navCard === "screenglasses" ? setNavCard("") : setNavCard("screenglasses")
+            setGender(0)
+            setCategory(null)
+          }}
+          >
+            SCREEN GLASSES
+          </button>
+          <button onClick = {() => {
+            navCard === "kidsglasses" ? setNavCard("") : setNavCard("kidsglasses")
+            setGender(0)
+            setCategory(null)
+          }}
+          >
+            KIDS GLASSES
+          </button>
+          <button onClick = {() => {
+            navCard === "contactlenses" ? setNavCard("") : setNavCard("contactlenses")
+            setGender(null)
+            setCategory(contactlenses)
+          }}
+          >
+            CONTACT LENSES
+          </button>
+          <button onClick = {() => {
+            navCard === "sunglasses" ? setNavCard("") : setNavCard("sunglasses")
+            setGender(0)
+            setCategory(classiceyeglasses)
+          }}
+          >
+            SUN GLASSES
+          </button>
+          <button onClick = {() => {
+            navCard === "eyetest" ? setNavCard("") : setNavCard("eyetest")
+          }}
+          >HOME EYE-TEST</button>
+          <button onClick = {() => {
+            navCard === "storelocator" ? setNavCard("") : setNavCard("storelocator")
+          }}
+          >STORE LOCATOR</button>
         </div>
       </nav>
       {navCard === "eyeglasses" && 
@@ -359,10 +378,10 @@ function Header({ onLoginClick, darkMode, cartCount, wishlistCount, toggleWishli
         A certified refractionist will visit you with latest eye testing machines & 100 trial frames
       </p>
             <Link to="/appointment">
-        <button className="p-3 rounded-full text-lg font-medium transition-all duration-200 bg-white text-blue-600 hover:bg-blue-800 border border-blue-600">
-          Book Appointment
-        </button>
-      </Link> 
+            <button className="p-3 rounded-full text-lg border dark:border-[rgba(230,230,255,1)] border-[rgba(0,0,80,1)]">
+              Book Appointment
+            </button>
+          </Link>
       </div>
     </div>
       }

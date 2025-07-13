@@ -9,12 +9,6 @@ import ChatBot from "./components/ChatBot"
 import HomePage from "./pages/HomePage"
 import AuthModalManager from "./components/AuthModalManager"
 import Products from "./components/Products/Products";
-import BrandPage from "./BrandPage";
-import ScreenGlassesPage from "./pages/ScreenGlassesPage";
-import KidsGlassesPage from "./pages/KidsGlassesPage";
-import ContactLensesPage from "./pages/ContactLensesPage";
-import SunglassesPage from "./pages/SunglassesPage";
-import HomeEyeTestPage from "./pages/HomeEyeTestPage";
 
 const App = () => {
   const [authModal, setAuthModal] = useState({
@@ -121,14 +115,8 @@ const App = () => {
             <Routes>
               <Route path="/" element={<HomePage addToCart={addToCart} addToWishlist={addToWishlist} wishlistItems={wishlistItems} removeFromWishlist={removeFromWishlist} darkMode={darkMode} />} />
               <Route path="/cart" element={<Cart cart={cartItems} removeFromCart={removeFromCart} increaseQuantity={increaseQuantity} wishlistItems={wishlistItems} addToCart={addToCart} removeFromWishlist={removeFromWishlist} addToWishlist={addToWishlist}/>} />
-              <Route path="/trackorder" element={<TrackOrder />} />
+              <Route path="/trackorder" element={<TrackOrder darkMode={darkMode} />} />
               <Route path="/eyeglasses" element={<Products addToCart={addToCart} wishlistItems={wishlistItems} addToWishlist={addToWishlist} removeFromWishlist={removeFromWishlist} cartItems={cartItems} />} />
-              <Route path="/screenglasses" element={<ScreenGlassesPage addToCart={addToCart} addToWishlist={addToWishlist} wishlistItems={wishlistItems} removeFromWishlist={removeFromWishlist} cartItems={cartItems} />} />
-              <Route path="/kidsglasses" element={<KidsGlassesPage addToCart={addToCart} addToWishlist={addToWishlist} wishlistItems={wishlistItems} removeFromWishlist={removeFromWishlist} cartItems={cartItems} />} />
-              <Route path="/contactlenses" element={<ContactLensesPage addToCart={addToCart} wishlistItems={wishlistItems} addToWishlist={addToWishlist} removeFromWishlist={removeFromWishlist} cartItems={cartItems} />} />
-              <Route path="/sunglasses" element={<SunglassesPage addToCart={addToCart} addToWishlist={addToWishlist} wishlistItems={wishlistItems} removeFromWishlist={removeFromWishlist} cartItems={cartItems} />} />
-              <Route path="/brand/:brandName" element={<BrandPage addToCart={addToCart} wishlistItems={wishlistItems} addToWishlist={addToWishlist} removeFromWishlist={removeFromWishlist} cartItems={cartItems} /> }/>
-              <Route path="/home-eye-test" element={<HomeEyeTestPage />} />
             </Routes>
           </main>
           <FooterSection className="py-4" />

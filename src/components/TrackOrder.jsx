@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const TrackOrderPage = ({ darkMode }) => {
+const TrackOrder = ({ darkMode }) => {
   const [orderNumber, setOrderNumber] = useState("");
   const [email, setEmail] = useState("");
   const [orderStatus, setOrderStatus] = useState(null);
@@ -34,16 +34,17 @@ const TrackOrderPage = ({ darkMode }) => {
   };
 
   const getStatusColor = (status) => {
+    const base = darkMode ? "text-" : "text-";
     switch (status?.toLowerCase()) {
       case "delivered":
-        return "text-green-500";
+        return `${base}green-500`;
       case "shipped":
       case "out for delivery":
-        return "text-blue-400";
+        return `${base}blue-400`;
       case "processing":
-        return "text-yellow-400";
+        return `${base}yellow-400`;
       default:
-        return darkMode ? "text-zinc-400" : "text-gray-400";
+        return `${base}gray-400`;
     }
   };
 
@@ -57,7 +58,7 @@ const TrackOrderPage = ({ darkMode }) => {
     <div className={`min-h-screen py-8 ${darkMode ? 'bg-zinc-800 text-[rgba(230,230,255,1)]' : 'bg-zinc-100 text-[rgba(0,0,80,1)]'}`}>
       <div className="max-w-6xl mx-auto px-4">
         {!orderStatus ? (
-          <div className={`rounded-lg shadow-lg p-8 ${darkMode ? 'bg-zinc-900' : 'bg-white'}`}>
+          <div className={`rounded-lg shadow-lg p-8 ${darkMode ? 'bg-zinc-800' : 'bg-white'}`}>
             <div className="text-center mb-8">
               <h1 className="text-4xl font-bold mb-4">Track Your Order</h1>
               <p className="text-lg">Enter your order details to track your V-lens purchase</p>
@@ -78,8 +79,8 @@ const TrackOrderPage = ({ darkMode }) => {
                     required
                     className={`w-full p-4 rounded-lg focus:outline-none text-base transition-colors ${
                       darkMode
-                        ? 'bg-zinc-700 border border-zinc-600 placeholder-zinc-400 text-[rgba(230,230,255,1)] focus:border-blue-400'
-                        : 'border-2 border-gray-300 text-[rgba(0,0,80,1)] focus:border-cyan-500 bg-white'
+                        ? 'bg-zinc-700 border border-zinc-600 placeholder-zinc-400 text-zinc-100 focus:border-blue-400'
+                        : 'border-2 border-gray-300 text-gray-800 focus:border-cyan-500'
                     }`}
                   />
                 </div>
@@ -97,8 +98,8 @@ const TrackOrderPage = ({ darkMode }) => {
                     required
                     className={`w-full p-4 rounded-lg focus:outline-none text-base transition-colors ${
                       darkMode
-                        ? 'bg-zinc-700 border border-zinc-600 placeholder-zinc-400 text-[rgba(230,230,255,1)] focus:border-blue-400'
-                        : 'border-2 border-gray-300 text-[rgba(0,0,80,1)] focus:border-cyan-500 bg-white'
+                        ? 'bg-zinc-700 border border-zinc-600 placeholder-zinc-400 text-zinc-100 focus:border-blue-400'
+                        : 'border-2 border-gray-300 text-gray-800 focus:border-cyan-500'
                     }`}
                   />
                 </div>
@@ -136,23 +137,23 @@ const TrackOrderPage = ({ darkMode }) => {
                 <p className="text-sm mb-3">
                   Can't find your order number? Check your email confirmation or contact our support team.
                 </p>
-                <button className={`text-sm font-medium hover:underline transition-colors duration-200 ${
-                  darkMode ? 'text-blue-400 hover:text-blue-300' : 'text-cyan-500 hover:text-cyan-600'
-                }`}>
+                <button className="text-sm font-medium hover:underline transition-colors duration-200 
+                  ${darkMode ? 'text-blue-400 hover:text-blue-300' : 'text-cyan-500 hover:text-cyan-600'}"
+                >
                   Contact Support
                 </button>
               </div>
             </div>
           </div>
         ) : (
-          <div className={`rounded-lg shadow-lg p-8 ${darkMode ? 'bg-zinc-950' : 'bg-white'}`}>
+          <div className={`rounded-lg shadow-lg p-8 ${darkMode ? 'bg-zinc-800' : 'bg-white'}`}>
             <div className="text-center mb-8">
               <h1 className="text-4xl font-bold mb-2">Order Status</h1>
               <p className="text-lg">Order #{orderStatus.id}</p>
             </div>
 
             <div className="mb-12">
-              <div className={`rounded-full h-3 mb-6 ${darkMode ? 'bg-zinc-700' : 'bg-gray-300'}`}>
+              <div className="bg-gray-300 dark:bg-zinc-700 rounded-full h-3 mb-6">
                 <div
                   className="bg-gradient-to-r from-cyan-500 to-blue-500 h-3 rounded-full transition-all duration-1000"
                   style={{ width: `${getProgressPercentage()}%` }}
@@ -181,27 +182,15 @@ const TrackOrderPage = ({ darkMode }) => {
                         <div className="flex justify-between items-start">
                           <div>
                             <h3
-                              className={`font-semibold text-lg ${
-                                step.completed 
-                                  ? darkMode ? "text-[rgba(230,230,255,1)]" : "text-[rgba(0,0,80,1)]"
-                                  : darkMode ? "text-zinc-400" : "text-gray-500"
-                              }`}
+                              className={`font-semibold text-lg ${step.completed ? "" : darkMode ? "text-zinc-400" : "text-gray-500"}`}
                             >
                               {step.status}
                             </h3>
-                            <p className={`text-sm mt-1 ${
-                              step.completed 
-                                ? darkMode ? "text-zinc-300" : "text-gray-700"
-                                : darkMode ? "text-zinc-500" : "text-gray-400"
-                            }`}>
+                            <p className={`text-sm mt-1 ${step.completed ? '' : darkMode ? "text-zinc-500" : "text-gray-400"}`}>
                               {step.description}
                             </p>
                           </div>
-                          <div className={`text-right text-sm ${
-                            step.completed 
-                              ? darkMode ? "text-zinc-300" : "text-gray-700"
-                              : darkMode ? "text-zinc-400" : "text-gray-400"
-                          }`}>
+                          <div className={`text-right text-sm ${step.completed ? '' : darkMode ? "text-zinc-400" : "text-gray-400"}`}>
                             <div className="font-medium">{step.date}</div>
                             <div>{step.time}</div>
                           </div>
@@ -226,7 +215,7 @@ const TrackOrderPage = ({ darkMode }) => {
                       />
                       <div className="flex-1">
                         <h4 className="font-medium">{item.name}</h4>
-                        <p className={`text-sm ${darkMode ? 'text-zinc-400' : 'text-gray-600'}`}>Quantity: {item.quantity}</p>
+                        <p className="text-sm">Quantity: {item.quantity}</p>
                       </div>
                       <div className="font-semibold text-lg">₹{item.price.toLocaleString()}</div>
                     </div>
@@ -272,11 +261,7 @@ const TrackOrderPage = ({ darkMode }) => {
             <div className="mt-12 text-center space-x-4">
               <button
                 onClick={() => setOrderStatus(null)}
-                className={`px-8 py-3 rounded-lg transition-colors font-medium ${
-                  darkMode 
-                    ? 'bg-zinc-600 text-white hover:bg-zinc-500' 
-                    : 'bg-gray-500 text-white hover:bg-gray-600'
-                }`}
+                className="bg-gray-500 text-white px-8 py-3 rounded-lg hover:bg-gray-600 transition-colors font-medium"
               >
                 Track Another Order
               </button>
@@ -291,4 +276,4 @@ const TrackOrderPage = ({ darkMode }) => {
   );
 };
 
-export default TrackOrderPage;
+export default TrackOrder;
