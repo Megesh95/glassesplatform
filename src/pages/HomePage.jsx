@@ -85,8 +85,9 @@ const HomePage = ({ addToCart, addToWishlist, wishlistItems, removeFromWishlist,
   wishlistItems={wishlistItems}
   removeFromWishlist={removeFromWishlist}
   cartItems={cartItems}
+  darkMode={darkMode}
 />
-<CustomerReview />
+<CustomerReview darkMode={darkMode} />
     </>
   );
 };

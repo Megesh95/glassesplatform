@@ -1,11 +1,12 @@
 import React from 'react';
 
-const CustomerReview = () => {
+const CustomerReview = ({ darkMode }) => {
   return (
-    <section className="bg-[#ede38f] py-16">
-      <h2 className="text-4xl font- text-center mb-12">MEET OUR HAPPY CUSTOMERS</h2>
+    <section className={`py-16 ${darkMode ? "bg-neutral-800" : "bg-[#ede38f]"}`}>
+      <h2 className={`text-3xl font- text-center mb-10 ${darkMode ? "text-white" : "text-black"}`}>MEET OUR HAPPY CUSTOMERS</h2>
+
       <div className="flex flex-wrap justify-center gap-10 px-4">
-        <div className="w-[400px]">
+        <div className={`w-[400px] ${darkMode ? "shadow-lg shadow-white/10" : "shadow-md"}`}>
           <iframe
             width="100%"
             height="300"

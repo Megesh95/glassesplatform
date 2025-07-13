@@ -74,7 +74,7 @@ const sunglassesData = [
 
 const VISIBLE_COUNT = 3;
 
-const EyeglassesSunglassesCarousel = ({ addToCart, addToWishlist, wishlistItems = [], removeFromWishlist, cartItems = [] }) => {
+const EyeglassesSunglassesCarousel = ({ addToCart, addToWishlist, wishlistItems = [], removeFromWishlist, cartItems = [], darkMode }) => {
   return (
     <>
       <CarouselSection
@@ -85,6 +85,7 @@ const EyeglassesSunglassesCarousel = ({ addToCart, addToWishlist, wishlistItems 
         wishlistItems={wishlistItems}
         removeFromWishlist={removeFromWishlist}
         cartItems={cartItems}
+        darkMode={darkMode}
       />
 
       <CarouselSection
@@ -95,12 +96,13 @@ const EyeglassesSunglassesCarousel = ({ addToCart, addToWishlist, wishlistItems 
         wishlistItems={wishlistItems}
         removeFromWishlist={removeFromWishlist}
         cartItems={cartItems}
+        darkMode={darkMode}
       />
     </>
   );
 };
 
-const CarouselSection = ({ title, products, addToCart, addToWishlist, wishlistItems, removeFromWishlist, cartItems }) => {
+const CarouselSection = ({ title, products, addToCart, addToWishlist, wishlistItems, removeFromWishlist, cartItems , darkMode}) => {
   const [startIdx, setStartIdx] = useState(0);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
@@ -116,7 +118,7 @@ const CarouselSection = ({ title, products, addToCart, addToWishlist, wishlistIt
   const isInCart = selectedProduct && cartItems.some((item) => item.name === selectedProduct.name);
 
   return (
-    <section className="w-full max-w-6xl mx-auto mt-12 mb-16 px-4 py-4">
+    <section className={`w-full max-w-6xl mx-auto mt-12 mb-16 px-4 py-4 transition-colors duration-300 ${darkMode ? "bg-zinc-900 text-white" : "bg-white text-black"}`}>
       <div className="flex items-center justify-between mb-2">
         <h2 className="text-2xl font-semibold tracking-wide">{title}</h2>
       </div>
@@ -128,13 +130,22 @@ const CarouselSection = ({ title, products, addToCart, addToWishlist, wishlistIt
 
         <div className="flex justify-center w-full gap-8 md:gap-12">
           {products.slice(startIdx, startIdx + VISIBLE_COUNT).map((product) => (
-            <div key={product.src} className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 p-4 md:p-5 w-full max-w-xs cursor-pointer border border-gray-100 group relative overflow-hidden flex flex-col items-center" style={{ fontFamily: "'Inter', sans-serif" }} onClick={() => setSelectedProduct(product)}>
-              <div className="w-full h-32 flex justify-center items-center mb-3">
+            <div
+  key={product.src}
+  className="bg-white dark:bg-zinc-800 text-gray-900 dark:text-gray-100 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 p-4 md:p-5 w-full max-w-xs cursor-pointer border border-gray-100 dark:border-zinc-700 group relative overflow-hidden flex flex-col items-center"
+  style={{ fontFamily: "'Inter', sans-serif" }}
+  onClick={() => setSelectedProduct(product)}
+>
+
+              <div className={`bg-white dark:bg-zinc-900 p-8 rounded-2xl w-[95%] max-w-lg relative shadow-2xl border ${
+  darkMode ? "border-zinc-700 text-white" : "border-gray-200 text-gray-900"
+}`}>
+
                 <img src={product.src} alt={product.name} className="w-full h-full object-contain rounded-t-2xl" />
               </div>
-              <h3 className="text-base font-bold text-gray-900 truncate leading-tight mb-1 text-center">{product.name}</h3>
+              <h3 className="text-base font-bold text-gray-900 dark:text-white truncate leading-tight mb-1 text-center"> {product.name}</h3>
               <span className="inline-block bg-blue-50 text-blue-700 font-semibold text-sm px-3 py-1 rounded-full mb-2">₹{product.price}</span>
-              <p className="text-gray-600 text-xs text-center line-clamp-2">{product.description}</p>
+              <p className="text-gray-700 dark:text-gray-200 mb-4 text-center leading-normal text-base"> {product.description}</p>
             </div>
           ))}
         </div>
@@ -146,17 +157,18 @@ const CarouselSection = ({ title, products, addToCart, addToWishlist, wishlistIt
 
       {selectedProduct && (
         <div className="fixed inset-0 bg-black/30 flex justify-center items-center z-50">
-          <div className="bg-white p-8 rounded-2xl w-[95%] max-w-lg relative shadow-2xl border border-gray-200 flex flex-col items-center animate-fadeIn">
+         <div className="bg-white dark:bg-zinc-900 p-8 rounded-2xl w-[95%] max-w-lg relative shadow-2xl border border-gray-200 dark:border-zinc-700 flex flex-col items-center animate-fadeIn">
             <button onClick={() => setSelectedProduct(null)} className="absolute top-3 right-4 text-gray-400 hover:text-red-500 text-3xl font-bold focus:outline-none transition-colors" aria-label="Close">&times;</button>
             <img src={selectedProduct.src} alt={selectedProduct.name} className="w-56 h-44 object-contain mb-4 mt-2 mx-auto rounded-xl shadow" />
-            <h2 className="text-2xl font-semibold text-gray-900 mt-2 mb-1 text-center">{selectedProduct.name}</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mt-2 mb-1 text-center"> {selectedProduct.name}</h2>
             <span className="inline-block bg-blue-100 text-blue-700 font-bold text-lg px-4 py-1 rounded-full mb-2">₹{selectedProduct.price}</span>
-            <p className="text-gray-700 mb-4 text-center leading-normal text-base">{selectedProduct.description}</p>
+            <p className="text-gray-700 dark:text-gray-200 mb-4 text-center leading-normal text-base"> {selectedProduct.description}</p>
             <div className="flex gap-3 w-full mt-2">
               <button className={`flex-1 flex items-center justify-center gap-2 ${isInCart ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-yellow-400 hover:bg-yellow-500 text-gray-900'} font-medium py-2 px-4 rounded-lg transition duration-150`} onClick={() => { if (!isInCart) { addToCart(selectedProduct); setSelectedProduct(null); } }} disabled={isInCart}>
                 {isInCart ? 'Added to Cart' : 'Add to Cart'}
               </button>
-              <button className={`flex-1 flex items-center justify-center gap-2 border ${isWishlisted ? 'bg-red-100 text-red-500 border-red-200' : 'bg-white text-gray-500 border-gray-200 hover:bg-red-50 hover:text-red-400'} font-medium py-2 px-4 rounded-lg transition duration-150`} onClick={() => { if (isWishlisted) { removeFromWishlist(selectedProduct.name); } else { addToWishlist({ name: selectedProduct.name, price: selectedProduct.price, image: selectedProduct.src }); } }}>
+              <button className={`flex-1 flex items-center justify-center gap-2 border ${isWishlisted ? 'bg-red-100 text-red-500 dark:bg-red-200' : 'bg-white dark:bg-zinc-800 text-gray-500 dark:text-gray-300 border-gray-200 dark:border-zinc-700 hover:bg-red-50 hover:text-red-400'} font-medium py-2 px-4 rounded-lg transition duration-150`}
+ onClick={() => { if (isWishlisted) { removeFromWishlist(selectedProduct.name); } else { addToWishlist({ name: selectedProduct.name, price: selectedProduct.price, image: selectedProduct.src }); } }}>
                 {isWishlisted ? 'Wishlisted' : 'Add to Wishlist'}
               </button>
             </div>

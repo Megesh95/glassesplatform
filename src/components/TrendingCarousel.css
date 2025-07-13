@@ -74,7 +74,7 @@
 
 /* Dark Mode */
 .dark-background {
-  background-color: #1f2937; /* Tailwind dark bg-zinc-800 similar */
+  background-color: #0b0e13; /* Tailwind dark bg-zinc-800 similar */
 }
 
 .text-light {
@@ -82,7 +82,7 @@
 }
 
 .dark-card {
-  background-color: #374151; /* Tailwind dark bg-zinc-700 similar */
+  background-color: #232e41; /* Tailwind dark bg-zinc-700 similar */
   border: 1px solid #555;
 }
 
