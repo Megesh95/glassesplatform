@@ -8,7 +8,8 @@ import FooterSection from "./components/FooterSection"
 import ChatBot from "./components/ChatBot"
 import HomePage from "./pages/HomePage"
 import AuthModalManager from "./components/AuthModalManager"
-import Products from "./components/Products/Products";
+import Products from "./components/Products/Products"
+import Appointment from './components/appointment'
 
 const App = () => {
   const [authModal, setAuthModal] = useState({
@@ -117,6 +118,7 @@ const App = () => {
               <Route path="/cart" element={<Cart cart={cartItems} removeFromCart={removeFromCart} increaseQuantity={increaseQuantity} wishlistItems={wishlistItems} addToCart={addToCart} removeFromWishlist={removeFromWishlist} addToWishlist={addToWishlist}/>} />
               <Route path="/trackorder" element={<TrackOrder darkMode={darkMode} />} />
               <Route path="/eyeglasses" element={<Products addToCart={addToCart} wishlistItems={wishlistItems} addToWishlist={addToWishlist} removeFromWishlist={removeFromWishlist} cartItems={cartItems} />} />
+                        <Route path="/appointment" element={<Appointment darkMode={darkMode} />} />
             </Routes>
           </main>
           <FooterSection className="py-4" />

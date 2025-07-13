@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const TrackOrder = ({ darkMode }) => {
+const TrackOrderPage = ({ darkMode }) => {
   const [orderNumber, setOrderNumber] = useState("");
   const [email, setEmail] = useState("");
   const [orderStatus, setOrderStatus] = useState(null);
@@ -55,7 +55,7 @@ const TrackOrder = ({ darkMode }) => {
   };
 
   return (
-    <div className={`min-h-screen py-8 ${darkMode ? 'bg-zinc-800 text-[rgba(230,230,255,1)]' : 'bg-zinc-100 text-[rgba(0,0,80,1)]'}`}>
+    <div className={`min-h-screen ${darkMode ? 'bg-zinc-900 text-zinc-100' : 'bg-gray-50 text-gray-800'}`}>
       <div className="max-w-6xl mx-auto px-4">
         {!orderStatus ? (
           <div className={`rounded-lg shadow-lg p-8 ${darkMode ? 'bg-zinc-800' : 'bg-white'}`}>
@@ -276,4 +276,4 @@ const TrackOrder = ({ darkMode }) => {
   );
 };
 
-export default TrackOrder;
+export default TrackOrderPage;

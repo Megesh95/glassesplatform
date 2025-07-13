@@ -279,7 +279,6 @@ const Appointment = () => {
             {step === 3 && (
               <div>
                 <h3 className="text-lg font-semibold mb-4">Select Date & Time</h3>
-                {/* Hide native calendar icon */}
                 <style>
                   {`
                     input[type="date"].custom-date::-webkit-calendar-picker-indicator {
