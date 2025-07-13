@@ -16,11 +16,16 @@ if (selectedBrand) {
   );
 }
 
+console.log("Selected Brand:", selectedBrand);
+console.log("Filtered Products:", filteredProducts);
+
   if (sortOption === "priceLowHigh") {
     sortedProducts.sort((a, b) => a.price - b.price);
   } else if (sortOption === "priceHighLow") {
     sortedProducts.sort((a, b) => b.price - a.price);
   }
+
+
 
   return (
     <div className="w-full py-4 bg-gray-50 min-h-screen flex flex-col items-center">
