@@ -31,6 +31,7 @@ import StarIcon from '@mui/icons-material/Star';
   const recognitionRef = useRef(null);
   const [ready, setReady] = useState(!delayStart);
   const inputRef = useRef(null);
+   const [lastMessageTime, setLastMessageTime] = useState(0);
   const chatMessagesEndRef = useRef(null);
 
 useEffect(() => {
@@ -82,6 +83,20 @@ useEffect(() => {
 
   const sendMessage = () => {
     if (!text.trim()) return;
+    const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const trimmedText = text.trim();
+    const userMsg = { from: "user", text: trimmedText, time: currentTime };
+    const nowTime = Date.now();
+    if(nowTime - lastMessageTime < 1500) {
+      const botMsg = {
+        from: "agent",
+        text: `Please wait a moment before sending another message.`,
+        time: currentTime,
+      };
+      setAgentMsgs((prev) => [...prev, botMsg]);
+      return;
+    }
+    setLastMessageTime(nowTime);
     const newMsg = { from: "user", text };
     setAgentMsgs((prev) => [...prev, newMsg]);
     setText("");
@@ -745,24 +760,41 @@ if (trimmedText.startsWith("/")) {
     ? cart.map((item, i) => `${i + 1}. ${item.name}`).join("\n")
     : "Your cart is currently empty.";
   botResponse.text = `Here’s your current order:\n${productList}`;
-}else if (command === "/faq") {
-  botResponse.text = "Here are some frequently asked questions:";
-  setMessages((prev) => [...prev, userMsg, botResponse]);
-  faqs.forEach((faq) => {
+} else if (command === "/agent") {
+  const freeAgents = agents.filter(agent => agent.status === "free");
+
+  setMessages((prev) => [...prev, userMsg]);
+  setInputText("");
+
+  if (freeAgents.length === 0) {
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
         {
-          type: "faq-button",
-          text: faq.question,
+          type: "bot",
+          text: "Sorry, all our agents are currently busy. Please try again later.",
           time: getCurrentTime(),
         },
       ]);
-    }, 300);
-  });
-  setInputText("");
+    }, 500);
+  } else {
+    setTimeout(() => {
+      setMessages((prev) => [
+        ...prev,
+        {
+          type: "bot",
+          text: "Would you like to talk to our support agent?",
+          options: ["Yes, connect me", "No, it's fine"],
+          time: getCurrentTime(),
+        },
+      ]);
+    }, 800);
+  }
+
   return;
-}else if (command === "/agent") {
+}
+
+else if (command === "/agent") {
   const freeAgents = agents.filter(agent => agent.status === "free");
 
   if (freeAgents.length === 0) {
@@ -774,11 +806,8 @@ if (trimmedText.startsWith("/")) {
       setMessages((prev) => [
         ...prev,
         {
-          type: "bot",
-          text: "Please select an available agent:",
-          time: currentTime,
-          agentOptions: freeAgents,
-        },
+          
+        }
       ]);
     }, 800);
     return;
@@ -808,6 +837,7 @@ else {
     options: ["Yes, connect me", "No, it's fine"],
     time: currentTime,
   };
+  
 
   setMessages((prev) => [...prev, userMsg]);
   setInputText("");
