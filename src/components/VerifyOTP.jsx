@@ -1,21 +1,15 @@
 import React, { useState } from 'react';
 
-const GetOTP = ({ onBack, onOTPSent, darkMode }) => {
-  const [email, setEmail] = useState('');
+const VerifyOTP = ({ email, onBack, onVerified, darkMode }) => {
+  const [token, setToken] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!email) {
-      setError('Please enter your email');
-      return;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setError('Please enter a valid email address');
+    if (!token) {
+      setError('Please enter the verification code');
       return;
     }
 
@@ -23,23 +17,19 @@ const GetOTP = ({ onBack, onOTPSent, darkMode }) => {
     setError('');
 
     try {
-      const response = await fetch('/api/auth/req-reset', {
+      const response = await fetch(`/api/auth/verify-reset/${email}/${token}`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || 'Failed to send reset link');
+        throw new Error(data.message || 'Invalid verification code');
       }
 
-      onOTPSent(email);
+      onVerified(data.userId, token);
     } catch (err) {
-      setError(err.message || 'Failed to send reset link. Please try again.');
+      setError(err.message || 'Verification failed. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -48,18 +38,18 @@ const GetOTP = ({ onBack, onOTPSent, darkMode }) => {
   return (
     <div className={`fixed inset-0 flex items-center justify-center backdrop-blur-sm ${darkMode ? 'bg-black/70' : 'bg-black/30'} z-50`}>
       <div className={`${darkMode ? 'bg-zinc-800 text-zinc-100' : 'bg-white text-gray-800'} rounded-xl shadow-lg p-8 w-96 max-w-full relative`}>
-        <h2 className={`text-2xl font-semibold text-center mb-4 ${darkMode ? 'text-zinc-100' : 'text-gray-800'}`}>Reset Password</h2>
+        <h2 className={`text-2xl font-semibold text-center mb-4 ${darkMode ? 'text-zinc-100' : 'text-gray-800'}`}>Verify Code</h2>
         
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <p className={`text-sm mb-2 ${darkMode ? 'text-zinc-300' : 'text-gray-600'}`}>
-            Enter your email to receive a password reset link
+            Enter the verification code sent to {email}
           </p>
           
           <input
-            type="email"
-            placeholder="Your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="text"
+            placeholder="Verification code"
+            value={token}
+            onChange={(e) => setToken(e.target.value)}
             className={`p-3 border rounded-md focus:outline-none focus:ring-2 ${
               darkMode 
                 ? 'bg-zinc-700 border-zinc-600 focus:ring-blue-400 placeholder-zinc-400 text-zinc-100' 
@@ -79,7 +69,7 @@ const GetOTP = ({ onBack, onOTPSent, darkMode }) => {
                 : 'bg-gray-600 hover:bg-gray-800 text-white'
             }`}
           >
-            {isLoading ? 'Sending...' : 'Send Reset Link'}
+            {isLoading ? 'Verifying...' : 'Verify Code'}
           </button>
         </form>
         
@@ -97,4 +87,4 @@ const GetOTP = ({ onBack, onOTPSent, darkMode }) => {
   );
 };
 
-export default GetOTP;
+export default VerifyOTP;
