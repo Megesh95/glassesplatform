@@ -1,11 +1,15 @@
 import ProductCard from "./ProductCards";
 import { useState } from "react";
 import { sampleProducts } from "./productData";
+import { useRecentlyViewed } from "../RecentlyViewedCombined";
+
 
 
 function Products({ addToCart, wishlistItems, selectedBrand, addToWishlist, removeFromWishlist, cartItems, showFilterSidebar = true, customProducts, hideHeader = false }) {
 
   const [sortOption, setSortOption] = useState("");
+  const { addRecentlyViewed } = useRecentlyViewed();
+
 
   let filteredProducts = customProducts ? [...customProducts] : [...sampleProducts];
 
@@ -131,6 +135,7 @@ console.log("Filtered Products:", filteredProducts);
                 addToWishlist={addToWishlist}
                 removeFromWishlist={removeFromWishlist}
                 cartItems={cartItems}
+                onView={() => addRecentlyViewed(product)}
               />
             ))}
           </div>

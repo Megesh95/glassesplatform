@@ -1,5 +1,6 @@
 export const sampleProducts = [
   {
+    id: 1,
     name: "Lenskart Air",
     size: "Medium - Essential Edit",
     price: 1500,
@@ -13,6 +14,7 @@ export const sampleProducts = [
     description: "A perfect blend of style and functionality, these black-rimmed eyeglasses from Lenskart Air feature a lightweight design with a modern essential edit finish. Designed for everyday comfort, they make a timeless choice."
   },
   {
+    id: 2,
     name: "Air Fusion Black",
     size: "Medium - Air Fusion",
     price: 1500,
@@ -26,6 +28,7 @@ export const sampleProducts = [
     description: "These fusion eyeglasses combine sleek black aesthetics with feather-light comfort. Ideal for long wear, their Air Fusion build delivers durability without compromising on minimalistic charm."
   },
   {
+    id: 3,
     name: "Lenskart Blue",
     size: "Medium - Essential Edit",
     price: 1500,
@@ -39,6 +42,7 @@ export const sampleProducts = [
     description: "Stay cool and confident with the Lenskart Blue eyeglasses, designed in striking navy tones. Crafted with a strong yet light build, they're perfect for professionals and students alike."
   },
   {
+    id: 4,
     name: "Rose Gold Classic",
     size: "Medium - Lightweight Metal",
     price: 1800,
@@ -52,6 +56,7 @@ export const sampleProducts = [
     description: "Add a subtle pop of elegance with the Rose Gold Classic eyeglasses. Lightweight metal frames in soft blush tones make these glasses a stylish and graceful companion for any outfit."
   },
   {
+    id: 5,
     name: "Translucent Grey",
     size: "Medium - Essential Edit",
     price: 1500,
@@ -65,6 +70,7 @@ export const sampleProducts = [
     description: "Modern and versatile, the Translucent Grey eyeglasses blend muted tones with a clean, essential design. A go-to choice for those who love minimalism with a futuristic touch."
   },
   {
+    id: 6,
     name: "Gunmetal Round",
     size: "Medium - Metal Series",
     price: 1600,
@@ -78,6 +84,7 @@ export const sampleProducts = [
     description: "Rugged yet refined, the Gunmetal Round frames are part of the metal series designed for durability and edge. Their industrial-chic look pairs effortlessly with bold personalities."
   },
   {
+    id: 7,
     name: "Purple Minimalist",
     size: "Medium - Slim Rim",
     price: 1700,
@@ -91,6 +98,7 @@ export const sampleProducts = [
     description: "Step into soft sophistication with the Purple Minimalist frames. Their pastel slim rim design offers lightweight elegance, making them a dreamy choice for everyday flair."
   },
   {
+    id: 8,
     name: "Classic Gold Rim",
     size: "Medium - Retro Frame",
     price: 1900,
@@ -104,6 +112,7 @@ export const sampleProducts = [
     description: "Channel vintage vibes with the Classic Gold Rim eyeglasses. Featuring a retro frame with a rich golden finish, this pair is for those who love timeless statement pieces."
   },
   {
+    id: 9,
     name: "Matte Navy",
     size: "Medium - Matte Series",
     price: 1500,
@@ -117,6 +126,7 @@ export const sampleProducts = [
     description: "Make a bold yet classy statement with Matte Navy frames. Their smooth finish and dark blue tones exude confidence, making them a versatile pick for any setting."
   },
   {
+    id: 10,
     name: "Minimal Black Rim",
     size: "Medium - Classic Fit",
     price: 1500,
@@ -130,6 +140,7 @@ export const sampleProducts = [
     description: "Sleek and sharp, the Minimal Black Rim glasses offer a classic fit for everyday style. With a sturdy design and matte finish, they bring practicality and polish together."
   },
   {
+    id: 11,
     name: "Lenskart Air",
     size: "Medium - Classic Fit",
     price: 1500,
@@ -143,6 +154,7 @@ export const sampleProducts = [
     description: "A true classic from the Lenskart Air line, this variant offers a clean, adaptable look for any face shape. Ideal for professionals who prioritize both form and function."
   },
   {
+    id: 12,
     name: "Minimal Rim",
     size: "Medium - Classic Fit",
     price: 1500,
@@ -159,6 +171,7 @@ export const sampleProducts = [
 
 export const screenGlassesProducts = [
   {
+    id: 13,
     name: "Silver Screen Glasses",
     size: "Medium - Blue Block",
     price: 1999,
@@ -172,6 +185,7 @@ export const screenGlassesProducts = [
     description: "Silver blue-block screen glasses for digital protection."
   },
   {
+    id: 14,
     name: "Matte Black Full Rim Square",
     size: "Medium - Blue Block",
     price: 1899,
@@ -185,6 +199,7 @@ export const screenGlassesProducts = [
     description: "Matte black full rim square screen glasses for all-day comfort."
   },
   {
+    id: 15,
     name: "Gold Full Rim Square",
     size: "Medium - Blue Block",
     price: 2099,
@@ -198,6 +213,7 @@ export const screenGlassesProducts = [
     description: "Gold full rim square blue-block glasses for style and protection."
   },
   {
+    id: 16,
     name: "Matte Grey Full Rim Square",
     size: "Medium - Blue Block",
     price: 1899,
@@ -211,6 +227,7 @@ export const screenGlassesProducts = [
     description: "Matte grey full rim square glasses for phone and computer use."
   },
   {
+    id: 17,
     name: "Blue Full Rim Rectangle",
     size: "Medium - Blue Block",
     price: 1799,
@@ -224,6 +241,7 @@ export const screenGlassesProducts = [
     description: "Blue full rim rectangle screen glasses for digital eye strain relief."
   },
   {
+    id: 18,
     name: "Classic Black Full Rim",
     size: "Medium - Blue Block",
     price: 1999,
@@ -237,6 +255,7 @@ export const screenGlassesProducts = [
     description: "Classic black full rim screen glasses for everyday use."
   },
   {
+    id: 19,
     name: "Black Full Rim Square",
     size: "Medium - Blue Block",
     price: 1999,
@@ -250,6 +269,7 @@ export const screenGlassesProducts = [
     description: "Black full rim square blue-block glasses for screen time."
   },
   {
+    id: 20,
     name: "Gunmetal Full Rim Square",
     size: "Medium - Blue Block",
     price: 2099,
@@ -263,6 +283,7 @@ export const screenGlassesProducts = [
     description: "Gunmetal full rim square screen glasses for a modern look."
   },
   {
+    id: 21,
     name: "Light Blue Transparent Full Rim Round",
     size: "Medium - Blue Block",
     price: 1899,
@@ -279,6 +300,7 @@ export const screenGlassesProducts = [
 
 export const kidsGlassesProducts = [
   {
+    id: 22,
     name: "Blue Transparent Black Grey Rectangle (8-12 yrs)",
     size: "Kids Large - Flexi",
     price: 1299,
@@ -292,6 +314,7 @@ export const kidsGlassesProducts = [
     description: "Durable and flexible rectangle glasses for kids aged 8-12, in blue, black, and grey."
   },
   {
+    id: 23,
     name: "Green Transparent Blue Rectangle (8-12 yrs)",
     size: "Kids Large - Flexi",
     price: 1299,
@@ -305,6 +328,7 @@ export const kidsGlassesProducts = [
     description: "Fun green and blue rectangle glasses for active kids aged 8-12."
   },
   {
+    id: 24,
     name: "Pink Transparent Purple Tortoise Rectangle (5-8 yrs)",
     size: "Kids Medium - TR Flex",
     price: 1199,
@@ -318,6 +342,7 @@ export const kidsGlassesProducts = [
     description: "Bright and playful rectangle glasses for kids aged 5-8, in pink, purple, and tortoise."
   },
   {
+    id: 25,
     name: "Blue Transparent Pink Purple Round (5-8 yrs)",
     size: "Kids Medium - Flexi",
     price: 1199,
@@ -331,6 +356,7 @@ export const kidsGlassesProducts = [
     description: "Colorful round glasses for kids aged 5-8, in blue, pink, and purple."
   },
   {
+    id: 26,
     name: "Black Blue Transparent Rectangle (8-12 yrs)",
     size: "Kids Large - Astra",
     price: 1299,
@@ -344,6 +370,7 @@ export const kidsGlassesProducts = [
     description: "Classic black and blue rectangle glasses for kids aged 8-12."
   },
   {
+    id: 27,
     name: "Hooper Flexi C11 (8-12 yrs)",
     size: "Kids Large - Flexi",
     price: 1299,
@@ -357,6 +384,7 @@ export const kidsGlassesProducts = [
     description: "Trendy yellow flexi glasses for kids aged 8-12."
   },
   {
+    id: 28,
     name: "Pink Transparent Rectangle (8-12 yrs)",
     size: "Kids Large - Astra",
     price: 1299,
@@ -370,6 +398,7 @@ export const kidsGlassesProducts = [
     description: "Pretty pink rectangle glasses for kids aged 8-12."
   },
   {
+    id: 29,
     name: "Transparent Square (8-12 yrs)",
     size: "Kids Large - Astra",
     price: 1299,
@@ -383,6 +412,7 @@ export const kidsGlassesProducts = [
     description: "Crystal clear square glasses for kids aged 8-12."
   },
   {
+    id: 30,
     name: "Blue Sky Blue Round (8-12 yrs)",
     size: "Kids Large - Flexi",
     price: 1299,
@@ -396,6 +426,7 @@ export const kidsGlassesProducts = [
     description: "Cool blue round glasses for kids aged 8-12."
   },
   {
+    id: 31,
     name: "Transparent Blue Grey Round (8-12 yrs)",
     size: "Kids Large - Flexi",
     price: 1299,
@@ -409,6 +440,7 @@ export const kidsGlassesProducts = [
     description: "Trendy transparent blue and grey round glasses for kids aged 8-12."
   },
   {
+    id: 32,
     name: "Pink Transparent Pink Tortoise Round (8-12 yrs)",
     size: "Kids Large - Flexi",
     price: 1299,
@@ -422,6 +454,7 @@ export const kidsGlassesProducts = [
     description: "Fun pink and tortoise round glasses for kids aged 8-12."
   },
   {
+    id: 33,
     name: "Extra Narrow Blue Sky Full Rim (Hustlr)",
     size: "Kids Small - Hustlr",
     price: 1399,
@@ -438,6 +471,7 @@ export const kidsGlassesProducts = [
 
 export const contactLensProducts = [
   {
+    id: 34,
     name: "Aqualens Nxt Monthly (3 Lens)",
     image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//a/i/aqualens-nxt-monthly_144127_1_23_06_2025.png",
     price: 899,
@@ -450,6 +484,7 @@ export const contactLensProducts = [
     size: "3 Lens per Box"
   },
   {
+    id: 35,
     name: "Aqualens Daily Disposable 10Hrs (10 Lens)",
     image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//a/i/aqualens-10h-dailies_134722_1_23_06_2025.png",
     price: 399,
@@ -462,6 +497,7 @@ export const contactLensProducts = [
     size: "10 Lens per Box"
   },
   {
+    id: 36,
     name: "Aqualens Nxt Power Clear Monthly (1 Lens)",
     image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//a/i/aqualens-24h-nxt-power-clear-monthly_148700_1_23_06_2025.png",
     price: 299,
@@ -474,6 +510,7 @@ export const contactLensProducts = [
     size: "1 Lens per Box"
   },
   {
+    id: 37,
     name: "Bausch & Lomb Soflens 59 (6 Lens)",
     image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//b/i/soflens-59-6-lens-per-box-bausch-lomb_sl59.jpg",
     price: 1099,
@@ -486,6 +523,7 @@ export const contactLensProducts = [
     size: "6 Lens per Box"
   },
   {
+    id: 38,
     name: "Aqualens 10H Monthly (3 Lens)",
     image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//a/i/aqualens-10h-monthly_134538_1_23_06_2025.png",
     price: 799,
@@ -498,6 +536,7 @@ export const contactLensProducts = [
     size: "3 Lens per Box"
   },
   {
+    id: 39,
     name: "Bausch & Lomb iConnect (3 Lens)",
     image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//b/i/bausch---lomb-iconnect--3-lens-box_iconnect3monthpack-new_iconnect3monthpack-new_1_3.jpg.png",
     price: 499,
@@ -510,6 +549,7 @@ export const contactLensProducts = [
     size: "3 Lens per Box"
   },
   {
+    id: 40,
     name: "Bausch & Lomb PureVision2 HD (6 Lens)",
     image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//b/i/bausch-lomb-purevision2-hd-contact-lenses-6-lens-per-box_csvfile-1711626905044-dsc_0561.jpg",
     price: 1999,
@@ -522,6 +562,7 @@ export const contactLensProducts = [
     size: "6 Lens per Box"
   },
   {
+    id: 41,
     name: "Bausch & Lomb Optima 38 Daily Wear (1 Lens)",
     image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//b/i/optima-38-daily-wear-lens--1-lens-per-box--bausch---lomb---prefix-duplicate_b_boptima38daily-new_3_2.jpg.png",
     price: 299,
@@ -534,6 +575,7 @@ export const contactLensProducts = [
     size: "1 Lens per Box"
   },
   {
+    id: 42,
     name: "Johnson & Johnson Acuvue Moist Dailies (10 Lens)",
     image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//j/o/johnson-johnson-acuvue-moist-dailies_10-lens-pack_g_9717.jpg",
     price: 1199,
@@ -546,6 +588,7 @@ export const contactLensProducts = [
     size: "10 Lens per Pack"
   },
   {
+    id: 43,
     name: "Aqualens 24H Dailies (30 Lens)",
     image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//a/i/aqualens-24h-dailies_118538_1_23_06_2025.png",
     price: 1499,
@@ -558,6 +601,7 @@ export const contactLensProducts = [
     size: "30 Lens per Box"
   },
   {
+    id: 44,
     name: "Aqualens 10H Monthly (1 Lens)",
     image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//a/i/aqualens-10hmonthly_aquacolor-turquoise-premium-powered-monthly---1lp_aquacolor_premium_1_lp(power).png.png",
     price: 299,
@@ -570,6 +614,7 @@ export const contactLensProducts = [
     size: "1 Lens per Box"
   },
   {
+    id: 45,
     name: "Aqualens Daily Disposable (5 Lens)",
     image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//a/i/aqualens-daily-disposable-contact-lenses--5-lenses-box_aqualens-dly-dspoble-cntct-lense-5-lenses_aqualens-dly-dspoble-cntct-lense-5-lenses_aqualens-dly-dspoble-cntct-lense-5-lenses_g_9723_1.png",
     price: 299,
@@ -585,6 +630,7 @@ export const contactLensProducts = [
 
 export const sunglassesProducts = [
   {
+    id: 46,
     name: "Brown Gold Black Geometric Vincent Chase Polarized Pilot",
     image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//v/i/brown-gold-black-full-rim-geometric-vincent-chase-polarized-pilot-collection-vc-s15403-c2-sunglasses_g_0715_01_02_2023.jpg",
     price: 2499,
@@ -597,6 +643,7 @@ export const sunglassesProducts = [
     size: "Medium"
   },
   {
+    id: 47,
     name: "Black Full Rim Square Vincent Chase MIRAGE1 Polarized",
     image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//v/i/Black-Full-Rim-Square-Vincent-Chase--MIRAGE1VC-S11748-C8-Polorized-Sunglasses_vincent-chase-vc-s11748-c8-sunglasses_g_5574_218_02_2022.jpg",
     price: 2299,
@@ -609,6 +656,7 @@ export const sunglassesProducts = [
     size: "Medium"
   },
   {
+    id: 48,
     name: "Vincent Chase VC-S15407-C1 Sunglasses",
     image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//v/i/vincent-chase-vc-s15407-c1-sunglasses_g_2710_07_02_2023.jpg",
     price: 2199,
@@ -621,6 +669,7 @@ export const sunglassesProducts = [
     size: "Medium"
   },
   {
+    id: 49,
     name: "Gold Brown Cat Eye Vincent Chase Polarized Metal Edit",
     image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//v/i/gold-brown-full-rim-cat-eye-vincent-chase-polarized-polarized-the-metal-edit-vc-s11470-c5-sunglasses_vincent-chase-vc-s11470-c5-sunglasses_sunglasses_g_2462_1_28july23.jpg",
     price: 2399,
@@ -633,6 +682,7 @@ export const sunglassesProducts = [
     size: "Medium"
   },
   {
+    id: 50,
     name: "Brown Full Rim Aviator Vincent Chase Metal Edit",
     image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//v/i/brown-full-rim-aviator-vincent-chase-the-metal-edit-vc-s13835-c3-polarized-sunglasses_vincent-chose-vc-s13835-frll-rum-c3-sunglasses_sunglasses_g_3405_1_28july23.jpg",
     price: 2499,
@@ -645,6 +695,7 @@ export const sunglassesProducts = [
     size: "Medium"
   },
   {
+    id: 51,
     name: "Gold Blue Gradient Aviator Vincent Chase Polarized Vintage",
     image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//v/i/gold-blue-gradient-full-rim-aviator-vincent-chase-polarized-vintage-vc-s11075-c12-sunglasses_g_3383_6_02_22.jpg",
     price: 2599,
@@ -657,6 +708,7 @@ export const sunglassesProducts = [
     size: "Medium"
   },
   {
+    id: 52,
     name: "Green Gold Geometric Vincent Chase Polarized Pilot",
     image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//v/i/green-gold-full-rim-geometric-vincent-chase-polarized-pilot-collection-vc-s15403-c1-sunglasses_g_0755_01_02_2023.jpg",
     price: 2499,
@@ -669,6 +721,7 @@ export const sunglassesProducts = [
     size: "Medium"
   },
   {
+    id: 53,
     name: "Silver Pink Gradient Square Vincent Chase Polarized Met Effect",
     image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//v/i/silver-pink-gradient-full-rim-square-vincent-chase-polarized-met-effect-vc-s15400-c3-sunglasses_g_1035_02_02_23.jpg",
     price: 2299,
@@ -681,6 +734,7 @@ export const sunglassesProducts = [
     size: "Medium"
   },
   {
+    id: 54,
     name: "Grey Transparent Geometric Vincent Chase Style Cast",
     image: "https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//v/i/grey-transparent-full-rim-geometric-vincent-chase-style-cast-pc-vc-s13833-c2-sunglasses_vincent-chase-vc-s13833-c2-suglasses_sunglasses_g_6203_28july23.jpg",
     price: 2199,

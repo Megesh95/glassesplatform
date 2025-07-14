@@ -1,6 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import Products from "./components/Products/Products";
+import { RecentlyViewed } from "./components/RecentlyViewedCombined";
 
 const BrandPage = ({
   addToCart,
@@ -30,6 +31,8 @@ const BrandPage = ({
         removeFromWishlist={removeFromWishlist}
         cartItems={cartItems}
       />
+
+      <RecentlyViewed />
     </div>
   );
 };
