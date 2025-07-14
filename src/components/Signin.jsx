@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { app } from '../firebase/firebaseConfig';
 
 const SignIn = ({ onClose, onSwitch, onForgotPassword, darkMode }) => {
@@ -10,7 +10,9 @@ const SignIn = ({ onClose, onSwitch, onForgotPassword, darkMode }) => {
   });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const auth = getAuth(app);
+  const googleProvider = new GoogleAuthProvider();
 
   useEffect(() => {
     setAnimate(true);
@@ -53,17 +55,14 @@ const SignIn = ({ onClose, onSwitch, onForgotPassword, darkMode }) => {
     setIsSubmitting(true);
     
     try {
-      // 1. Sign in with Firebase Auth
       const userCredential = await signInWithEmailAndPassword(
         auth,
         formData.email,
         formData.password
       );
 
-      // 2. Get the Firebase ID token
       const idToken = await userCredential.user.getIdToken();
 
-      // 3. Authenticate with your backend
       const response = await fetch('/user/login', {
         method: 'POST',
         headers: {
@@ -71,8 +70,6 @@ const SignIn = ({ onClose, onSwitch, onForgotPassword, darkMode }) => {
         },
         body: JSON.stringify({
           idToken,
-          // These fields are only needed for new user creation
-          // but we include them in case the user doesn't exist yet
           email: formData.email,
           fullName: userCredential.user.displayName || '',
           phone: '', 
@@ -86,11 +83,6 @@ const SignIn = ({ onClose, onSwitch, onForgotPassword, darkMode }) => {
         throw new Error(data.error || 'Failed to authenticate with backend');
       }
 
-      // 4. Handle successful login
-      console.log('Login successful:', data);
-      
-      // The session cookie is set by the backend automatically
-      // You can now close the modal or redirect
       onClose();
       
     } catch (error) {
@@ -121,6 +113,51 @@ const SignIn = ({ onClose, onSwitch, onForgotPassword, darkMode }) => {
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    setIsGoogleLoading(true);
+    
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      const idToken = await user.getIdToken();
+
+      const response = await fetch('/user/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          idToken,
+          email: user.email,
+          fullName: user.displayName || '',
+          phone: user.phoneNumber || '',
+          isAdmin: false
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to authenticate with backend');
+      }
+
+      onClose();
+    } catch (error) {
+      console.error('Google sign-in error:', error);
+      let errorMessage = 'Google sign-in failed. Please try again.';
+      
+      if (error.code === 'auth/popup-closed-by-user') {
+        errorMessage = 'Sign-in popup was closed. Please try again.';
+      } else if (error.code === 'auth/account-exists-with-different-credential') {
+        errorMessage = 'An account already exists with this email. Please sign in with your password.';
+      }
+      
+      alert(errorMessage);
+    } finally {
+      setIsGoogleLoading(false);
+    }
+  };
+
   return (
     <div className={`fixed inset-0 flex items-center justify-center backdrop-blur-sm ${darkMode ? 'bg-black/70' : 'bg-black/30'} z-50`}>
       <div
@@ -144,6 +181,43 @@ const SignIn = ({ onClose, onSwitch, onForgotPassword, darkMode }) => {
 
         <div className="p-6">
           <h2 className={`text-2xl font-semibold text-center mb-4 ${darkMode ? 'text-zinc-100' : 'text-gray-800'}`}>Sign In</h2>
+          
+          {/* Google Sign In Button */}
+          <button
+            onClick={handleGoogleSignIn}
+            disabled={isGoogleLoading}
+            className={`w-full py-3 rounded-md mb-4 flex items-center justify-center gap-2 ${
+              darkMode 
+                ? 'bg-white text-gray-800 hover:bg-gray-200' 
+                : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+            } ${isGoogleLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+          >
+            {isGoogleLoading ? (
+              <>
+                <svg className="animate-spin h-5 w-5 text-gray-800" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Signing In...
+              </>
+            ) : (
+              <>
+                <img 
+                  src="https://www.google.com/favicon.ico" 
+                  alt="Google" 
+                  className="w-5 h-5" 
+                />
+                Continue with Google
+              </>
+            )}
+          </button>
+
+          <div className="flex items-center my-4">
+            <div className={`flex-1 h-px ${darkMode ? 'bg-zinc-600' : 'bg-gray-300'}`}></div>
+            <span className={`px-3 text-sm ${darkMode ? 'text-zinc-400' : 'text-gray-500'}`}>or</span>
+            <div className={`flex-1 h-px ${darkMode ? 'bg-zinc-600' : 'bg-gray-300'}`}></div>
+          </div>
+
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <div>
               <input
@@ -204,7 +278,7 @@ const SignIn = ({ onClose, onSwitch, onForgotPassword, darkMode }) => {
                   Signing In...
                 </>
               ) : (
-                'Sign In'
+                'Sign In with Email'
               )}
             </button>
             
