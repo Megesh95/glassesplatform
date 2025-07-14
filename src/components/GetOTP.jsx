@@ -7,20 +7,39 @@ const GetOTP = ({ onBack, onOTPSent, darkMode }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     if (!email) {
       setError('Please enter your email');
       return;
     }
-    
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError('Please enter a valid email address');
+      return;
+    }
+
     setIsLoading(true);
     setError('');
-    
+
     try {
-      // Simulate API call to send OTP
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await fetch('/api/auth/req-reset', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to send reset link');
+      }
+
       onOTPSent(email);
     } catch (err) {
-      setError('Failed to send OTP. Please try again.');
+      setError(err.message || 'Failed to send reset link. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -33,7 +52,7 @@ const GetOTP = ({ onBack, onOTPSent, darkMode }) => {
         
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <p className={`text-sm mb-2 ${darkMode ? 'text-zinc-300' : 'text-gray-600'}`}>
-            Enter your email to receive a verification code
+            Enter your email to receive a password reset link
           </p>
           
           <input
@@ -46,6 +65,7 @@ const GetOTP = ({ onBack, onOTPSent, darkMode }) => {
                 ? 'bg-zinc-700 border-zinc-600 focus:ring-blue-400 placeholder-zinc-400 text-zinc-100' 
                 : 'border-gray-300 focus:ring-blue-500'
             }`}
+            autoFocus
           />
           
           {error && <p className="text-red-500 text-sm">{error}</p>}
@@ -59,7 +79,7 @@ const GetOTP = ({ onBack, onOTPSent, darkMode }) => {
                 : 'bg-gray-600 hover:bg-gray-800 text-white'
             }`}
           >
-            {isLoading ? 'Sending...' : 'Send OTP'}
+            {isLoading ? 'Sending...' : 'Send Reset Link'}
           </button>
         </form>
         
@@ -68,6 +88,7 @@ const GetOTP = ({ onBack, onOTPSent, darkMode }) => {
           className={`absolute top-4 right-4 text-xl ${
             darkMode ? 'text-zinc-400 hover:text-zinc-200' : 'text-gray-400 hover:text-gray-600'
           }`}
+          aria-label="Close"
         >
           &times;
         </button>

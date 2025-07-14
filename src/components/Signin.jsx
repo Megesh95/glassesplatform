@@ -75,7 +75,7 @@ const SignIn = ({ onClose, onSwitch, onForgotPassword, darkMode }) => {
           // but we include them in case the user doesn't exist yet
           email: formData.email,
           fullName: userCredential.user.displayName || '',
-          phone: '', // You might want to get this from a separate form if needed
+          phone: '', 
           isAdmin: false
         }),
       });
