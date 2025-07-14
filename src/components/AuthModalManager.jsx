@@ -2,15 +2,33 @@ import React from 'react';
 import SignIn from './Signin';
 import SignUp from './Signup';
 import GetOTP from './GetOTP';
+import VerifyOTP from './VerifyOTP';
+import NewPassword from './NewPassword';
 
 const AuthModalManager = ({ 
   authModal, 
   closeAuthModal, 
   switchAuthModal, 
   handleOTPSent,
-  darkMode // Add darkMode prop
+  darkMode
 }) => {
+  const [resetData, setResetData] = React.useState({
+    email: '',
+    userId: '',
+    token: ''
+  });
+
   if (!authModal.show || !authModal.type) return null;
+
+  const handleOTPVerified = (userId, token) => {
+    setResetData(prev => ({ ...prev, userId, token }));
+    switchAuthModal('newpassword');
+  };
+
+  const handlePasswordResetComplete = () => {
+    setResetData({ email: '', userId: '', token: '' });
+    closeAuthModal();
+  };
 
   return (
     <>
@@ -19,7 +37,7 @@ const AuthModalManager = ({
           onClose={closeAuthModal}
           onSwitch={() => switchAuthModal('signup')}
           onForgotPassword={() => switchAuthModal('getotp')}
-          darkMode={darkMode} // Pass to SignIn
+          darkMode={darkMode}
         />
       )}
 
@@ -27,19 +45,40 @@ const AuthModalManager = ({
         <SignUp
           onClose={closeAuthModal}
           onSwitch={() => switchAuthModal('signin')}
-          darkMode={darkMode} // Pass to SignUp
+          darkMode={darkMode}
         />
       )}
 
       {authModal.type === 'getotp' && (
         <GetOTP
-          onBack={closeAuthModal}
-          onOTPSent={handleOTPSent}
-          darkMode={darkMode} // Pass to GetOTP
+          onBack={() => switchAuthModal('signin')}
+          onOTPSent={(email) => {
+            setResetData(prev => ({ ...prev, email }));
+            handleOTPSent(email);
+            switchAuthModal('verifyotp');
+          }}
+          darkMode={darkMode}
         />
       )}
 
-      
+      {authModal.type === 'verifyotp' && (
+        <VerifyOTP
+          email={resetData.email}
+          onBack={() => switchAuthModal('getotp')}
+          onVerified={handleOTPVerified}
+          darkMode={darkMode}
+        />
+      )}
+
+      {authModal.type === 'newpassword' && (
+        <NewPassword
+          userId={resetData.userId}
+          token={resetData.token}
+          onBack={() => switchAuthModal('verifyotp')}
+          onComplete={handlePasswordResetComplete}
+          darkMode={darkMode}
+        />
+      )}
     </>
   );
 };
