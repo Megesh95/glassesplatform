@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Heart } from "lucide-react";
 
-const ProductCard = ({ product, addToCart, wishlistItems, addToWishlist, removeFromWishlist, cartItems = [] }) => {
+const ProductCard = ({ product, addToCart, wishlistItems, addToWishlist, removeFromWishlist, cartItems = [], onView }) => {
   const [isOpen, setIsOpen] = useState(false);
   const isWishlisted = wishlistItems.some((item) => item.name === product.name);
   const isInCart = cartItems.some((item) => item.name === product.name);
@@ -21,7 +21,10 @@ const ProductCard = ({ product, addToCart, wishlistItems, addToWishlist, removeF
       <div
         className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 p-5 w-full cursor-pointer border border-gray-100 group relative overflow-hidden"
         style={{ fontFamily: "'Inter', sans-serif" }}
-        onClick={() => setIsOpen(true)}
+       onClick={() => {
+  setIsOpen(true);
+  onView && onView(); 
+       }}
         tabIndex={0}
         aria-label={`View details for ${product.name}`}
       >
