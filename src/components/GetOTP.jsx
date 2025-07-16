@@ -23,7 +23,7 @@ const GetOTP = ({ onBack, onOTPSent, darkMode }) => {
     setError('');
 
     try {
-      const response = await fetch('/api/auth/req-reset', {
+      const response = await fetch('http://localhost:5000/auth/req-reset', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

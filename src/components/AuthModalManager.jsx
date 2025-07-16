@@ -1,11 +1,11 @@
 import React from 'react';
-import SignIn from './Signin';
-import SignUp from './Signup';
+import Signin from './Signin';
+import Signup from './Signup';
 import GetOTP from './GetOTP';
 import VerifyOTP from './VerifyOTP';
 import NewPassword from './NewPassword';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { auth } from '../firebase/firebaseConfig'; // Import your Firebase auth instance
+import { auth } from '../firebase/firebaseConfig';
 
 const AuthModalManager = ({ 
   authModal, 
@@ -13,8 +13,8 @@ const AuthModalManager = ({
   switchAuthModal, 
   handleOTPSent,
   darkMode,
-  onGoogleAuthSuccess, // Callback for successful Google auth
-  onGoogleAuthError    // Callback for Google auth errors
+  onGoogleAuthSuccess,
+  onGoogleAuthError
 }) => {
   const [resetData, setResetData] = React.useState({
     email: '',
@@ -22,25 +22,39 @@ const AuthModalManager = ({
     token: ''
   });
 
-  const handleGoogleSignIn = async () => {
+  const handleGoogleSignIn = async (phone = '') => {
     const provider = new GoogleAuthProvider();
-    
+
     try {
       const result = await signInWithPopup(auth, provider);
-      // This gives you a Google Access Token and user info
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential.accessToken;
-      const user = result.user;
-      
-      if (onGoogleAuthSuccess) {
-        onGoogleAuthSuccess(user);
+      const idToken = await result.user.getIdToken();
+
+      const fullName = result.user.displayName || '';
+      const email = result.user.email || '';
+
+      // Send to backend
+      const response = await fetch('http://localhost:5000/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fullName,
+          phone, // from user input on Signup modal
+          idToken,
+          isAdmin: false
+        })
+      });
+
+      if (response.ok) {
+        const user = await response.json();
+        if (onGoogleAuthSuccess) onGoogleAuthSuccess(user);
+        closeAuthModal();
+      } else {
+        const errorData = await response.json();
+        if (onGoogleAuthError) onGoogleAuthError(errorData);
       }
-      closeAuthModal();
     } catch (error) {
       console.error('Google auth error:', error);
-      if (onGoogleAuthError) {
-        onGoogleAuthError(error);
-      }
+      if (onGoogleAuthError) onGoogleAuthError(error);
     }
   };
 
@@ -59,20 +73,20 @@ const AuthModalManager = ({
   return (
     <>
       {authModal.type === 'signin' && (
-        <SignIn
+        <Signin
           onClose={closeAuthModal}
           onSwitch={() => switchAuthModal('signup')}
           onForgotPassword={() => switchAuthModal('getotp')}
-          onGoogleSignIn={handleGoogleSignIn} // Pass Google auth handler
+          onGoogleSignIn={handleGoogleSignIn}
           darkMode={darkMode}
         />
       )}
 
       {authModal.type === 'signup' && (
-        <SignUp
+        <Signup
           onClose={closeAuthModal}
           onSwitch={() => switchAuthModal('signin')}
-          onGoogleSignIn={handleGoogleSignIn} // Pass Google auth handler
+          onGoogleSignIn={handleGoogleSignIn}
           darkMode={darkMode}
         />
       )}
