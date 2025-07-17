@@ -126,10 +126,20 @@ const Signin = ({ onClose, onSwitch, onForgotPassword, darkMode }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className={`w-full max-w-md ${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-xl relative`}>
-        <button onClick={onClose} className="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
-          <X size={24} />
-        </button>
-
+        
+        <div className="w-full h-48 relative">
+          <img
+            src="https://static1.lenskart.com/media/desktop/img/DesignStudioIcons/DesktopLoginImage.svg"
+            alt="Welcome"
+            className="w-full h-full object-cover rounded-t-xl"
+          />
+          <button
+            onClick={onClose}
+            className={`absolute top-4 right-4 ${darkMode ? 'text-zinc-200 hover:text-white' : 'text-white hover:text-gray-200'} text-xl ${darkMode ? 'bg-zinc-700/80' : 'bg-black/40'} rounded-full w-8 h-8 flex items-center justify-center`}
+          >
+            &times;
+          </button>
+        </div>
         <div className="p-8">
           <h2 className={`text-2xl font-bold text-center mb-6 ${
   darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'
