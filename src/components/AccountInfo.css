@@ -1,0 +1,72 @@
+/* AccountInfo.css  */
+
+.accinfo-container {
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 30px;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.accinfo-title {
+  font-size: 26px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.accinfo-subtitle {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.accinfo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.accinfo-label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+  color: #444;
+  font-size: 14px;
+}
+
+.accinfo-input,
+.accinfo-select {
+  margin-top: 6px;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.accinfo-input:focus,
+.accinfo-select:focus {
+  border-color: #4a90e2;
+}
+
+.accinfo-button {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.accinfo-button:hover {
+  background-color: #357abd;
+}

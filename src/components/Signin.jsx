@@ -3,7 +3,8 @@ import { Eye, EyeOff, X, Mail, Lock, Loader2 } from 'lucide-react';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '../firebase/firebaseConfig';
 
-const Signin = ({ onClose, onSwitch, onForgotPassword, darkMode }) => {
+const Signin = ({ onClose, onSwitch, onForgotPassword, darkMode, onAuthSuccess }) => {
+
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -74,12 +75,22 @@ const Signin = ({ onClose, onSwitch, onForgotPassword, darkMode }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ idToken: idToken }),
+        body: JSON.stringify({ idToken }),
       });
 
       const jsonresponse = await response.json();
       console.log('Backend login response:', jsonresponse);
+
+    // 👇 Add this line to notify App.jsx
+    if (jsonresponse.user) {
+      console.log('✅ Signin.jsx: Calling onAuthSuccess with:', jsonresponse.user);
+      onAuthSuccess(jsonresponse.user);
+    } else {
+      console.warn('Signin.jsx: No user in response');
+    }
+
       onClose(); // success
+
     } catch (error) {
       console.error('Backend login error:', error);
       setError('Failed to complete login.');
