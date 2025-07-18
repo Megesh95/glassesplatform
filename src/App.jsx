@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Wishlist from "./components/Wishlist";
@@ -9,8 +9,9 @@ import ChatBot from "./components/ChatBot";
 import HomePage from "./pages/HomePage";
 import AuthModalManager from "./components/AuthModalManager";
 import Products from "./components/Products/Products";
-import Appointment from './components/appointment';
+import Appointment from "./components/appointment";
 import BrandPage from "./BrandPage";
+import AccountInfo from "./components/AccountInfo";
 import { RecentlyViewedProvider } from "./components/RecentlyViewedCombined";
 
 const App = () => {
@@ -22,6 +23,16 @@ const App = () => {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      const parsed = JSON.parse(savedUser);
+      console.log("App.jsx: Restoring user from localStorage", parsed);
+      setUser(parsed);
+      setIsAuthenticated(true);
+    }
+  }, []);
+
   const [darkMode, setDarkMode] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [wishlistItems, setWishlistItems] = useState([]);
@@ -43,19 +54,24 @@ const App = () => {
   };
 
   const handleAuthSuccess = (userData) => {
-    setIsAuthenticated(true);
+    console.log("✅ App.jsx: handleAuthSuccess called with:", userData);
     setUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData)); // optional
+    setIsAuthenticated(true);
     closeAuthModal();
   };
 
+  console.log("App.jsx: user state in render:", user);
   const handleOTPSent = (email) => {
-    setAuthModal(prev => ({ ...prev, email }));
+    setAuthModal((prev) => ({ ...prev, email }));
   };
 
   // Cart Functions
   const addToCart = (product) => {
     setCartItems((prev) => {
-      const idx = prev.findIndex((item) => item.name === product.name && item.size === product.size);
+      const idx = prev.findIndex(
+        (item) => item.name === product.name && item.size === product.size
+      );
       if (idx !== -1) {
         return prev.map((item, i) =>
           i === idx ? { ...item, quantity: (item.quantity || 1) + 1 } : item
@@ -98,9 +114,9 @@ const App = () => {
       <Router>
         <RecentlyViewedProvider>
           <div className="font-sans min-h-screen dark:bg-zinc-950 bg-zinc-100 flex flex-col">
-            <Header 
+            <Header
               darkMode={darkMode}
-              onLoginClick={() => openAuthModal('signin')}
+              onLoginClick={() => openAuthModal("signin")}
               cartCount={cartItems.length}
               wishlistCount={wishlistItems.length}
               toggleWishlist={() => setShowWishlist((prev) => !prev)}
@@ -109,61 +125,95 @@ const App = () => {
             />
 
             {/* Dark Mode Toggle Button */}
-            <button 
-              onClick={() => setDarkMode(!darkMode)} 
+            <button
+              onClick={() => setDarkMode(!darkMode)}
               className={`fixed bottom-8 shadow-[0_2px_5px_1px_rgba(0,0,0,0.25)] hover:scale-[1.05] left-5 z-30 ${
                 darkMode ? "bg-zinc-700" : "bg-zinc-200"
               } w-[10vh] h-[10vh] rounded-full flex items-center justify-center`}
             >
-              {darkMode ? 
-                <img src="/dark.svg" className="size-[50%]" alt="Light mode"/>
-                :
-                <img src="/lightblack.svg" className="size-[50%]" alt="Dark mode"/>
-              }
+              {darkMode ? (
+                <img src="/dark.svg" className="size-[50%]" alt="Light mode" />
+              ) : (
+                <img
+                  src="/lightblack.svg"
+                  className="size-[50%]"
+                  alt="Dark mode"
+                />
+              )}
             </button>
 
             <main className="flex-grow">
               <Routes>
-                <Route path="/" element={
-                  <HomePage 
-                    addToCart={addToCart} 
-                    addToWishlist={addToWishlist} 
-                    wishlistItems={wishlistItems} 
-                    removeFromWishlist={removeFromWishlist} 
-                    darkMode={darkMode} 
-                  />
-                } />
-                <Route path="/cart" element={
-                  <Cart 
-                    cart={cartItems} 
-                    removeFromCart={removeFromCart} 
-                    increaseQuantity={increaseQuantity} 
-                    wishlistItems={wishlistItems} 
-                    addToCart={addToCart} 
-                    removeFromWishlist={removeFromWishlist} 
-                    addToWishlist={addToWishlist}
-                  />
-                } />
-                <Route path="/trackorder" element={<TrackOrder darkMode={darkMode} />} />
-                <Route path="/eyeglasses" element={
-                  <Products 
-                    addToCart={addToCart} 
-                    wishlistItems={wishlistItems} 
-                    addToWishlist={addToWishlist} 
-                    removeFromWishlist={removeFromWishlist} 
-                    cartItems={cartItems} 
-                  />
-                } />
-                <Route path="/appointment" element={<Appointment darkMode={darkMode} />} />
-                <Route path="/brand/:brandName" element={
-                  <BrandPage  
-                    addToCart={addToCart}  
-                    wishlistItems={wishlistItems}  
-                    addToWishlist={addToWishlist} 
-                    removeFromWishlist={removeFromWishlist} 
-                    cartItems={cartItems} 
-                  />
-                } />
+                <Route
+                  path="/"
+                  element={
+                    <HomePage
+                      addToCart={addToCart}
+                      addToWishlist={addToWishlist}
+                      wishlistItems={wishlistItems}
+                      removeFromWishlist={removeFromWishlist}
+                      darkMode={darkMode}
+                    />
+                  }
+                />
+                <Route
+                  path="/cart"
+                  element={
+                    <Cart
+                      cart={cartItems}
+                      removeFromCart={removeFromCart}
+                      increaseQuantity={increaseQuantity}
+                      wishlistItems={wishlistItems}
+                      addToCart={addToCart}
+                      removeFromWishlist={removeFromWishlist}
+                      addToWishlist={addToWishlist}
+                    />
+                  }
+                />
+                <Route
+                  path="/trackorder"
+                  element={<TrackOrder darkMode={darkMode} />}
+                />
+                <Route
+                  path="/user"
+                  element={
+                    <>
+                      {console.log(
+                        "App.jsx: Rendering /user route with user:",
+                        user
+                      )}
+                      <AccountInfo user={user} />
+                    </>
+                  }
+                />{" "}
+                <Route
+                  path="/eyeglasses"
+                  element={
+                    <Products
+                      addToCart={addToCart}
+                      wishlistItems={wishlistItems}
+                      addToWishlist={addToWishlist}
+                      removeFromWishlist={removeFromWishlist}
+                      cartItems={cartItems}
+                    />
+                  }
+                />
+                <Route
+                  path="/appointment"
+                  element={<Appointment darkMode={darkMode} />}
+                />
+                <Route
+                  path="/brand/:brandName"
+                  element={
+                    <BrandPage
+                      addToCart={addToCart}
+                      wishlistItems={wishlistItems}
+                      addToWishlist={addToWishlist}
+                      removeFromWishlist={removeFromWishlist}
+                      cartItems={cartItems}
+                    />
+                  }
+                />
               </Routes>
             </main>
 
@@ -180,10 +230,10 @@ const App = () => {
             />
 
             {/* Chat Bot */}
-            <ChatBot 
-              cart={cartItems} 
-              wishlist={wishlistItems} 
-              darkMode={darkMode} 
+            <ChatBot
+              cart={cartItems}
+              wishlist={wishlistItems}
+              darkMode={darkMode}
             />
           </div>
 

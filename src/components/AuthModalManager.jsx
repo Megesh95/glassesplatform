@@ -14,7 +14,8 @@ const AuthModalManager = ({
   handleOTPSent,
   darkMode,
   onGoogleAuthSuccess,
-  onGoogleAuthError
+  onGoogleAuthError,
+  onAuthSuccess 
 }) => {
   const [resetData, setResetData] = React.useState({
     email: '',
@@ -79,6 +80,7 @@ const AuthModalManager = ({
           onForgotPassword={() => switchAuthModal('getotp')}
           onGoogleSignIn={handleGoogleSignIn}
           darkMode={darkMode}
+          onAuthSuccess={onAuthSuccess}
         />
       )}
 
