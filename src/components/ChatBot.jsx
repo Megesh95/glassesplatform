@@ -392,13 +392,13 @@ function startNewConversationHandler() {
     const summaryTitle = firstUserMsg?.text?.slice(0, 20) || "Conversation";
 
     const newHistoryItem = {
-  id: "#" + Math.floor(100000000 + Math.random() * 900000000),
-  title: summaryTitle,
-  avatar: [avatar1, avatar2, avatar3][Math.floor(Math.random() * 3)],
-  timeAgo: "Just now",
-  sortIndex: Date.now(),
-  messages: [...messages],
-};
+      id: "#" + Math.floor(100000000 + Math.random() * 900000000),
+      title: summaryTitle,
+      avatar: [avatar1, avatar2, avatar3][Math.floor(Math.random() * 3)],
+      timeAgo: "Just now",
+      sortIndex: Date.now(),
+      messages: [...messages], 
+    };
 
     setConversationHistory(prev => [newHistoryItem, ...prev]);
   }
@@ -408,6 +408,7 @@ function startNewConversationHandler() {
   setMessages([]);
   setInputText("");
 }
+
 
 
 
@@ -539,6 +540,9 @@ useEffect(() => {
 >
   →
 </div>
+{conversationHistory.length === 0 && (
+  <div style={{ padding: "10px", color: "#888" }}>No past conversations found.</div>
+)}
 
     </div>
 ))}
