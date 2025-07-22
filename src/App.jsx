@@ -14,6 +14,11 @@ import BrandPage from "./BrandPage";
 import AccountInfo from "./components/AccountInfo";
 import { RecentlyViewedProvider } from "./components/RecentlyViewedCombined";
 import ResetPassword from "./components/ResetPassword";
+import SunglassesPage from "./pages/SunglassesPage";
+import ScreenGlassesPage from "./pages/ScreenGlassesPage";
+import KidsGlassesPage from "./pages/KidsGlassesPage";
+import ContactLensesPage from "./pages/ContactLensesPage";
+import HomeEyeTestPage from "./pages/HomeEyeTestPage";
 
 const App = () => {
   const [authModal, setAuthModal] = useState({
@@ -200,6 +205,18 @@ const App = () => {
                   }
                 />
                 <Route
+                  path="/sunglasses"
+                  element={
+                    <SunglassesPage
+                      addToCart={addToCart}
+                      addToWishlist={addToWishlist}
+                      wishlistItems={wishlistItems}
+                      removeFromWishlist={removeFromWishlist}
+                      cartItems={cartItems}
+                    />
+                  }
+                />
+                <Route
                   path="/appointment"
                   element={<Appointment darkMode={darkMode} />}
                 />
@@ -218,6 +235,46 @@ const App = () => {
                 <Route 
                   path="/reset-password/:userId/:token" 
                   element={<ResetPassword />} 
+                />
+                <Route
+                  path="/screenglasses"
+                  element={
+                    <ScreenGlassesPage
+                      addToCart={addToCart}
+                      addToWishlist={addToWishlist}
+                      wishlistItems={wishlistItems}
+                      removeFromWishlist={removeFromWishlist}
+                      cartItems={cartItems}
+                    />
+                  }
+                />
+                <Route
+                  path="/kidsglasses"
+                  element={
+                    <KidsGlassesPage
+                      addToCart={addToCart}
+                      addToWishlist={addToWishlist}
+                      wishlistItems={wishlistItems}
+                      removeFromWishlist={removeFromWishlist}
+                      cartItems={cartItems}
+                    />
+                  }
+                />
+                <Route
+                  path="/contactlenses"
+                  element={
+                    <ContactLensesPage
+                      addToCart={addToCart}
+                      addToWishlist={addToWishlist}
+                      wishlistItems={wishlistItems}
+                      removeFromWishlist={removeFromWishlist}
+                      cartItems={cartItems}
+                    />
+                  }
+                />
+                <Route
+                  path="/home-eye-test"
+                  element={<HomeEyeTestPage />}
                 />
               </Routes>
             </main>

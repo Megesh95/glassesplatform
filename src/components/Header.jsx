@@ -134,48 +134,42 @@ function Header({ onLoginClick, darkMode, cartCount, wishlistCount, toggleWishli
       <nav className = "flex bg-zinc-200 dark:bg-zinc-700 text-[rgba(0,0,80,1)] dark:text-[rgba(230,230,255,1)] px-10 h-16" id="navigator">
         <div id = "navleft" className = "flex justify-evenly gap-4 font-semibold">
           <button onClick = {() => {
-            navCard === "eyeglasses" ? setNavCard("") : setNavCard("eyeglasses")
-            setGender(0)
-            setCategory(classiceyeglasses)
+            setNavCard("");
+            navigate("/eyeglasses");
           }}>
             EYEGLASSES
           </button>
           <button onClick = {() => {
-            navCard === "screenglasses" ? setNavCard("") : setNavCard("screenglasses")
-            setGender(0)
-            setCategory(null)
-          }}
-          >
+            setNavCard("");
+            navigate("/screenglasses");
+          }}>
             SCREEN GLASSES
           </button>
           <button onClick = {() => {
-            navCard === "kidsglasses" ? setNavCard("") : setNavCard("kidsglasses")
-            setGender(0)
-            setCategory(null)
-          }}
-          >
+            setNavCard("");
+            navigate("/kidsglasses");
+          }}>
             KIDS GLASSES
           </button>
           <button onClick = {() => {
-            navCard === "contactlenses" ? setNavCard("") : setNavCard("contactlenses")
-            setGender(null)
-            setCategory(contactlenses)
-          }}
-          >
+            setNavCard("");
+            navigate("/contactlenses");
+          }}>
             CONTACT LENSES
           </button>
           <button onClick = {() => {
-            navCard === "sunglasses" ? setNavCard("") : setNavCard("sunglasses")
-            setGender(0)
-            setCategory(classiceyeglasses)
+            setNavCard("");
+            navigate("/sunglasses");
           }}
           >
             SUN GLASSES
           </button>
           <button onClick = {() => {
-            navCard === "eyetest" ? setNavCard("") : setNavCard("eyetest")
-          }}
-          >HOME EYE-TEST</button>
+            setNavCard("");
+            navigate("/home-eye-test");
+          }}>
+            HOME EYE-TEST
+          </button>
           <button onClick = {() => {
             navCard === "storelocator" ? setNavCard("") : setNavCard("storelocator")
           }}
