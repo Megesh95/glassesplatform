@@ -21,15 +21,18 @@ const AuthModalManager = ({
   });
   const [googleLoading, setGoogleLoading] = useState(false);
   const [googleError, setGoogleError] = useState('');
+  const [resetError, setResetError] = useState('');
 
   // Handle forgot password flow
   const handleForgotPassword = () => {
+    setResetError('');
     switchAuthModal('requestReset');
   };
 
   // Handle password reset request
   const handlePasswordResetRequest = async (email) => {
     try {
+      setResetError('');
       const response = await fetch('http://localhost:5000/auth/req-reset', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -39,54 +42,66 @@ const AuthModalManager = ({
       const data = await response.json();
       if (response.ok) {
         setResetData(prev => ({ ...prev, email }));
-        switchAuthModal('verifyResetToken');
+        return { success: true, message: data.message || 'Reset link sent to your email' };
       } else {
         throw new Error(data.message || 'Failed to send reset link');
       }
     } catch (error) {
       console.error('Password reset request failed:', error);
-      return Promise.reject(error.message || 'Error requesting password reset');
+      setResetError(error.message);
+      return { success: false, message: error.message };
     }
   };
 
-  // Handle token verification
+  // Handle token verification (when user clicks email link)
   const handleTokenVerification = async (token, userId) => {
     try {
-      const response = await fetch(`http://localhost:5000/auth/verify-reset/${userId}/${token}`, {
+      setResetError('');
+      const response = await fetch(`http://localhost:5000/auth/verify-reset`, {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token, userId }),
       });
       
       const data = await response.json();
       if (response.ok) {
         setResetData(prev => ({ ...prev, token, userId }));
         switchAuthModal('resetPassword');
+        return true;
       } else {
         throw new Error(data.message || 'Token verification failed');
       }
     } catch (error) {
       console.error('Token verification failed:', error);
-      return Promise.reject(error.message || 'Error verifying token');
+      setResetError(error.message);
+      return false;
     }
   };
 
-  // Handle password reset
+  // Handle password reset - Updated to match your API endpoint
   const handlePasswordReset = async (newPassword) => {
     try {
+      setResetError('');
       const response = await fetch(`http://localhost:5000/auth/reset/${resetData.userId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ newPassword }),
+        body: JSON.stringify({ 
+          token: resetData.token,
+          newPassword 
+        }),
       });
       
       const data = await response.json();
       if (response.ok) {
         closeAuthModal();
+        return { success: true, message: 'Password reset successfully' };
       } else {
         throw new Error(data.message || 'Password reset failed');
       }
     } catch (error) {
-      console.log('Password reset failed:', error);
-      return Promise.reject(error.message || 'Error resetting password');
+      console.error('Password reset failed:', error);
+      setResetError(error.message);
+      return { success: false, message: error.message };
     }
   };
 
@@ -99,11 +114,7 @@ const AuthModalManager = ({
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       
-      // The signed-in user info
       const user = result.user;
-      console.log('Google sign-in success:', user);
-      
-      // Send the Google ID token to your backend
       const idToken = await user.getIdToken();
       const response = await fetch('http://localhost:5000/auth/login', {
         method: 'POST',
@@ -166,6 +177,7 @@ const AuthModalManager = ({
           onBack={() => switchAuthModal('signin')}
           onSubmit={handlePasswordResetRequest}
           darkMode={darkMode}
+          error={resetError}
         />
       )}
 
@@ -176,17 +188,19 @@ const AuthModalManager = ({
           onBack={() => switchAuthModal('requestReset')}
           onVerified={handleTokenVerification}
           darkMode={darkMode}
+          error={resetError}
         />
       )}
 
       {/* Reset Password Modal */}
       {authModal.type === 'resetPassword' && (
-  <ResetPassword
-    onBack={() => switchAuthModal('verifyResetToken')}
-    onSubmit={handlePasswordReset}  // Make sure this is passed correctly
-    darkMode={darkMode}
-  />
-)}
+        <ResetPassword
+          onBack={() => switchAuthModal('verifyResetToken')}
+          onSubmit={handlePasswordReset}
+          darkMode={darkMode}
+          error={resetError}
+        />
+      )}
     </>
   );
 };
