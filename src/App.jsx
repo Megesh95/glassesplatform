@@ -13,6 +13,7 @@ import Appointment from "./components/appointment";
 import BrandPage from "./BrandPage";
 import AccountInfo from "./components/AccountInfo";
 import { RecentlyViewedProvider } from "./components/RecentlyViewedCombined";
+import ResetPassword from "./components/ResetPassword";
 
 const App = () => {
   const [authModal, setAuthModal] = useState({
@@ -213,6 +214,10 @@ const App = () => {
                       cartItems={cartItems}
                     />
                   }
+                />
+                <Route 
+                  path="/reset-password/:userId/:token" 
+                  element={<ResetPassword />} 
                 />
               </Routes>
             </main>

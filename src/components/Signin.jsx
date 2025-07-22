@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff, X, Mail, Lock, Loader2 } from 'lucide-react';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { auth } from '../firebase/firebaseConfig';
 
-const Signin = ({ onClose, onSwitch, onForgotPassword, darkMode, onAuthSuccess }) => {
-
+const Signin = ({ 
+  onClose, 
+  onSwitch, 
+  onForgotPassword, 
+  darkMode, 
+  onAuthSuccess,
+  onGoogleSignIn,
+  googleLoading,
+  googleError
+}) => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleChange = (e) => {
@@ -51,7 +56,6 @@ const Signin = ({ onClose, onSwitch, onForgotPassword, darkMode, onAuthSuccess }
         throw new Error(jsonresponse.error?.message || 'Login failed');
       }
 
-      console.log(jsonresponse); // contains idToken, email, etc.
       await sendLoginToken(jsonresponse.idToken);
 
     } catch (err) {
@@ -79,58 +83,15 @@ const Signin = ({ onClose, onSwitch, onForgotPassword, darkMode, onAuthSuccess }
       });
 
       const jsonresponse = await response.json();
-      console.log('Backend login response:', jsonresponse);
-
-    // 👇 Add this line to notify App.jsx
-    if (jsonresponse.user) {
-      console.log('✅ Signin.jsx: Calling onAuthSuccess with:', jsonresponse.user);
-      onAuthSuccess(jsonresponse.user);
-    } else {
-      console.warn('Signin.jsx: No user in response');
-    }
-
-      onClose(); // success
-
+      if (jsonresponse.user) {
+        onAuthSuccess(jsonresponse.user);
+        onClose();
+      } else {
+        setError('Failed to complete login.');
+      }
     } catch (error) {
       console.error('Backend login error:', error);
       setError('Failed to complete login.');
-    }
-  };
-
-  const signInWithGoogle = async () => {
-    try {
-      setGoogleLoading(true);
-      setError('');
-      
-      const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider);
-      
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential.accessToken;
-      
-      // The signed-in user info
-      const user = result.user;
-      console.log('Google sign-in success:', user);
-      
-      // Send the Google ID token to your backend
-      const idToken = await user.getIdToken();
-      await sendLoginToken(idToken);
-      
-    } catch (error) {
-      console.error('Google sign-in error:', error);
-      
-      // Handle Errors here.
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      
-      if (errorCode === 'auth/account-exists-with-different-credential') {
-        setError('An account already exists with the same email but different sign-in method.');
-      } else {
-        setError('Google sign-in failed. Please try again.');
-      }
-    } finally {
-      setGoogleLoading(false);
     }
   };
 
@@ -152,20 +113,17 @@ const Signin = ({ onClose, onSwitch, onForgotPassword, darkMode, onAuthSuccess }
           </button>
         </div>
         <div className="p-8">
-          <h2 className={`text-2xl font-bold text-center mb-6 ${
-  darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'
-}`}>Sign In</h2>
+          <h2 className={`text-2xl font-bold text-center mb-6 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Sign In</h2>
 
-          {error && (
+          {(error || googleError) && (
             <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-              {error}
+              {error || googleError}
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className={`block text-sm font-medium mb-1"  ${
-                darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'}`}>Email</label>
+              <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Email</label>
               <div className="relative">
                 <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
                 <input
@@ -173,7 +131,7 @@ const Signin = ({ onClose, onSwitch, onForgotPassword, darkMode, onAuthSuccess }
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 ${darkMode ? 'bg-gray-700 border-gray-600 text-white focus:ring-blue-500' : 'bg-white border-gray-300 text-gray-900 focus:ring-blue-500'}`}
                   placeholder="Enter your email"
                   required
                 />
@@ -181,8 +139,7 @@ const Signin = ({ onClose, onSwitch, onForgotPassword, darkMode, onAuthSuccess }
             </div>
 
             <div>
-              <label className={`block text-sm font-medium mb-1"  ${
-                darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'}`}>Password</label>
+              <label className={`block text-sm font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Password</label>
               <div className="relative">
                 <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
                 <input
@@ -190,7 +147,7 @@ const Signin = ({ onClose, onSwitch, onForgotPassword, darkMode, onAuthSuccess }
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-10 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className={`w-full pl-10 pr-10 py-2 border rounded-lg focus:ring-2 ${darkMode ? 'bg-gray-700 border-gray-600 text-white focus:ring-blue-500' : 'bg-white border-gray-300 text-gray-900 focus:ring-blue-500'}`}
                   placeholder="Enter your password"
                   required
                 />
@@ -234,7 +191,7 @@ const Signin = ({ onClose, onSwitch, onForgotPassword, darkMode, onAuthSuccess }
 
             <div className="mt-6 grid grid-cols-1 gap-3">
               <button
-                onClick={signInWithGoogle}
+                onClick={onGoogleSignIn}
                 disabled={googleLoading}
                 className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
