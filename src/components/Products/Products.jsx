@@ -5,7 +5,7 @@ import { useRecentlyViewed } from "../RecentlyViewedCombined";
 
 
 
-function Products({ addToCart, wishlistItems, selectedBrand, addToWishlist, removeFromWishlist, cartItems, showFilterSidebar = true, customProducts, hideHeader = false }) {
+function Products({ addToCart, wishlistItems, selectedBrand, addToWishlist, removeFromWishlist, cartItems, showFilterSidebar = true, customProducts, hideHeader = false, darkMode = false }) {
 
   const [sortOption, setSortOption] = useState("");
   const { addRecentlyViewed } = useRecentlyViewed();
@@ -32,28 +32,28 @@ console.log("Filtered Products:", filteredProducts);
 
 
   return (
-    <div className="w-full py-4 bg-gray-50 min-h-screen flex flex-col items-center">
+    <div className={`w-full py-4 min-h-screen flex flex-col items-center ${darkMode ? 'dark bg-zinc-950' : 'bg-gray-50'}`}>
       {/* Header */}
       {!hideHeader && (
-        <h2 className="text-xl font-semibold text-center w-full mb-2">Eyeglasses for You</h2>
+        <h2 className={`text-xl font-semibold text-center w-full mb-2 ${darkMode ? 'text-zinc-100' : ''}`}>Eyeglasses for You</h2>
       )}
       <div className="flex w-full max-w-7xl mx-auto">
         {/* Filter Sidebar */}
         {showFilterSidebar && (
-        <aside className="w-64 min-w-[200px] max-w-xs bg-white rounded-lg shadow p-6 mr-8 h-fit sticky top-24 self-start hidden md:block">
+        <aside className={`w-64 min-w-[200px] max-w-xs rounded-lg shadow p-6 mr-8 h-fit sticky top-24 self-start hidden md:block ${darkMode ? 'bg-zinc-900 text-zinc-100 border-zinc-700' : 'bg-white text-gray-900 border-gray-200'}` }>
           {/* FRAME TYPE */}
           <div className="mb-6">
-            <h3 className="font-semibold text-gray-700 mb-3 text-sm">FRAME TYPE</h3>
+            <h3 className={`font-semibold mb-3 text-sm ${darkMode ? 'text-zinc-200' : 'text-gray-700'}`}>FRAME TYPE</h3>
             <div className="grid grid-cols-3 gap-2">
-              <button className="flex flex-col items-center p-2 border border-gray-200 rounded hover:border-teal-500">
+              <button className={`flex flex-col items-center p-2 border rounded hover:border-teal-500 ${darkMode ? 'border-zinc-700' : 'border-gray-200'}`}>
                 <img src="/navpics/eyeglasses.webp" alt="Full Rim" className="h-8 mb-1 opacity-60" />
                 <span className="text-xs text-gray-700">Full Rim</span>
               </button>
-              <button className="flex flex-col items-center p-2 border border-gray-200 rounded hover:border-teal-500">
+              <button className={`flex flex-col items-center p-2 border rounded hover:border-teal-500 ${darkMode ? 'border-zinc-700' : 'border-gray-200'}`}>
                 <img src="/navpics/eyeglasses.webp" alt="Rimless" className="h-8 mb-1 opacity-60" />
                 <span className="text-xs text-gray-700">Rimless</span>
               </button>
-              <button className="flex flex-col items-center p-2 border border-gray-200 rounded hover:border-teal-500">
+              <button className={`flex flex-col items-center p-2 border rounded hover:border-teal-500 ${darkMode ? 'border-zinc-700' : 'border-gray-200'}`}>
                 <img src="/navpics/eyeglasses.webp" alt="Half Rim" className="h-8 mb-1 opacity-60" />
                 <span className="text-xs text-gray-700">Half Rim</span>
               </button>
@@ -61,37 +61,37 @@ console.log("Filtered Products:", filteredProducts);
           </div>
           {/* FRAME SHAPE */}
           <div className="mb-6">
-            <h3 className="font-semibold text-gray-700 mb-3 text-sm">FRAME SHAPE</h3>
+            <h3 className={`font-semibold mb-3 text-sm ${darkMode ? 'text-zinc-200' : 'text-gray-700'}`}>FRAME SHAPE</h3>
             <div className="grid grid-cols-3 gap-2">
-              <button className="flex flex-col items-center p-2 border border-gray-200 rounded hover:border-teal-500">
+              <button className={`flex flex-col items-center p-2 border rounded hover:border-teal-500 ${darkMode ? 'border-zinc-700' : 'border-gray-200'}`}>
                 <img src="/navpics/eyeglasses.webp" alt="Rectangle" className="h-8 mb-1 opacity-60" />
                 <span className="text-xs text-gray-700">Rectangle</span>
               </button>
-              <button className="flex flex-col items-center p-2 border border-gray-200 rounded hover:border-teal-500">
+              <button className={`flex flex-col items-center p-2 border rounded hover:border-teal-500 ${darkMode ? 'border-zinc-700' : 'border-gray-200'}`}>
                 <img src="/navpics/eyeglasses.webp" alt="Square" className="h-8 mb-1 opacity-60" />
                 <span className="text-xs text-gray-700">Square</span>
               </button>
-              <button className="flex flex-col items-center p-2 border border-gray-200 rounded hover:border-teal-500">
+              <button className={`flex flex-col items-center p-2 border rounded hover:border-teal-500 ${darkMode ? 'border-zinc-700' : 'border-gray-200'}`}>
                 <img src="/navpics/eyeglasses.webp" alt="Cat Eye" className="h-8 mb-1 opacity-60" />
                 <span className="text-xs text-gray-700">Cat Eye</span>
               </button>
-              <button className="flex flex-col items-center p-2 border border-gray-200 rounded hover:border-teal-500">
+              <button className={`flex flex-col items-center p-2 border rounded hover:border-teal-500 ${darkMode ? 'border-zinc-700' : 'border-gray-200'}`}>
                 <img src="/navpics/eyeglasses.webp" alt="Round" className="h-8 mb-1 opacity-60" />
                 <span className="text-xs text-gray-700">Round</span>
               </button>
-              <button className="flex flex-col items-center p-2 border border-gray-200 rounded hover:border-teal-500">
+              <button className={`flex flex-col items-center p-2 border rounded hover:border-teal-500 ${darkMode ? 'border-zinc-700' : 'border-gray-200'}`}>
                 <img src="/navpics/eyeglasses.webp" alt="Geometric" className="h-8 mb-1 opacity-60" />
                 <span className="text-xs text-gray-700">Geometric</span>
               </button>
-              <button className="flex flex-col items-center p-2 border border-gray-200 rounded hover:border-teal-500">
+              <button className={`flex flex-col items-center p-2 border rounded hover:border-teal-500 ${darkMode ? 'border-zinc-700' : 'border-gray-200'}`}>
                 <img src="/navpics/eyeglasses.webp" alt="Aviator" className="h-8 mb-1 opacity-60" />
                 <span className="text-xs text-gray-700">Aviator</span>
               </button>
-              <button className="flex flex-col items-center p-2 border border-gray-200 rounded hover:border-teal-500">
+              <button className={`flex flex-col items-center p-2 border rounded hover:border-teal-500 ${darkMode ? 'border-zinc-700' : 'border-gray-200'}`}>
                 <img src="/navpics/eyeglasses.webp" alt="Oval" className="h-8 mb-1 opacity-60" />
                 <span className="text-xs text-gray-700">Oval</span>
               </button>
-              <button className="flex flex-col items-center p-2 border border-gray-200 rounded hover:border-teal-500">
+              <button className={`flex flex-col items-center p-2 border rounded hover:border-teal-500 ${darkMode ? 'border-zinc-700' : 'border-gray-200'}`}>
                 <img src="/navpics/eyeglasses.webp" alt="Clubmaster" className="h-8 mb-1 opacity-60" />
                 <span className="text-xs text-gray-700">Clubmaster</span>
               </button>
@@ -99,7 +99,7 @@ console.log("Filtered Products:", filteredProducts);
           </div>
           {/* FRAME COLOR */}
           <div className="mb-6">
-            <h3 className="font-semibold text-gray-700 mb-3 text-sm">FRAME COLOR</h3>
+            <h3 className={`font-semibold mb-3 text-sm ${darkMode ? 'text-zinc-200' : 'text-gray-700'}`}>FRAME COLOR</h3>
             <div className="flex flex-col gap-2 max-h-32 overflow-y-auto pr-2">
               <label className="flex items-center text-xs text-gray-700">
                 <input type="checkbox" className="mr-2" /> Black (493)
@@ -136,6 +136,7 @@ console.log("Filtered Products:", filteredProducts);
                 removeFromWishlist={removeFromWishlist}
                 cartItems={cartItems}
                 onView={() => addRecentlyViewed(product)}
+                darkMode={darkMode}
               />
             ))}
           </div>

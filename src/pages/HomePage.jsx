@@ -21,6 +21,7 @@ const HomePage = ({ addToCart, addToWishlist, wishlistItems, removeFromWishlist,
           wishlistItems={wishlistItems}
           removeFromWishlist={removeFromWishlist}
           showFilterSidebar={false}
+          darkMode={darkMode}
         />
       </div>
       

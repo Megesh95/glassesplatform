@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Heart } from "lucide-react";
 
-const ProductCard = ({ product, addToCart, wishlistItems, addToWishlist, removeFromWishlist, cartItems = [], onView }) => {
+const ProductCard = ({ product, addToCart, wishlistItems, addToWishlist, removeFromWishlist, cartItems = [], onView, darkMode = false }) => {
   const [isOpen, setIsOpen] = useState(false);
   const isWishlisted = wishlistItems.some((item) => item.name === product.name);
   const isInCart = cartItems.some((item) => item.name === product.name);
@@ -19,7 +19,7 @@ const ProductCard = ({ product, addToCart, wishlistItems, addToWishlist, removeF
     <>
       {/* Card */}
       <div
-        className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 p-5 w-full cursor-pointer border border-gray-100 group relative overflow-hidden"
+        className={`rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 p-5 w-full cursor-pointer border group relative overflow-hidden ${darkMode ? 'bg-zinc-900 border-zinc-700 text-zinc-100' : 'bg-white border-gray-100 text-gray-900'}`}
         style={{ fontFamily: "'Inter', sans-serif" }}
        onClick={() => {
   setIsOpen(true);
@@ -74,12 +74,12 @@ const ProductCard = ({ product, addToCart, wishlistItems, addToWishlist, removeF
         {/* Price and Color Swatches */}
         <div className="flex items-center justify-between mt-3">
           <div className="flex items-center gap-2">
-            <span className="text-gray-900 font-bold text-lg">₹{product.price}</span>
+            <span className={`${darkMode ? 'text-zinc-100' : 'text-gray-900'} font-bold text-lg`}>₹{product.price}</span>
             {product.originalPrice && (
-              <span className="text-gray-400 line-through text-sm">₹{product.originalPrice}</span>
+              <span className={`${darkMode ? 'text-zinc-400' : 'text-gray-400'} line-through text-sm`}>₹{product.originalPrice}</span>
             )}
             {product.discount && (
-              <span className="bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded">
+              <span className={`${darkMode ? 'bg-green-900 text-green-200' : 'bg-green-100 text-green-700'} text-xs font-semibold px-2 py-0.5 rounded`}>
                 {product.discount}% OFF
               </span>
             )}
@@ -101,8 +101,8 @@ const ProductCard = ({ product, addToCart, wishlistItems, addToWishlist, removeF
 
       {/* Modal */}
       {isOpen && (
-        <div className="fixed inset-0 bg-black/20 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-xl w-[95%] max-w-lg relative shadow-lg border border-gray-200 flex flex-col items-center">
+        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+          <div className={`p-6 rounded-xl w-[95%] max-w-lg relative shadow-lg border flex flex-col items-center ${darkMode ? 'bg-zinc-900 border-zinc-700 text-zinc-100' : 'bg-white border-gray-200 text-gray-900'}` }>
             <button
               onClick={() => setIsOpen(false)}
               className="absolute top-3 right-4 text-gray-400 hover:text-red-500 text-2xl font-bold focus:outline-none"
@@ -117,14 +117,14 @@ const ProductCard = ({ product, addToCart, wishlistItems, addToWishlist, removeF
             />
 
             <h2 className="text-xl font-semibold text-gray-900 mt-2 mb-1 text-center">{product.name}</h2>
-            <p className="text-sm text-gray-500 mb-2 text-center">Size: {product.size}</p>
-            <p className="text-gray-700 mb-4 text-center leading-normal">{product.description}</p>
+            <p className={`text-sm mb-2 text-center ${darkMode ? 'text-zinc-300' : 'text-gray-500'}`}>Size: {product.size}</p>
+            <p className={`mb-4 text-center leading-normal ${darkMode ? 'text-zinc-200' : 'text-gray-700'}`}>{product.description}</p>
 
             {/* Price Section */}
             <div className="flex items-center justify-center gap-2 mb-4 w-full">
-              <span className="text-base font-semibold text-blue-600">₹{product.price}</span>
-              <span className="text-sm line-through text-gray-400">₹{product.originalPrice}</span>
-              <span className="text-sm text-green-600">({product.discount}% OFF)</span>
+              <span className={`${darkMode ? 'text-blue-300' : 'text-blue-600'} text-base font-semibold`}>₹{product.price}</span>
+              <span className={`${darkMode ? 'text-zinc-400' : 'text-gray-400'} text-sm line-through`}>₹{product.originalPrice}</span>
+              <span className={`${darkMode ? 'text-green-300' : 'text-green-600'} text-sm`}>({product.discount}% OFF)</span>
             </div>
 
             {/* Add to Cart Button */}
